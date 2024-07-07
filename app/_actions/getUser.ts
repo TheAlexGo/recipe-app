@@ -1,7 +1,7 @@
 export interface IUser {
   firstname: string;
   lastname: string;
-  fullname: string;
+  get fullname(): string;
 }
 
 /**

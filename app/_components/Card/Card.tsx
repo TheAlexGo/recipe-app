@@ -2,15 +2,14 @@ import { FC, JSX } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { TbCampfire, TbClock, TbHeartPlus } from 'react-icons/tb';
+import { TbCampfire, TbHeartPlus } from 'react-icons/tb';
 
-interface ICard {
-  id: string;
-  cover: string;
-  title: string;
-  kcal: number;
-  cookingTime: number;
-}
+import { IRecipe } from '@/app/_actions/getRecipe';
+import { Detail } from '@/app/_components/Detail/Detail';
+import { DetailTime } from '@/app/_components/Detail/DetailTime';
+
+interface ICard
+  extends Omit<IRecipe, 'lessTitle' | 'description' | 'nutritions'> {}
 
 export const Card: FC<ICard> = ({
   id,
@@ -22,7 +21,7 @@ export const Card: FC<ICard> = ({
   return (
     <Link
       href={`recipe/${id}`}
-      className="shadow-card max-w-50 flex flex-col flex-wrap rounded-2xl p-4"
+      className="flex max-w-50 flex-col flex-wrap rounded-2xl p-4 shadow-card"
     >
       <div className="w-42 relative h-32">
         <button
@@ -33,24 +32,19 @@ export const Card: FC<ICard> = ({
           <TbHeartPlus className="size-4" />
         </button>
         <Image
-          className="rounded-2xl"
+          className="h-full w-full rounded-2xl object-cover"
           src={cover}
-          fill
+          width={168}
+          height={128}
           priority
           alt={`Обложка для ${title}`}
         />
       </div>
       <h3 className="mt-3 font-bold">{title}</h3>
       <div className="mt-1 flex items-center gap-x-2 text-sm text-neutral-gray-2">
-        <div className="flex items-center gap-x-1">
-          <TbCampfire />
-          {kcal} Ккал
-        </div>
+        <Detail icon={TbCampfire}>{kcal} Ккал</Detail>
         <div className="h-1 w-1 rounded-full bg-current" />
-        <div className="flex items-center gap-x-1">
-          <TbClock />
-          {cookingTime / 60} мин
-        </div>
+        <DetailTime time={cookingTime} />
       </div>
     </Link>
   );

@@ -21,9 +21,9 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="ru">
-      <body className={`${lato.className} text-neutral-dark`}>
-        <main className="px-6 py-3">{children}</main>
+    <html lang="ru" className="h-full">
+      <body className={`${lato.className} h-full text-neutral-dark`}>
+        <main className="h-full px-6 py-3 pb-nav">{children}</main>
         <Nav>
           <Nav.Item href="/" icon="home" />
           <Nav.Item href="/search" icon="search" />

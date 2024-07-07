@@ -39,6 +39,8 @@ export default tseslint.config(
       'react/jsx-props-no-spreading': 'off',
       'react/require-default-props': 'off',
       'import/prefer-default-export': 'off',
+      'no-unused-vars': 'off',
+      'no-shadow': 'off',
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/extensions': ['error', { tsx: 'never' }],

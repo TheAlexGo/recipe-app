@@ -1,5 +1,5 @@
 import { getUser } from '@/app/_actions/getUser';
-import { Card } from '@/app/_components/Card/Card';
+import { Card } from '@/app/_components/Card';
 import { Chip } from '@/app/_components/Chip';
 import { Header } from '@/app/_components/Header';
 import { Section } from '@/app/_components/Section';
@@ -7,7 +7,7 @@ import { Section } from '@/app/_components/Section';
 export default async function Home() {
   const user = await getUser();
   return (
-    <main className="flex flex-col gap-y-6">
+    <div className="flex flex-col gap-y-6">
       <Header user={user} />
       <Section>
         <Section.Header moreLink="/">Category</Section.Header>
@@ -32,7 +32,7 @@ export default async function Home() {
           <Section.Scroll.Item>
             <Card
               id="1"
-              cover="https://placehold.co/168x128.png"
+              cover="https://placehold.co/600x400.png"
               title="Healthy Taco Salad with fresh vegetable"
               kcal={120}
               cookingTime={1200}
@@ -49,6 +49,6 @@ export default async function Home() {
           </Section.Scroll.Item>
         </Section.Scroll>
       </Section>
-    </main>
+    </div>
   );
 }
