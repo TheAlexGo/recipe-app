@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { IoClose } from 'react-icons/io5';
-import { PiPizza } from 'react-icons/pi';
 import { TbHeartPlus } from 'react-icons/tb';
 
 import { getRecipe, Units } from '@/app/_actions/getRecipe';

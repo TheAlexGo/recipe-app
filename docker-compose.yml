@@ -1,0 +1,7 @@
+services:
+    frontend:
+        container_name: recipe-app
+        image: ghcr.io/thealexgo/recipe-app:main
+        restart: always
+        ports:
+            - 3003:3000
