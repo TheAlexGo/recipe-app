@@ -72,6 +72,12 @@ export default function Fridge() {
         return getProductByBarcode(barcodes[0].rawValue);
       })
       .then((product) => {
+        if (!product) {
+          clearStream();
+          // eslint-disable-next-line no-alert
+          alert('Товар с таким barcode не нашли');
+          throw new Error('Товар с таким barcode не нашли');
+        }
         setItems((prevItems) => {
           const newItems = [...prevItems];
           const existedProduct = prevItems.find(
