@@ -1,6 +1,6 @@
 import { FC, JSX, PropsWithChildren } from 'react';
 
-import { ScrollItem } from '@/app/_components/Section/ScrollItem';
+import { ScrollItem } from '@/components/Section/ScrollItem';
 
 interface IScroll extends PropsWithChildren {}
 

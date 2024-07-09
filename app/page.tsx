@@ -1,8 +1,9 @@
-import { getUser } from '@/app/_actions/getUser';
-import { Card } from '@/app/_components/Card';
-import { Chip } from '@/app/_components/Chip';
-import { Header } from '@/app/_components/Header';
-import { Section } from '@/app/_components/Section';
+import { getUser } from '@/actions/getUser';
+import { Card } from '@/components/Card';
+import { Chip } from '@/components/Chip';
+import { Section } from '@/components/Section';
+
+import { Header } from './_components/Header';
 
 export default async function Home() {
   const user = await getUser();
@@ -42,7 +43,7 @@ export default async function Home() {
             <Card
               id="2"
               cover="https://placehold.co/168x128.png"
-              title="Healthy Taco Salad with fresh vegetable"
+              title="Healthy Taco Salad with fresh vegetable 123"
               kcal={120}
               cookingTime={1200}
             />

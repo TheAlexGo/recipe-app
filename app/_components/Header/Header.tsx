@@ -2,7 +2,7 @@ import { FC, JSX } from 'react';
 
 import { WiDaySunny } from 'react-icons/wi';
 
-import { IUser } from '@/app/_actions/getUser';
+import { IUser } from '@/actions/getUser';
 
 interface IHeader {
   user: IUser;

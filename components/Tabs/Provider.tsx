@@ -2,8 +2,8 @@
 
 import { FC, PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
-import { Context, IStore } from '@/app/_components/Tabs/store';
-import { ITab } from '@/app/_components/Tabs/types';
+import { Context, IStore } from '@/components/Tabs/store';
+import { ITab } from '@/components/Tabs/types';
 
 export interface IProvider {
   defaultActiveTab: string;

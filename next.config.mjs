@@ -8,6 +8,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'placehold.co',
       },
+      {
+        protocol: 'https',
+        hostname: 'lenta.servicecdn.ru',
+      },
     ],
   },
   async redirects() {

@@ -4,9 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { TbCampfire, TbHeartPlus } from 'react-icons/tb';
 
-import { IRecipe } from '@/app/_actions/getRecipe';
-import { Detail } from '@/app/_components/Detail/Detail';
-import { DetailTime } from '@/app/_components/Detail/DetailTime';
+import { IRecipe } from '@/actions/getRecipe';
+import { Detail } from '@/components/Detail/Detail';
+import { DetailTime } from '@/components/Detail/DetailTime';
 
 interface ICard
   extends Omit<IRecipe, 'lessTitle' | 'description' | 'nutritions'> {}
@@ -40,7 +40,7 @@ export const Card: FC<ICard> = ({
           alt={`Обложка для ${title}`}
         />
       </div>
-      <h3 className="mt-3 font-bold">{title}</h3>
+      <h3 className="mt-3 line-clamp-2 font-bold">{title}</h3>
       <div className="mt-1 flex items-center gap-x-2 text-sm text-neutral-gray-2">
         <Detail icon={TbCampfire}>{kcal} Ккал</Detail>
         <div className="h-1 w-1 rounded-full bg-current" />

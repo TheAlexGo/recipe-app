@@ -1,6 +1,6 @@
 import { FC, JSX } from 'react';
 
-import { ITab } from '@/app/_components/Tabs/types';
+import { ITab } from '@/components/Tabs/types';
 
 import { Panel } from './Panel';
 

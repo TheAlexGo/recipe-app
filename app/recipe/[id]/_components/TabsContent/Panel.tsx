@@ -1,6 +1,6 @@
 import { FC, JSX, PropsWithChildren } from 'react';
 
-import { ITab } from '@/app/_components/Tabs/types';
+import { ITab } from '@/components/Tabs/types';
 
 interface IPanel extends Pick<ITab, 'id'>, PropsWithChildren {}
 

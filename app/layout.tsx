@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { Lato } from 'next/font/google';
 
-import { Nav } from '@/app/_components/Nav';
+import { Footer } from '@/app/_components/Footer/Footer';
 
 import type { Metadata } from 'next';
 
@@ -21,16 +21,10 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="ru" className="h-full">
-      <body className={`${lato.className} h-full text-neutral-dark`}>
-        <main className="h-full px-6 py-3 pb-nav">{children}</main>
-        <Nav>
-          <Nav.Item href="/" icon="home" />
-          <Nav.Item href="/search" icon="search" />
-          <Nav.Item href="/chef" icon="chef" float />
-          <Nav.Item href="/notification" icon="notification" />
-          <Nav.Item href="/profile" icon="profile" />
-        </Nav>
+    <html lang="ru" className="max-h-full">
+      <body className={`${lato.className} max-h-full text-neutral-dark`}>
+        <main className="max-h-full px-6 py-3 pb-nav">{children}</main>
+        <Footer />
       </body>
     </html>
   );

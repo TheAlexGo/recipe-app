@@ -1,12 +1,13 @@
 import Image from 'next/image';
-import { IoClose } from 'react-icons/io5';
 import { TbHeartPlus } from 'react-icons/tb';
 
-import { getRecipe, Units } from '@/app/_actions/getRecipe';
-import { CollapsedText } from '@/app/_components/CollapsedText';
-import { DetailTime } from '@/app/_components/Detail/DetailTime';
-import { Nutritions } from '@/app/_components/Nutritions';
+import { getRecipe, Units } from '@/actions/getRecipe';
 import { TabsContent } from '@/app/recipe/[id]/_components/TabsContent/TabsContent';
+import { CollapsedText } from '@/components/CollapsedText';
+import { DetailTime } from '@/components/Detail/DetailTime';
+import { Nutritions } from '@/components/Nutritions';
+
+import { Close } from './_components/Close/Close';
 
 export default async function Recipe({ params }: { params: { id: string } }) {
   const { title, lessTitle, description, cover, cookingTime, nutritions } =
@@ -21,13 +22,7 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           alt={`Обложка для ${title}`}
           fill
         />
-        <button
-          type="button"
-          className="absolute left-6 top-3 rounded-xl bg-white p-2"
-          aria-label="Закрыть"
-        >
-          <IoClose className="size-6" />
-        </button>
+        <Close />
         <button
           type="button"
           className="absolute right-6 top-3 rounded-xl bg-white p-2"

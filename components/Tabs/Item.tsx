@@ -4,8 +4,8 @@ import { FC, JSX, memo, PropsWithChildren } from 'react';
 
 import cn from 'classnames';
 
-import { useStore } from '@/app/_components/Tabs/store';
-import { ITab } from '@/app/_components/Tabs/types';
+import { useStore } from '@/components/Tabs/store';
+import { ITab } from '@/components/Tabs/types';
 
 interface IItem extends ITab, PropsWithChildren {}
 

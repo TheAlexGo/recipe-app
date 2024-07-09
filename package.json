@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "barcode-detector": "^2.2.7",
     "classnames": "^2.5.1",
     "next": "14.2.4",
     "react": "^18",

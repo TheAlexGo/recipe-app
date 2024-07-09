@@ -2,9 +2,9 @@
 
 import { FC, JSX, useState } from 'react';
 
-import { Tabs } from '@/app/_components/Tabs';
-import { ITab } from '@/app/_components/Tabs/types';
 import { Content } from '@/app/recipe/[id]/_components/TabsContent/Content';
+import { Tabs } from '@/components/Tabs';
+import { ITab } from '@/components/Tabs/types';
 
 interface ITabsContent {
   items: ITab[];

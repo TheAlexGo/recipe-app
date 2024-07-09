@@ -37,6 +37,7 @@ const config: Config = {
       },
       boxShadow: {
         card: '0px 2px 16px 0px rgba(6, 51, 54, 0.10)',
+        productChip: '0px 2px 16px rgba(6, 51, 54, 0.1)',
       },
       padding: {
         nav: '5.3125rem',

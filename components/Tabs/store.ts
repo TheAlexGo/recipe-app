@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 
-import { ITab } from '@/app/_components/Tabs/types';
+import { ITab } from '@/components/Tabs/types';
 
 export interface IStore {
   activeTabId: ITab['id'];
