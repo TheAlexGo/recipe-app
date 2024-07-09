@@ -4,11 +4,17 @@ import { IProduct } from '@/actions/getProductByBarcode';
 
 interface IFridgeStore {
   items: IProduct[];
+  setItems: (products: IProduct[]) => void;
   addItem: (product: IProduct) => void;
 }
 
 export const useFridge = create<IFridgeStore>((set) => ({
   items: [],
+  setItems: (products) => {
+    set({
+      items: products,
+    });
+  },
   addItem: (product) => {
     set((state) => {
       const existedProduct = state.items.find(

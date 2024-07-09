@@ -6,7 +6,9 @@ import { IProduct } from '@/actions/getProductByBarcode';
 import { ProductChip } from '@/components/ProductChip/ProductChip';
 import { useLoadImage } from '@/hooks/useLoadImage';
 
-interface IChip extends IProduct {}
+interface IChip extends IProduct {
+  lines?: number;
+}
 
 export const Chip: FC<IChip> = ({
   imageUrl: _imageUrl,

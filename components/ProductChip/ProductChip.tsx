@@ -7,12 +7,15 @@ import Image from 'next/image';
 import { IProduct } from '@/actions/getProductByBarcode';
 import { Counter } from '@/components/Counter/Counter';
 
-interface IProductChip extends IProduct {}
+interface IProductChip extends IProduct {
+  lines?: number;
+}
 
 export const ProductChip: FC<IProductChip> = ({
   title,
   imageUrl,
   count,
+  lines = 1,
 }): JSX.Element => {
   const [value, setValue] = useState(count);
 
@@ -36,9 +39,15 @@ export const ProductChip: FC<IProductChip> = ({
         <div className="relative size-12 shrink-0">
           <Image className="object-contain" src={imageUrl} fill alt={title} />
         </div>
-        <span className="line-clamp-1 text-lg font-bold">{title}</span>
+        <span
+          className={`text-lg font-bold line-clamp-${lines === 0 ? 'none' : lines}`}
+        >
+          {title}
+        </span>
       </div>
-      <Counter value={value} onRemove={removeHandler} onAdd={addHandler} />
+      {Number.isInteger(value) && (
+        <Counter value={value} onRemove={removeHandler} onAdd={addHandler} />
+      )}
     </article>
   );
 };

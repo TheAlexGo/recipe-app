@@ -89,6 +89,13 @@ export const useBarcodeDetector = ({
     }
   }, [checkVideoState, collectBarcode, stream]);
 
+  useEffect(
+    () => () => {
+      clearTimeout(timeoutIdRef.current);
+    },
+    [],
+  );
+
   return {
     start,
     continue: continueCollect,

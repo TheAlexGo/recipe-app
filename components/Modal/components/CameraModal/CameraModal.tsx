@@ -2,6 +2,7 @@
 
 import { FC, JSX, useCallback, useEffect, useState } from 'react';
 
+import { addProduct } from '@/actions/fridge';
 import {
   getProductByBarcode,
   getProductByBarcodeDB,
@@ -62,6 +63,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
   const addHandler = () => {
     addItem(foundedItem!);
+    addProduct(foundedItem!.id);
     onClose();
   };
 
@@ -89,8 +91,8 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
         <video width="100%" height="100%" autoPlay playsInline ref={videoRef} />
       </div>
       {foundedItem && (
-        <div className="x-3 fixed bottom-3 z-10">
-          <Chip {...foundedItem} />
+        <div className="fixed inset-x-6 bottom-3 z-10">
+          <Chip {...foundedItem} lines={0} />
           <button
             type="button"
             className="mt-3 w-full rounded-lg bg-white p-4"
