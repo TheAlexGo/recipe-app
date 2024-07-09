@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'lenta.servicecdn.ru',
+        hostname: 'ldahtvsnwulnkxrsnekw.supabase.co',
       },
     ],
   },

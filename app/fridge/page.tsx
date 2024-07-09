@@ -6,9 +6,16 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { BarcodeDetector } from 'barcode-detector';
 import { IoQrCodeOutline } from 'react-icons/io5';
 
-import { getProductByBarcode, IProduct } from '@/actions/getProductByBarcode';
+import { addProduct } from '@/actions/fridge';
+import {
+  getProductByBarcode,
+  getProductByBarcodeDB,
+  IProduct,
+} from '@/actions/getProductByBarcode';
+import { createProduct, uploadProductImage } from '@/actions/product';
 import { Header } from '@/components/Header';
-import { ProductChip } from '@/components/ProductChip/ProductChip';
+
+import { Chip } from './_components/Chip/Chip';
 
 const TAKE_PHOTO_DELAY = 500;
 
@@ -69,22 +76,43 @@ export default function Fridge() {
         if (!barcodes.length) {
           throw new Error('Barcode не распознан!');
         }
-        return getProductByBarcode(barcodes[0].rawValue);
+        return barcodes[0].rawValue;
       })
-      .then((product) => {
+      .then(async (barcode) => {
+        let product = await getProductByBarcodeDB(barcode);
         if (!product) {
-          clearStream();
-          // eslint-disable-next-line no-alert
-          alert('Товар с таким barcode не нашли');
-          throw new Error('Товар с таким barcode не нашли');
-        }
-        setItems((prevItems) => {
-          const newItems = [...prevItems];
-          const existedProduct = prevItems.find(
-            (item) => item.code === product.code,
+          product = await getProductByBarcode(barcode);
+
+          if (!product) {
+            clearStream();
+            // eslint-disable-next-line no-alert
+            alert('Товар с таким barcode не нашли');
+            throw new Error('Товар с таким barcode не нашли');
+          }
+
+          const imageData = await uploadProductImage(
+            `image-${product.code}`,
+            product.imageUrl,
           );
-          if (existedProduct) {
-            return newItems.map((item) => {
+          if (!imageData) {
+            throw new Error('При загрузке изображения произошла ошибка');
+          }
+
+          product = (await createProduct({
+            title: product.title,
+            code: product.code,
+            brand: product.brand,
+            imageUrl: imageData.path,
+            barcode,
+          })) as IProduct;
+        }
+
+        clearStream();
+
+        const existedProduct = items.find((item) => item.code === product.code);
+        if (existedProduct) {
+          setItems((prevItems) => {
+            return prevItems.map((item) => {
               if (item.code === product.code) {
                 return {
                   ...item,
@@ -93,19 +121,24 @@ export default function Fridge() {
               }
               return item;
             });
-          }
-          newItems.push({
-            ...product,
-            count: 1,
           });
-          return newItems;
-        });
-        clearStream();
+          addProduct(existedProduct.id);
+        } else {
+          setItems((prevItems) => {
+            const newItems = [...prevItems];
+            newItems.push({
+              ...product,
+              count: 1,
+            });
+            return newItems;
+          });
+          addProduct(product.id);
+        }
       })
       .catch(() => {
         setTimeoutId(window.setTimeout(takePhoto, TAKE_PHOTO_DELAY));
       });
-  }, [barcodeDetector, clearStream, stream]);
+  }, [barcodeDetector, clearStream, items, stream]);
 
   useEffect(() => {
     setBarcodeDetector(
@@ -143,7 +176,7 @@ export default function Fridge() {
       <ul className="flex flex-col gap-y-3">
         {items.map((product) => (
           <li key={product.code}>
-            <ProductChip {...product} />
+            <Chip {...product} />
           </li>
         ))}
       </ul>
