@@ -3,7 +3,8 @@
 import { FC, JSX } from 'react';
 
 import { useRouter } from 'next/navigation';
-import { IoClose } from 'react-icons/io5';
+
+import { Button } from '@/components/Button';
 
 interface IClose {}
 
@@ -14,14 +15,5 @@ export const Close: FC<IClose> = (): JSX.Element => {
     router.back();
   };
 
-  return (
-    <button
-      type="button"
-      className="absolute left-6 top-3 rounded-xl bg-white p-2"
-      aria-label="Закрыть"
-      onClick={clickHandler}
-    >
-      <IoClose className="size-6" />
-    </button>
-  );
+  return <Button.Close onClick={clickHandler} />;
 };

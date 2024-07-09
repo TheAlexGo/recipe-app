@@ -31,7 +31,7 @@ export const ProductChip: FC<IProductChip> = ({
   }, [count]);
 
   return (
-    <article className="flex items-center rounded-xl p-4 shadow-productChip">
+    <article className="flex items-center rounded-xl bg-white p-4 shadow-productChip">
       <div className="flex items-center gap-x-4">
         <div className="relative size-12 shrink-0">
           <Image className="object-contain" src={imageUrl} fill alt={title} />
