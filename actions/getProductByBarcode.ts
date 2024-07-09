@@ -1,11 +1,15 @@
 const PROXY = 'https://cors-anywhere.thealexgo.ru';
 const API_URL = 'https://lenta.com/api/v1';
 
-export interface IProduct {
+export interface IProductApi {
   title: string;
   brand: string;
   imageUrl: string;
   code: string;
+}
+
+export interface IProduct extends IProductApi {
+  count: number;
 }
 
 export const getProductByBarcode = async (

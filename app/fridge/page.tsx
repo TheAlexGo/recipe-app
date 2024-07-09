@@ -40,7 +40,9 @@ export default function Fridge() {
     }
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: {
+          facingMode: 'environment',
+        },
         audio: false,
       })
       .then(setStream);
@@ -71,11 +73,25 @@ export default function Fridge() {
       })
       .then((product) => {
         setItems((prevItems) => {
-          if (prevItems.find((item) => item.code === product.code)) {
-            return prevItems;
-          }
           const newItems = [...prevItems];
-          newItems.push(product);
+          const existedProduct = prevItems.find(
+            (item) => item.code === product.code,
+          );
+          if (existedProduct) {
+            return newItems.map((item) => {
+              if (item.code === product.code) {
+                return {
+                  ...item,
+                  count: item.count + 1,
+                };
+              }
+              return item;
+            });
+          }
+          newItems.push({
+            ...product,
+            count: 1,
+          });
           return newItems;
         });
         clearStream();
@@ -129,7 +145,7 @@ export default function Fridge() {
       {stream && (
         <>
           {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <video width="320" height="240" autoPlay ref={videoRef} />
+          <video width="320" height="240" autoPlay playsInline ref={videoRef} />
         </>
       )}
     </div>

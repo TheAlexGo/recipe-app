@@ -1,4 +1,6 @@
-import { FC, JSX, useCallback, useState } from 'react';
+'use client';
+
+import { FC, JSX, useCallback, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -10,8 +12,9 @@ interface IProductChip extends IProduct {}
 export const ProductChip: FC<IProductChip> = ({
   title,
   imageUrl,
+  count,
 }): JSX.Element => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(count);
 
   const removeHandler = useCallback(() => {
     setValue((prevValue) => prevValue - 1);
@@ -21,8 +24,14 @@ export const ProductChip: FC<IProductChip> = ({
     setValue((prevValue) => prevValue + 1);
   }, []);
 
+  useEffect(() => {
+    if (count !== undefined) {
+      setValue(count);
+    }
+  }, [count]);
+
   return (
-    <article className="flex items-center rounded-xl p-4 shadow-productChip">
+    <article className="shadow-productChip flex items-center rounded-xl p-4">
       <div className="flex items-center gap-x-4">
         <div className="relative size-12 shrink-0">
           <Image className="object-contain" src={imageUrl} fill alt={title} />
