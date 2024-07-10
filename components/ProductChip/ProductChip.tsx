@@ -2,20 +2,21 @@
 
 import { FC, JSX, useCallback, useEffect, useState } from 'react';
 
+import cn from 'classnames';
 import Image from 'next/image';
 
 import { IProduct } from '@/actions/getProductByBarcode';
 import { Counter } from '@/components/Counter/Counter';
 
-interface IProductChip extends IProduct {
-  lines?: number;
+export interface IProductChip extends IProduct {
+  withoutClamp?: boolean;
 }
 
 export const ProductChip: FC<IProductChip> = ({
   title,
   imageUrl,
   count,
-  lines = 1,
+  withoutClamp,
 }): JSX.Element => {
   const [value, setValue] = useState(count);
 
@@ -34,13 +35,16 @@ export const ProductChip: FC<IProductChip> = ({
   }, [count]);
 
   return (
-    <article className="flex items-center rounded-xl bg-white p-4 shadow-productChip">
+    <article className="flex items-center justify-between rounded-xl bg-white p-4 shadow-productChip">
       <div className="flex items-center gap-x-4">
         <div className="relative size-12 shrink-0">
           <Image className="object-contain" src={imageUrl} fill alt={title} />
         </div>
         <span
-          className={`text-lg font-bold line-clamp-${lines === 0 ? 'none' : lines}`}
+          className={cn('text-lg font-bold', {
+            'line-clamp-1': !withoutClamp,
+            'line-clamp-none': withoutClamp,
+          })}
         >
           {title}
         </span>

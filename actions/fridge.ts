@@ -7,12 +7,10 @@ import { createClient } from '@/utils/supabase/server';
 
 export const getProducts = async (): Promise<IProduct[]> => {
   const supabase = createClient();
-  const user = await getUser();
 
   const { data, error } = await supabase
     .from('product')
-    .select('*, fridge!inner(user_id)')
-    .eq('fridge.user_id', user.id);
+    .select('*, fridge!inner(user_id)');
   if (error) {
     logger.log(`addProduct: ${error.message}`);
   }
@@ -53,7 +51,6 @@ export const removeProduct = async (productId: IProduct['id']) => {
     .eq('user_id', user.id)
     .eq('product_id', productId);
   if (error) {
-    // eslint-disable-next-line no-console
-    console.log(`addProduct: ${error.message}`);
+    logger.log(`removeProduct: ${error.message}`);
   }
 };

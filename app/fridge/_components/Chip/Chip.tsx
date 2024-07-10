@@ -2,13 +2,13 @@
 
 import { FC, JSX } from 'react';
 
-import { IProduct } from '@/actions/getProductByBarcode';
-import { ProductChip } from '@/components/ProductChip/ProductChip';
+import {
+  IProductChip,
+  ProductChip,
+} from '@/components/ProductChip/ProductChip';
 import { useLoadImage } from '@/hooks/useLoadImage';
 
-interface IChip extends IProduct {
-  lines?: number;
-}
+interface IChip extends IProductChip {}
 
 export const Chip: FC<IChip> = ({
   imageUrl: _imageUrl,
