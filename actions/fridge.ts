@@ -8,22 +8,23 @@ import { createClient } from '@/utils/supabase/server';
 export const getProducts = async (): Promise<IProduct[]> => {
   const supabase = createClient();
 
-  const { data, error } = await supabase
-    .from('product')
-    .select('*, fridge!inner(user_id)');
+  const { data, error } = await supabase.from('product').select(`
+      id,
+      title,
+      code,
+      imageUrl:image_url,
+      brand,
+      barcode,
+      fridgeItems:fridge!inner(user_id)
+    `);
   if (error) {
     logger.log(`addProduct: ${error.message}`);
   }
 
   return (
-    data?.map((item) => ({
-      id: item.id,
-      title: item.title,
-      code: item.code,
-      brand: item.brand,
-      barcode: item.barcode,
-      imageUrl: item.image_url,
-      count: item.fridge.length,
+    data?.map(({ fridgeItems, ...item }) => ({
+      ...item,
+      count: fridgeItems.length,
     })) || []
   );
 };
