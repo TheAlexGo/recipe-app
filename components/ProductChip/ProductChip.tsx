@@ -1,6 +1,4 @@
-'use client';
-
-import { FC, JSX, useCallback, useEffect, useState } from 'react';
+import { FC, JSX, useCallback } from 'react';
 
 import cn from 'classnames';
 import Image from 'next/image';
@@ -9,30 +7,28 @@ import { IProduct } from '@/actions/getProductByBarcode';
 import { Counter } from '@/components/Counter/Counter';
 
 export interface IProductChip extends IProduct {
+  count?: number;
   withoutClamp?: boolean;
+  onRemove?: (productId: IProduct['id']) => void;
+  onAdd?: (productId: IProduct['id']) => void;
 }
 
 export const ProductChip: FC<IProductChip> = ({
+  id,
   title,
   imageUrl,
-  count,
   withoutClamp,
+  count,
+  onRemove,
+  onAdd,
 }): JSX.Element => {
-  const [value, setValue] = useState(count);
-
   const removeHandler = useCallback(() => {
-    setValue((prevValue) => prevValue - 1);
-  }, []);
+    onRemove?.(id);
+  }, [id, onRemove]);
 
   const addHandler = useCallback(() => {
-    setValue((prevValue) => prevValue + 1);
-  }, []);
-
-  useEffect(() => {
-    if (count !== undefined) {
-      setValue(count);
-    }
-  }, [count]);
+    onAdd?.(id);
+  }, [id, onAdd]);
 
   return (
     <article className="flex items-center justify-between rounded-xl bg-white p-4 shadow-productChip">
@@ -49,8 +45,8 @@ export const ProductChip: FC<IProductChip> = ({
           {title}
         </span>
       </div>
-      {Number.isInteger(value) && (
-        <Counter value={value} onRemove={removeHandler} onAdd={addHandler} />
+      {Boolean(count) && (
+        <Counter value={count!} onRemove={removeHandler} onAdd={addHandler} />
       )}
     </article>
   );

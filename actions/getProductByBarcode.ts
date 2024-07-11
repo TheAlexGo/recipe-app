@@ -14,9 +14,13 @@ export interface IProductApi {
   barcode: string;
 }
 
-export interface IProduct extends IProductApi {
-  count: number;
+export interface IProductDB extends IProductApi {
+  inFridge: {
+    id: string;
+  }[];
 }
+
+export interface IProduct extends IProductApi {}
 
 export const getProductByBarcodeDB = async (
   barcode: string,

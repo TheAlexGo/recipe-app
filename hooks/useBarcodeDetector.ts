@@ -47,6 +47,7 @@ export const useBarcodeDetector = ({
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
     }
+    clearTimeout(timeoutIdRef.current);
   }, [stream]);
 
   const collectBarcode = useCallback(() => {
@@ -89,12 +90,7 @@ export const useBarcodeDetector = ({
     }
   }, [checkVideoState, collectBarcode, stream]);
 
-  useEffect(
-    () => () => {
-      clearTimeout(timeoutIdRef.current);
-    },
-    [],
-  );
+  useEffect(() => stop, [stop]);
 
   return {
     start,

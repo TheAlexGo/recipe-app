@@ -1,5 +1,5 @@
 import { getProducts } from '@/actions/fridge';
-import { FridgeItems } from '@/app/fridge/_components/FridgeItems/FridgeItems';
+import { Chip } from '@/app/fridge/_components/Chip/Chip';
 
 import { FridgeHeader } from './_components/FridgeHeader/FridgeHeader';
 
@@ -8,7 +8,13 @@ export default async function Fridge() {
   return (
     <div>
       <FridgeHeader />
-      <FridgeItems initialItems={products} />
+      <ul className="flex flex-col gap-y-3">
+        {products.map((product) => (
+          <li key={product.code}>
+            <Chip {...product} />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

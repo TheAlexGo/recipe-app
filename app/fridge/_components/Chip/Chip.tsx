@@ -2,18 +2,52 @@
 
 import { FC, JSX } from 'react';
 
+import { useRouter } from 'next/navigation';
+
+import { addProduct, removeProduct } from '@/actions/fridge';
+import { IProductApi, IProductDB } from '@/actions/getProductByBarcode';
 import {
   IProductChip,
   ProductChip,
 } from '@/components/ProductChip/ProductChip';
 import { useLoadImage } from '@/hooks/useLoadImage';
 
-interface IChip extends IProductChip {}
+interface IChip extends IProductApi, Pick<IProductChip, 'withoutClamp'> {
+  inFridge?: IProductDB['inFridge'];
+}
 
 export const Chip: FC<IChip> = ({
   imageUrl: _imageUrl,
+  inFridge = [],
   ...product
 }): JSX.Element => {
+  const router = useRouter();
   const imageUrl = useLoadImage(_imageUrl);
-  return <ProductChip {...product} imageUrl={imageUrl} />;
+
+  const addHandler = (productId: IProductDB['id']) => {
+    addProduct(productId).then(() => router.refresh());
+  };
+
+  const removeHandler = () => {
+    if (inFridge.length === 1) {
+      if (
+        !window.confirm(
+          'После удаления последнего товара, он пропадёт из холодильника. Продолжить?',
+        )
+      ) {
+        return;
+      }
+    }
+    removeProduct(inFridge[0].id).then(() => router.refresh());
+  };
+
+  return (
+    <ProductChip
+      {...product}
+      imageUrl={imageUrl}
+      onAdd={addHandler}
+      onRemove={removeHandler}
+      count={inFridge.length}
+    />
+  );
 };

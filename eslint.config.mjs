@@ -41,6 +41,7 @@ export default tseslint.config(
       'import/prefer-default-export': 'off',
       'no-unused-vars': 'off',
       'no-shadow': 'off',
+      'class-methods-use-this': 'off',
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/extensions': ['error', { tsx: 'never' }],

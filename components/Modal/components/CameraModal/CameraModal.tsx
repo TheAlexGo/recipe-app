@@ -2,11 +2,14 @@
 
 import { FC, JSX, useCallback, useEffect, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { addProduct } from '@/actions/fridge';
 import {
   getProductByBarcode,
   getProductByBarcodeDB,
   IProduct,
+  IProductApi,
 } from '@/actions/getProductByBarcode';
 import { createProduct, uploadProductImage } from '@/actions/product';
 import { Chip } from '@/app/fridge/_components/Chip/Chip';
@@ -14,16 +17,17 @@ import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal/Modal';
 import { useBarcodeDetector } from '@/hooks/useBarcodeDetector';
 import { useCameraModal } from '@/hooks/useCameraModal';
-import { useFridge } from '@/hooks/useFridge';
 
 const TAKE_PHOTO_DELAY = 500;
 
 interface ICameraModal {}
 
 export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
+  const [foundedItem, setFoundedItem] = useState<IProductApi | null>(null);
+  const [disabled, setDisabled] = useState(false);
+
   const { isOpen, onClose } = useCameraModal();
-  const { addItem } = useFridge();
-  const [foundedItem, setFoundedItem] = useState<IProduct | null>(null);
+  const router = useRouter();
 
   const collectHandler = useCallback(async (barcode: string) => {
     let product = await getProductByBarcodeDB(barcode);
@@ -62,9 +66,12 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
   });
 
   const addHandler = () => {
-    addItem(foundedItem!);
-    addProduct(foundedItem!.id);
-    onClose();
+    setDisabled(true);
+    addProduct(foundedItem!.id).then(() => {
+      setDisabled(false);
+      onClose();
+      router.refresh();
+    });
   };
 
   useEffect(() => {
@@ -92,14 +99,10 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
       </div>
       {foundedItem && (
         <div className="fixed inset-x-6 bottom-3 z-10">
-          <Chip {...foundedItem} lines={0} />
-          <button
-            type="button"
-            className="mt-3 w-full rounded-lg bg-white p-4"
-            onClick={addHandler}
-          >
+          <Chip {...foundedItem} inFridge={[]} withoutClamp />
+          <Button className="mt-3" onClick={addHandler} disabled={disabled}>
             Добавить
-          </button>
+          </Button>
         </div>
       )}
     </Modal>

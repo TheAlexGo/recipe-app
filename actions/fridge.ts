@@ -1,11 +1,11 @@
 'use server';
 
-import { IProduct } from '@/actions/getProductByBarcode';
+import { IProduct, IProductDB } from '@/actions/getProductByBarcode';
 import { getUser } from '@/actions/getUser';
 import logger from '@/utils/logger';
 import { createClient } from '@/utils/supabase/server';
 
-export const getProducts = async (): Promise<IProduct[]> => {
+export const getProducts = async (): Promise<IProductDB[]> => {
   const supabase = createClient();
 
   const { data, error } = await supabase.from('product').select(`
@@ -15,18 +15,13 @@ export const getProducts = async (): Promise<IProduct[]> => {
       imageUrl:image_url,
       brand,
       barcode,
-      fridgeItems:fridge!inner(user_id)
+      inFridge:fridge!inner(id)
     `);
   if (error) {
     logger.log(`addProduct: ${error.message}`);
   }
 
-  return (
-    data?.map(({ fridgeItems, ...item }) => ({
-      ...item,
-      count: fridgeItems.length,
-    })) || []
-  );
+  return data || [];
 };
 
 export const addProduct = async (productId: IProduct['id']) => {
@@ -42,15 +37,14 @@ export const addProduct = async (productId: IProduct['id']) => {
   }
 };
 
-export const removeProduct = async (productId: IProduct['id']) => {
+export const removeProduct = async (productFridgeId: string) => {
   const supabase = createClient();
-  const user = await getUser();
 
   const { error } = await supabase
     .from('fridge')
     .delete()
-    .eq('user_id', user.id)
-    .eq('product_id', productId);
+    .eq('id', productFridgeId)
+    .select();
   if (error) {
     logger.log(`removeProduct: ${error.message}`);
   }
