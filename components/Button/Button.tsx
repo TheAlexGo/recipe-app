@@ -15,6 +15,7 @@ export const Button: FC<IButton> = ({
   ...props
 }): JSX.Element => {
   return (
+    // eslint-disable-next-line react/button-has-type
     <button
       {...props}
       className={cn(

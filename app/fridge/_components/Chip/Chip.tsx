@@ -31,6 +31,7 @@ export const Chip: FC<IChip> = ({
   const removeHandler = () => {
     if (inFridge.length === 1) {
       if (
+        // eslint-disable-next-line no-alert
         !window.confirm(
           'После удаления последнего товара, он пропадёт из холодильника. Продолжить?',
         )

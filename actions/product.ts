@@ -2,29 +2,38 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-import { IProduct } from '@/actions/getProductByBarcode';
-import { getUser } from '@/actions/getUser';
+import { IProduct, IProductApi } from '@/actions/getProductByBarcode';
 import { createClient } from '@/utils/supabase/server';
 
 export const createProduct = async (
   product: Omit<IProduct, 'count' | 'id'>,
-) => {
+): Promise<IProductApi> => {
   const { imageUrl, ...restProductData } = product;
   const supabase = createClient();
-  const user = await getUser();
 
-  const { error } = await supabase.from('product').insert({
-    ...restProductData,
-    user_id: user.id,
-    image_url: imageUrl,
-  });
+  const { data, error } = await supabase
+    .from('product')
+    .insert({
+      ...restProductData,
+      image_url: imageUrl,
+    })
+    .select(
+      `
+      id,
+      title,
+      code,
+      imageUrl:image_url,
+      brand,
+      barcode
+    `,
+    )
+    .single();
 
   if (error) {
-    // eslint-disable-next-line no-console
-    console.log(`createProduct: ${error.message}`);
+    throw new Error(`createProduct: ${error.message}`);
   }
 
-  return product;
+  return data;
 };
 
 export const downloadImage = async (imageUrl: string): Promise<Blob> => {
@@ -51,9 +60,7 @@ export const uploadProductImage = async (
     });
 
   if (error) {
-    // eslint-disable-next-line no-console
-    console.log(`uploadProductImage: ${error.message}`);
-    return null;
+    throw new Error(`uploadProductImage: ${error.message}`);
   }
 
   return data;

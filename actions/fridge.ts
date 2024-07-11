@@ -18,7 +18,7 @@ export const getProducts = async (): Promise<IProductDB[]> => {
       inFridge:fridge!inner(id)
     `);
   if (error) {
-    logger.log(`addProduct: ${error.message}`);
+    throw new Error(`addProduct: ${error.message}`);
   }
 
   return data || [];
@@ -33,7 +33,7 @@ export const addProduct = async (productId: IProduct['id']) => {
     product_id: productId,
   });
   if (error) {
-    logger.log(`addProduct: ${error.message}`);
+    throw new Error(`addProduct: ${error.message}`);
   }
 };
 
