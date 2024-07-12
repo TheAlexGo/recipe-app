@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, JSX, memo } from 'react';
+import { FC, JSX, memo, useMemo } from 'react';
 
 import cn from 'classnames';
 import { LinkProps } from 'next/dist/client/link';
@@ -19,13 +19,18 @@ export const Item: FC<INavItem> = memo(
   ({ icon: Icon, float, label, ...props }): JSX.Element => {
     const pathname = usePathname();
 
+    const isActiveUrl = useMemo(() => {
+      if (props.href === '/') {
+        return pathname === props.href;
+      }
+      return pathname.startsWith(props.href);
+    }, [pathname, props.href]);
+
     return (
       <Link
         {...props}
         className={cn(
-          pathname === props.href
-            ? 'text-brand-secondary'
-            : 'text-neutral-gray-2',
+          isActiveUrl ? 'text-brand-secondary' : 'text-neutral-gray-2',
           float
             ? 'absolute left-1/2 top-0 flex h-14 w-14 -translate-x-1/2 translate-y-[calc(-50%_-_4px)] transform items-center justify-center rounded-full bg-cyan-950 text-white'
             : 'flex w-full justify-center py-3',

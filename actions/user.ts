@@ -5,12 +5,15 @@ import { createClient } from '@/utils/supabase/server';
 
 export const changeMetadata = async (newData: Partial<Omit<IUser, 'id'>>) => {
   const supabase = createClient();
-  const { error } = await supabase.auth.updateUser({ data: newData });
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.updateUser({ data: newData });
   if (error) {
     throw new Error(`changeMetadata: ${error.message}`);
   }
 
-  return true;
+  return user;
 };
 
 export const uploadAvatar = async (file: File) => {
