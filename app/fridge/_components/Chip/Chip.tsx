@@ -22,7 +22,7 @@ export const Chip: FC<IChip> = ({
   ...product
 }): JSX.Element => {
   const router = useRouter();
-  const imageUrl = useLoadImage(_imageUrl);
+  const imageUrl = useLoadImage('product_images', _imageUrl)!;
 
   const addHandler = (productId: IProductDB['id']) => {
     addProduct(productId).then(() => router.refresh());

@@ -30,14 +30,14 @@ const config: Config = {
           primary: '#042628',
           secondary: '#70B9BE',
           dark: '#4D8194',
+          danger: '#f64e4e',
         },
       },
       dropShadow: {
         nav: '0px -10px 40px rgba(149, 168, 196, 0.15)',
       },
       boxShadow: {
-        card: '0px 2px 16px 0px rgba(6, 51, 54, 0.10)',
-        productChip: '0px 2px 16px rgba(6, 51, 54, 0.1)',
+        card: '0px 2px 16px rgba(6, 51, 54, 0.1)',
       },
       padding: {
         nav: '5.3125rem',

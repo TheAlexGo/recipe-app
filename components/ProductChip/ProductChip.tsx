@@ -31,13 +31,13 @@ export const ProductChip: FC<IProductChip> = ({
   }, [id, onAdd]);
 
   return (
-    <article className="flex items-center justify-between rounded-xl bg-white p-4 shadow-productChip">
+    <article className="flex items-center justify-between gap-x-4 rounded-xl bg-white p-4 shadow-card">
       <div className="flex items-center gap-x-4">
         <div className="relative size-12 shrink-0">
           <Image className="object-contain" src={imageUrl} fill alt={title} />
         </div>
         <span
-          className={cn('text-lg font-bold', {
+          className={cn('break-all text-lg font-bold', {
             'line-clamp-1': !withoutClamp,
             'line-clamp-none': withoutClamp,
           })}

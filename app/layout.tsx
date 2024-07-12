@@ -22,9 +22,13 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="ru" className="max-h-full">
-      <body className={`${lato.className} max-h-full text-neutral-dark`}>
-        <main className="max-h-full px-6 py-3 pb-nav">{children}</main>
+    <html lang="ru" className="flex min-h-full flex-col">
+      <body
+        className={`${lato.className} flex flex-1 flex-col text-neutral-dark`}
+      >
+        <main className="flex min-h-full flex-1 flex-col px-6 py-3 pb-nav">
+          {children}
+        </main>
         <Footer />
         <ModalProvider />
       </body>

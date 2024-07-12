@@ -11,7 +11,7 @@ import { DetailTime } from '@/components/Detail/DetailTime';
 interface ICard
   extends Omit<IRecipe, 'lessTitle' | 'description' | 'nutritions'> {}
 
-export const Card: FC<ICard> = ({
+export const RecipeCard: FC<ICard> = ({
   id,
   cover,
   title,

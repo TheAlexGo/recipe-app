@@ -1,0 +1,105 @@
+'use client';
+
+import {
+  ChangeEventHandler,
+  FC,
+  JSX,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+
+import Image from 'next/image';
+
+import { IUser } from '@/actions/getUser';
+import { SubmitButton } from '@/app/profile/settings/_components/UserForm/SubmitButton';
+import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
+import { Input } from '@/components/Input/Input';
+import { useLoadImage } from '@/hooks/useLoadImage';
+
+interface IUserForm {
+  user: IUser;
+}
+
+export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
+  const avatarSrc = useLoadImage('user_avatars', user.avatarUrl);
+
+  const [firstname, setFirstname] = useState(user.firstname);
+  const [lastname, setLastname] = useState(user.lastname);
+  const [avatar, setAvatar] = useState(avatarSrc);
+
+  const dataChanged = useMemo(() => {
+    return (
+      firstname !== user.firstname ||
+      lastname !== user.lastname ||
+      avatar !== avatarSrc
+    );
+  }, [avatar, firstname, lastname, avatarSrc, user.firstname, user.lastname]);
+
+  const firstnameChangeHandler: ChangeEventHandler<HTMLInputElement> =
+    useCallback(({ target }) => {
+      setFirstname(target.value);
+    }, []);
+
+  const lastnameChangeHandler: ChangeEventHandler<HTMLInputElement> =
+    useCallback(({ target }) => {
+      setLastname(target.value);
+    }, []);
+
+  const avatarChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
+    ({ target }) => {
+      setAvatar(URL.createObjectURL(target.files![0]));
+    },
+    [],
+  );
+
+  useEffect(() => {
+    setFirstname(user.firstname);
+    setLastname(user.lastname);
+    setAvatar(avatarSrc);
+  }, [avatarSrc, user.firstname, user.lastname]);
+
+  return (
+    <form className="mt-3 flex flex-col gap-y-3" action={submitHandler}>
+      <label htmlFor="avatar">
+        <Image
+          className="size-32 object-cover"
+          src={avatar}
+          width={128}
+          height={128}
+          priority
+          alt="Аватарка"
+        />
+        <Input
+          className="hidden"
+          id="avatar"
+          type="file"
+          name="avatar"
+          onChange={avatarChangeHandler}
+        />
+      </label>
+      <label htmlFor="firstname">
+        <span>Имя</span>
+        <Input
+          id="firstname"
+          type="text"
+          value={firstname}
+          onChange={firstnameChangeHandler}
+          name="firstname"
+        />
+      </label>
+      <label htmlFor="lastname">
+        <span>Фамилия</span>
+        <Input
+          id="lastname"
+          type="text"
+          value={lastname}
+          onChange={lastnameChangeHandler}
+          name="lastname"
+        />
+      </label>
+      {dataChanged && <SubmitButton>Сохранить</SubmitButton>}
+    </form>
+  );
+};

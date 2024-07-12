@@ -6,6 +6,7 @@ export interface IUser {
   id: string;
   firstname: string;
   lastname: string;
+  avatarUrl: string;
   get fullname(): string;
 }
 
@@ -25,6 +26,7 @@ export const getUser = async (): Promise<IUser> => {
     id: userData.id,
     firstname: userMetaData.firstname,
     lastname: userMetaData.lastname,
+    avatarUrl: userMetaData.avatarUrl,
     get fullname() {
       return `${this.firstname} ${this.lastname}`;
     },

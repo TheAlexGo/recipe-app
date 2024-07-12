@@ -1,11 +1,18 @@
+import { useMemo } from 'react';
+
 import { createClient } from '@/utils/supabase/client';
 
-export const useLoadImage = (imageUrl: string) => {
-  const supabaseClient = createClient();
+export const useLoadImage = (storage: string, imageUrl?: string) => {
+  return useMemo(() => {
+    if (!imageUrl) {
+      return 'https://placehold.co/600x400.png';
+    }
+    const supabaseClient = createClient();
 
-  const { data: imageData } = supabaseClient.storage
-    .from('product_images')
-    .getPublicUrl(imageUrl);
+    const { data } = supabaseClient.storage
+      .from(storage)
+      .getPublicUrl(imageUrl);
 
-  return imageData.publicUrl;
+    return data.publicUrl;
+  }, [imageUrl, storage]);
 };

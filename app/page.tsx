@@ -1,6 +1,6 @@
 import { getUser } from '@/actions/getUser';
-import { Card } from '@/components/Card';
 import { Chip } from '@/components/Chip';
+import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';
 
 import { Header } from './_components/Header';
@@ -31,7 +31,7 @@ export default async function Home() {
         <Section.Header moreLink="/">Popular Recipes</Section.Header>
         <Section.Scroll>
           <Section.Scroll.Item>
-            <Card
+            <RecipeCard
               id="1"
               cover="https://placehold.co/600x400.png"
               title="Healthy Taco Salad with fresh vegetable"
@@ -40,7 +40,7 @@ export default async function Home() {
             />
           </Section.Scroll.Item>
           <Section.Scroll.Item>
-            <Card
+            <RecipeCard
               id="2"
               cover="https://placehold.co/168x128.png"
               title="Healthy Taco Salad with fresh vegetable 123"
