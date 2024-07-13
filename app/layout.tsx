@@ -5,15 +5,29 @@ import { Lato } from 'next/font/google';
 import { Footer } from '@/app/_components/Footer/Footer';
 import { ModalProvider } from '@/providers/ModalProvider';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import './globals.css';
 
 const lato = Lato({ weight: ['400', '700'], subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Recipe App',
-  description: 'Приложение для сбора и оценки рецептов',
+  title: 'Recipe Book',
+  description: 'Приложения для хранения и получения рецептов',
+  icons: [
+    {
+      rel: 'mask-icon',
+      color: '#70B9BE',
+      url: '/safari-pinned-tab.svg',
+    },
+  ],
+  manifest: '/manifest.json',
+};
+
+export const viewport: Viewport = {
+  themeColor: [{ media: '(prefers-color-scheme: light)', color: '#ffffff' }],
+  colorScheme: 'light',
+  maximumScale: 1,
 };
 
 export default function RootLayout({

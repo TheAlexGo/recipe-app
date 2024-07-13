@@ -1,6 +1,6 @@
 import { FC, JSX, PropsWithChildren } from 'react';
 
-import NavigationContainer from '@/public/icon_navigation-container.svg';
+import NavigationContainer from '@/public/assets/svg/icon_navigation-container.svg';
 
 export interface INav extends PropsWithChildren {}
 

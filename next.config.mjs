@@ -1,4 +1,7 @@
 import { withSentryConfig } from '@sentry/nextjs';
+import withPWA from 'next-pwa';
+
+const isDev = process.env.NODE_ENV === 'development';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -54,7 +57,7 @@ const nextConfig = {
   },
 };
 
-export default withSentryConfig(nextConfig, {
+const nextConfigWithSentry = withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
@@ -82,3 +85,12 @@ export default withSentryConfig(nextConfig, {
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
 });
+
+// Конфигурация PWA
+export default withPWA({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: isDev,
+  reloadOnOnline: true,
+})(nextConfigWithSentry);
