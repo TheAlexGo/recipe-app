@@ -78,7 +78,6 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
           name="avatar"
           onChange={avatarChangeHandler}
           accept="image/*"
-          capture
         />
       </label>
       <label htmlFor="firstname">

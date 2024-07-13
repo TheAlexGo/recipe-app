@@ -1,5 +1,6 @@
 'use server';
 
+import { captureMessage } from '@sentry/core';
 import { revalidatePath } from 'next/cache';
 
 import { changeMetadata, uploadAvatar } from '@/actions/user';
@@ -13,6 +14,11 @@ export const submitHandler = async (formData: FormData) => {
     firstname,
     lastname,
   };
+
+  captureMessage(
+    `Пользователь загружает аватарку... Данные: ${JSON.stringify(avatar)}`,
+    'debug',
+  );
   if (avatar.size) {
     const imageData = await uploadAvatar(avatar);
     data.avatarUrl = `${imageData?.path}?${Date.now()}`;
