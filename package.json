@@ -32,6 +32,7 @@
     "@eslint/compat": "^1.1.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.6.0",
+    "@localazy/cli": "^1.7.11",
     "@svgr/webpack": "^8.1.0",
     "@types/cookie": "^0.6.0",
     "@types/eslint__js": "^8.42.3",
