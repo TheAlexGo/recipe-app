@@ -7,11 +7,8 @@ import Image from 'next/image';
 import { FaArrowRight } from 'react-icons/fa6';
 
 import { useLoadImage } from '@/hooks/useLoadImage';
+import { UserRole } from '@/types';
 import { getLocal } from '@/utils/local';
-
-export enum UserRole {
-  DEVELOPER = 'developer',
-}
 
 interface IUserCard {
   firstname: string;

@@ -1,7 +1,5 @@
 'use server';
 
-import { v4 as uuidv4 } from 'uuid';
-
 import { IProduct, IProductApi } from '@/actions/getProductByBarcode';
 import { createClient } from '@/utils/supabase/server';
 
@@ -50,13 +48,12 @@ export const uploadProductImage = async (
   imageUrl: string,
 ) => {
   const imageBlob = await downloadImage(imageUrl);
-  const uniqueID = uuidv4();
   const supabase = createClient();
   const { data, error } = await supabase.storage
     .from('product_images')
-    .upload(`${imageName}-${uniqueID}`, imageBlob, {
+    .upload(imageName, imageBlob, {
       cacheControl: '3600',
-      upsert: false,
+      upsert: true,
     });
 
   if (error) {

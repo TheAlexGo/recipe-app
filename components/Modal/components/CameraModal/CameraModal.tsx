@@ -15,6 +15,7 @@ import { createProduct, uploadProductImage } from '@/actions/product';
 import { Chip } from '@/app/fridge/_components/Chip/Chip';
 import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal/Modal';
+import { ProductChipStub } from '@/components/ProductChip/ProductChipStub';
 import { useBarcodeDetector } from '@/hooks/useBarcodeDetector';
 import { useCameraModal } from '@/hooks/useCameraModal';
 
@@ -25,11 +26,13 @@ interface ICameraModal {}
 export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
   const [foundedItem, setFoundedItem] = useState<IProductApi | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { isOpen, onClose } = useCameraModal();
   const router = useRouter();
 
   const collectHandler = useCallback(async (barcode: string) => {
+    setLoading(true);
     let product = await getProductByBarcodeDB(barcode);
     if (!product) {
       product = await getProductByBarcode(barcode);
@@ -41,7 +44,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
       }
 
       const imageData = await uploadProductImage(
-        `image-${product.code}`,
+        `${product.code}-cover`,
         product.image_url,
       );
       if (!imageData) {
@@ -58,6 +61,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
     }
 
     setFoundedItem(product);
+    setLoading(false);
   }, []);
 
   const { videoRef, start, stop } = useBarcodeDetector({
@@ -97,12 +101,15 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video width="100%" height="100%" autoPlay playsInline ref={videoRef} />
       </div>
-      {foundedItem && (
+      {(foundedItem || loading) && (
         <div className="fixed inset-x-6 bottom-3 z-10">
-          <Chip {...foundedItem} inFridge={[]} withoutClamp />
-          <Button className="mt-3" onClick={addHandler} disabled={disabled}>
-            Добавить
-          </Button>
+          {loading && <ProductChipStub />}
+          {foundedItem && <Chip {...foundedItem} inFridge={[]} withoutClamp />}
+          {foundedItem && (
+            <Button className="mt-3" onClick={addHandler} disabled={disabled}>
+              Добавить
+            </Button>
+          )}
         </div>
       )}
     </Modal>

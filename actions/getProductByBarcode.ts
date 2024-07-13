@@ -53,5 +53,9 @@ export const getProductByBarcode = async (
     },
   )
     .then((res) => res.json())
-    .then((json) => json.skus[0]);
+    .then((json) => json.skus[0])
+    .then(({ imageUrl, ...product }) => ({
+      ...product,
+      image_url: imageUrl,
+    }));
 };

@@ -1,6 +1,7 @@
 import { getUser } from '@/actions/getUser';
 import { LogoutButton } from '@/app/profile/_components/LogoutButton/LogoutButton';
-import { UserCard, UserRole } from '@/components/UserCard/UserCard';
+import { UserCard } from '@/components/UserCard/UserCard';
+import { UserRole } from '@/types';
 
 import { ProfileHeader } from './_components/ProfileHeader/ProfileHeader';
 
