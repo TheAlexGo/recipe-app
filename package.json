@@ -1,8 +1,8 @@
 {
-  "name": "recipe-app",
+  "name": "recipe-book",
   "version": "0.1.0",
   "private": true,
-  "description": "Приложение для рецептов",
+  "description": "Приложения для хранения и получения рецептов",
   "author": "Aleksandr Gordeev <alex280702@mail.ru>",
   "license": "MIT",
   "scripts": {

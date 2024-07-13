@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { signIn } from '@/actions/login';
+import { getLocal } from '@/utils/local';
 
 import { SubmitButton } from '../_components/SubmitButton/SubmitButton';
 
@@ -23,7 +24,7 @@ export default function Login({
           />
         </label>
         <label className="flex flex-col" htmlFor="password">
-          <span className="text-md">Пароль</span>
+          <span className="text-md">{getLocal('form.password.label')}</span>
           <input
             id="password"
             className="mb-6 rounded-md border bg-inherit px-4 py-2"
@@ -36,12 +37,15 @@ export default function Login({
         <SubmitButton
           formAction={signIn}
           className="mb-2 rounded-md bg-green-700 px-4 py-2 text-white"
-          pendingText="Вход..."
+          pendingText={getLocal('actions.login.pending')}
         >
-          Войти
+          {getLocal('actions.login.button')}
         </SubmitButton>
         <span>
-          Нет аккаунта? <Link href="/registration">Зарегистрируйтесь</Link>
+          {getLocal('actions.login.link.withoutAccount')}?{' '}
+          <Link href="/registration">
+            {getLocal('actions.login.link.registration')}
+          </Link>
         </span>
         {searchParams?.message && (
           <p className="bg-foreground/10 text-foreground mt-4 p-4 text-center">

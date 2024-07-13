@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { signUp } from '@/actions/login';
+import { getLocal } from '@/utils/local';
 
 import { SubmitButton } from '../_components/SubmitButton/SubmitButton';
 
@@ -13,7 +14,7 @@ export default function Login({
     <div className="flex w-full flex-1 flex-col justify-center gap-2 px-8 sm:max-w-md">
       <form className="text-foreground flex w-full flex-1 flex-col justify-center gap-2">
         <label className="flex flex-col" htmlFor="firstname">
-          <span className="text-md">Имя</span>
+          <span className="text-md">{getLocal('form.firstname.label')}</span>
           <input
             id="firstname"
             className="mb-6 rounded-md border bg-inherit px-4 py-2"
@@ -23,7 +24,7 @@ export default function Login({
           />
         </label>
         <label className="flex flex-col" htmlFor="lastname">
-          <span className="text-md">Фамилия</span>
+          <span className="text-md">{getLocal('form.lastname.label')}</span>
           <input
             id="lastname"
             className="mb-6 rounded-md border bg-inherit px-4 py-2"
@@ -43,7 +44,7 @@ export default function Login({
           />
         </label>
         <label className="flex flex-col" htmlFor="password">
-          <span className="text-md">Пароль</span>
+          <span className="text-md">{getLocal('form.password.label')}</span>
           <input
             id="password"
             className="mb-6 rounded-md border bg-inherit px-4 py-2"
@@ -56,12 +57,15 @@ export default function Login({
         <SubmitButton
           formAction={signUp}
           className="mb-2 rounded-md bg-green-700 px-4 py-2 text-white"
-          pendingText="Регистрация..."
+          pendingText={getLocal('actions.registration.pending')}
         >
-          Зарегистрироваться
+          {getLocal('actions.registration.button')}
         </SubmitButton>
         <span>
-          Уже зарегистрированы? <Link href="/login">Войдите</Link>
+          {getLocal('actions.registration.link.withAccount')}?{' '}
+          <Link href="/login">
+            {getLocal('actions.registration.link.login')}
+          </Link>
         </span>
         {searchParams?.message && (
           <p className="bg-foreground/10 text-foreground mt-4 p-4 text-center">

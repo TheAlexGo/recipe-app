@@ -6,6 +6,7 @@ import { IoQrCodeOutline } from 'react-icons/io5';
 
 import { Header } from '@/components/Header';
 import { useCameraModal } from '@/hooks/useCameraModal';
+import { getLocal } from '@/utils/local';
 
 interface IFridgeHeader {}
 
@@ -15,10 +16,10 @@ export const FridgeHeader: FC<IFridgeHeader> = (): JSX.Element => {
   return (
     <Header>
       <Header.Empty />
-      <Header.Title>Холодильник</Header.Title>
+      <Header.Title>{getLocal('page.fridge.title')}</Header.Title>
       <Header.Icon
         icon={IoQrCodeOutline}
-        label="Добавить продукт через сканирование QR-кода"
+        label={getLocal('page.fridge.action.qr.label')}
         onClick={onOpen}
       />
     </Header>

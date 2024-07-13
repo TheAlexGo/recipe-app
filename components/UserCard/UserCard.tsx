@@ -7,11 +7,16 @@ import Image from 'next/image';
 import { FaArrowRight } from 'react-icons/fa6';
 
 import { useLoadImage } from '@/hooks/useLoadImage';
+import { getLocal } from '@/utils/local';
+
+export enum UserRole {
+  DEVELOPER = 'developer',
+}
 
 interface IUserCard {
   firstname: string;
   lastname: string;
-  userRole: string;
+  userRole: UserRole;
   avatar?: string;
   className?: string;
 }
@@ -44,7 +49,7 @@ export const UserCard: FC<IUserCard> = ({
           <h1 className="text-lg font-bold">
             {firstname} {lastname}
           </h1>
-          <p className="text-sm">{userRole}</p>
+          <p className="text-sm">{getLocal(`user.role.${userRole}`)}</p>
         </div>
       </div>
       <div className="rounded-lg bg-neutral-dark p-1.5 text-white">

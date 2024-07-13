@@ -27,7 +27,7 @@ export const TabsContent: FC<ITabsContent> = ({ items }): JSX.Element => {
   return (
     <div>
       <Tabs
-        label="Элементы меню"
+        label={getLocal('tabs.page.recipe')}
         className="mt-6"
         defaultActiveTab={items[0].tab.id}
         onChangeTab={changeTabHandler}

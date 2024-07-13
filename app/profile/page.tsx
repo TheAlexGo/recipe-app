@@ -1,6 +1,6 @@
 import { getUser } from '@/actions/getUser';
 import { LogoutButton } from '@/app/profile/_components/LogoutButton/LogoutButton';
-import { UserCard } from '@/components/UserCard/UserCard';
+import { UserCard, UserRole } from '@/components/UserCard/UserCard';
 
 import { ProfileHeader } from './_components/ProfileHeader/ProfileHeader';
 
@@ -16,7 +16,7 @@ export default async function Profile() {
           avatar={user.avatarUrl}
           firstname={user.firstname}
           lastname={user.lastname}
-          userRole="Разработчик рецептов"
+          userRole={UserRole.DEVELOPER}
         />
         <LogoutButton />
       </div>

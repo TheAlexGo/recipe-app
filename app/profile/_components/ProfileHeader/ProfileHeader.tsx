@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { IoSettingsOutline } from 'react-icons/io5';
 
 import { Header } from '@/components/Header';
+import { getLocal } from '@/utils/local';
 
 interface IProfileHeader {}
 
@@ -19,10 +20,10 @@ export const ProfileHeader: FC<IProfileHeader> = (): JSX.Element => {
   return (
     <Header>
       <Header.Empty />
-      <Header.Title>Профиль</Header.Title>
+      <Header.Title>{getLocal('page.profile.title')}</Header.Title>
       <Header.Icon
         icon={IoSettingsOutline}
-        label="В настройки"
+        label={getLocal('page.profile.action.settings.label')}
         onClick={clickHandler}
       />
     </Header>

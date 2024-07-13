@@ -17,6 +17,7 @@ import { SubmitButton } from '@/app/profile/settings/_components/UserForm/Submit
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
 import { Input } from '@/components/Input/Input';
 import { useLoadImage } from '@/hooks/useLoadImage';
+import { getLocal } from '@/utils/local';
 
 interface IUserForm {
   user: IUser;
@@ -69,7 +70,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
           width={128}
           height={128}
           priority
-          alt="Аватарка"
+          alt={getLocal('images.alt.avatar')}
         />
         <Input
           className="hidden"
@@ -81,7 +82,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
         />
       </label>
       <label htmlFor="firstname">
-        <span>Имя</span>
+        <span>{getLocal('form.firstname.label')}</span>
         <Input
           id="firstname"
           type="text"
@@ -91,7 +92,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
         />
       </label>
       <label htmlFor="lastname">
-        <span>Фамилия</span>
+        <span>{getLocal('form.lastname.label')}</span>
         <Input
           id="lastname"
           type="text"
@@ -100,7 +101,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
           name="lastname"
         />
       </label>
-      {dataChanged && <SubmitButton>Сохранить</SubmitButton>}
+      {dataChanged && <SubmitButton>{getLocal('form.save')}</SubmitButton>}
     </form>
   );
 };

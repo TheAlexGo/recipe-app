@@ -4,6 +4,7 @@ import { FC, JSX } from 'react';
 
 import { logOut } from '@/actions/login';
 import { Button } from '@/components/Button/Button';
+import { getLocal } from '@/utils/local';
 
 interface ILogoutButton {}
 
@@ -12,7 +13,7 @@ export const LogoutButton: FC<ILogoutButton> = (): JSX.Element => {
 
   return (
     <Button view="danger" onClick={clickHandler}>
-      Выйти
+      {getLocal('profile.button.logout')}
     </Button>
   );
 };

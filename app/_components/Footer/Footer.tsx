@@ -9,33 +9,34 @@ import { TbFridge } from 'react-icons/tb';
 
 import { Nav } from '@/components/Nav';
 import { INavItem } from '@/components/Nav/Item';
+import { getLocal } from '@/utils/local';
 
 const navigations: INavItem[] = [
   {
     href: '/',
     icon: FaHouse,
-    label: 'Главная',
+    label: getLocal('nav.general.label'),
   },
   {
     href: '/search',
     icon: FaSearch,
-    label: 'Поиск',
+    label: getLocal('nav.search.label'),
   },
   {
     href: '/chef',
     icon: PiChefHat,
     float: true,
-    label: 'Готовить',
+    label: getLocal('nav.chef.label'),
   },
   {
     href: '/fridge',
     icon: TbFridge,
-    label: 'Холодильник',
+    label: getLocal('nav.fridge.label'),
   },
   {
     href: '/profile',
     icon: FaRegUser,
-    label: 'Профиль',
+    label: getLocal('nav.profile.label'),
   },
 ];
 

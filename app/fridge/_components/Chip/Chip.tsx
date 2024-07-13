@@ -10,6 +10,7 @@ import {
   IProductChip,
   ProductChip,
 } from '@/components/ProductChip/ProductChip';
+import { getLocal } from '@/utils/local';
 
 interface IChip extends IProductApi, Pick<IProductChip, 'withoutClamp'> {
   inFridge?: IProductDB['inFridge'];
@@ -26,9 +27,7 @@ export const Chip: FC<IChip> = ({ inFridge = [], ...product }): JSX.Element => {
     if (inFridge.length === 1) {
       if (
         // eslint-disable-next-line no-alert
-        !window.confirm(
-          'После удаления последнего товара, он пропадёт из холодильника. Продолжить?',
-        )
+        !window.confirm(getLocal('delete.item.confirm'))
       ) {
         return;
       }

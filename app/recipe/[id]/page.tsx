@@ -11,6 +11,7 @@ import { CollapsedText } from '@/components/CollapsedText';
 import { DetailTime } from '@/components/Detail/DetailTime';
 import { Nutritions } from '@/components/Nutritions';
 import { useLoadImage } from '@/hooks/useLoadImage';
+import { getLocal } from '@/utils/local';
 
 import { Close } from './_components/Close/Close';
 
@@ -40,14 +41,14 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           className="-z-10 object-cover"
           priority
           src={cover_url}
-          alt={`Обложка для ${title}`}
+          alt={getLocal('images.alt.recipe.cover')}
           fill
         />
         <Close />
         <button
           type="button"
           className="absolute right-6 top-3 rounded-xl bg-white p-2"
-          aria-label="В избранное"
+          aria-label={getLocal('actions.card.inFavorite')}
         >
           <TbHeartPlus className="size-6" />
         </button>

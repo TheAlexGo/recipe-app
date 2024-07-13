@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { FaArrowLeft } from 'react-icons/fa6';
 
 import { Header } from '@/components/Header';
+import { getLocal } from '@/utils/local';
 
 interface ISettingsHeader {}
 
@@ -20,10 +21,10 @@ export const SettingsHeader: FC<ISettingsHeader> = (): JSX.Element => {
     <Header>
       <Header.Icon
         icon={FaArrowLeft}
-        label="Вернуться в профиль"
+        label={getLocal('page.settings.action.back.label')}
         onClick={clickHandler}
       />
-      <Header.Title>Профиль</Header.Title>
+      <Header.Title>{getLocal('page.settings.title')}</Header.Title>
       <Header.Empty />
     </Header>
   );
