@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, JSX, useMemo } from 'react';
 
 import { IconType } from 'react-icons';
