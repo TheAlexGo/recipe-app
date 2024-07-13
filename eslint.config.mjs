@@ -32,6 +32,8 @@ export default tseslint.config(
       prettier: fixupPluginRules(prettier),
     },
     rules: {
+      camelcase: 'off',
+      'no-return-await': 'off',
       'no-underscore-dangle': 'off',
       'react/function-component-definition': 'off',
       'react/jsx-props-no-spreading': 'off',

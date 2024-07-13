@@ -12,7 +12,7 @@ export const getProducts = async (): Promise<IProductDB[]> => {
       id,
       title,
       code,
-      imageUrl:image_url,
+      image_url,
       brand,
       barcode,
       inFridge:fridge!inner(id)

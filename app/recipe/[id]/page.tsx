@@ -1,24 +1,45 @@
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 import { TbHeartPlus } from 'react-icons/tb';
 
-import { getRecipe, Units } from '@/actions/getRecipe';
+import { getRecipe } from '@/actions/impl/recipe';
+import { Units } from '@/actions/models/Nutritions';
+import { IngredientsPanel } from '@/app/recipe/[id]/_components/TabsContent/IngredientsPanel';
+import { InstructionPanel } from '@/app/recipe/[id]/_components/TabsContent/InstructionPanel';
 import { TabsContent } from '@/app/recipe/[id]/_components/TabsContent/TabsContent';
 import { CollapsedText } from '@/components/CollapsedText';
 import { DetailTime } from '@/components/Detail/DetailTime';
 import { Nutritions } from '@/components/Nutritions';
+import { useLoadImage } from '@/hooks/useLoadImage';
 
 import { Close } from './_components/Close/Close';
 
 export default async function Recipe({ params }: { params: { id: string } }) {
-  const { title, lessTitle, description, cover, cookingTime, nutritions } =
-    await getRecipe(params.id);
+  const recipe = await getRecipe(params.id);
+
+  if (!recipe) {
+    notFound();
+  }
+
+  const {
+    title,
+    less_title,
+    description,
+    cover_url: _cover_url,
+    cooking_time,
+    nutritions,
+    ingredients,
+    recipe_text,
+  } = recipe;
+  const cover_url = useLoadImage('recipe_covers', _cover_url);
+
   return (
     <article className="-mx-6 -mt-3 flex h-full flex-col pb-4">
       <div className="relative h-80 bg-recipe-overlay">
         <Image
-          className="-z-10"
+          className="-z-10 object-cover"
           priority
-          src={cover}
+          src={cover_url}
           alt={`Обложка для ${title}`}
           fill
         />
@@ -33,8 +54,8 @@ export default async function Recipe({ params }: { params: { id: string } }) {
       </div>
       <div className="-my-10 flex-1 rounded-se-recipe-container rounded-ss-recipe-container bg-white px-6 pb-10 before:mx-auto before:mb-6 before:mt-3 before:block before:h-1 before:w-14 before:bg-neutral-gray-3">
         <header className="flex justify-between">
-          <h1 className="text-2xl font-bold">{lessTitle}</h1>
-          <DetailTime className="text-neutral-gray-5" time={cookingTime} />
+          <h1 className="text-2xl font-bold">{less_title}</h1>
+          <DetailTime className="text-neutral-gray-5" time={cooking_time} />
         </header>
         <CollapsedText>{description}</CollapsedText>
         <Nutritions className="mt-4">
@@ -50,10 +71,16 @@ export default async function Recipe({ params }: { params: { id: string } }) {
         <TabsContent
           items={[
             {
-              id: 'ingredients',
+              tab: {
+                id: 'ingredients',
+              },
+              panel: <IngredientsPanel items={ingredients} />,
             },
             {
-              id: 'instructions',
+              tab: {
+                id: 'instructions',
+              },
+              panel: <InstructionPanel recipe={recipe_text} />,
             },
           ]}
         />

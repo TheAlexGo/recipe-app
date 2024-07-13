@@ -42,7 +42,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
       const imageData = await uploadProductImage(
         `image-${product.code}`,
-        product.imageUrl,
+        product.image_url,
       );
       if (!imageData) {
         throw new Error('При загрузке изображения произошла ошибка');
@@ -52,7 +52,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
         title: product.title,
         code: product.code,
         brand: product.brand,
-        imageUrl: imageData.path,
+        image_url: imageData.path,
         barcode,
       })) as IProduct;
     }

@@ -9,7 +9,7 @@ export interface IProductApi {
   id: string;
   title: string;
   brand: string;
-  imageUrl: string;
+  image_url: string;
   code: string;
   barcode: string;
 }
@@ -35,7 +35,7 @@ export const getProductByBarcodeDB = async (
   if (!error && data) {
     return {
       ...data,
-      imageUrl: data.image_url,
+      image_url: data.image_url,
     };
   }
   return null;

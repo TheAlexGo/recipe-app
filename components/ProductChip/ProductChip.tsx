@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, JSX, useCallback } from 'react';
 
 import cn from 'classnames';
@@ -5,6 +7,7 @@ import Image from 'next/image';
 
 import { IProduct } from '@/actions/getProductByBarcode';
 import { Counter } from '@/components/Counter/Counter';
+import { useLoadImage } from '@/hooks/useLoadImage';
 
 export interface IProductChip extends IProduct {
   count?: number;
@@ -16,12 +19,13 @@ export interface IProductChip extends IProduct {
 export const ProductChip: FC<IProductChip> = ({
   id,
   title,
-  imageUrl,
+  image_url: _image_url,
   withoutClamp,
   count,
   onRemove,
   onAdd,
 }): JSX.Element => {
+  const image_url = useLoadImage('product_images', _image_url);
   const removeHandler = useCallback(() => {
     onRemove?.(id);
   }, [id, onRemove]);
@@ -33,8 +37,14 @@ export const ProductChip: FC<IProductChip> = ({
   return (
     <article className="flex items-center justify-between gap-x-4 rounded-xl bg-white p-4 shadow-card">
       <div className="flex items-center gap-x-4">
-        <div className="relative size-12 shrink-0">
-          <Image className="object-contain" src={imageUrl} fill alt={title} />
+        <div className="flex shrink-0 items-center justify-center rounded-lg bg-neutral-gray-4 p-2">
+          <Image
+            className="size-8 object-contain"
+            src={image_url}
+            width={32}
+            height={32}
+            alt={title}
+          />
         </div>
         <span
           className={cn('break-all text-lg font-bold', {

@@ -8,21 +8,21 @@ import { createClient } from '@/utils/supabase/server';
 export const createProduct = async (
   product: Omit<IProduct, 'count' | 'id'>,
 ): Promise<IProductApi> => {
-  const { imageUrl, ...restProductData } = product;
+  const { image_url, ...restProductData } = product;
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from('product')
     .insert({
       ...restProductData,
-      image_url: imageUrl,
+      image_url,
     })
     .select(
       `
       id,
       title,
       code,
-      imageUrl:image_url,
+      image_url,
       brand,
       barcode
     `,

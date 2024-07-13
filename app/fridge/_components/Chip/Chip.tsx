@@ -10,19 +10,13 @@ import {
   IProductChip,
   ProductChip,
 } from '@/components/ProductChip/ProductChip';
-import { useLoadImage } from '@/hooks/useLoadImage';
 
 interface IChip extends IProductApi, Pick<IProductChip, 'withoutClamp'> {
   inFridge?: IProductDB['inFridge'];
 }
 
-export const Chip: FC<IChip> = ({
-  imageUrl: _imageUrl,
-  inFridge = [],
-  ...product
-}): JSX.Element => {
+export const Chip: FC<IChip> = ({ inFridge = [], ...product }): JSX.Element => {
   const router = useRouter();
-  const imageUrl = useLoadImage('product_images', _imageUrl)!;
 
   const addHandler = (productId: IProductDB['id']) => {
     addProduct(productId).then(() => router.refresh());
@@ -45,7 +39,6 @@ export const Chip: FC<IChip> = ({
   return (
     <ProductChip
       {...product}
-      imageUrl={imageUrl}
       onAdd={addHandler}
       onRemove={removeHandler}
       count={inFridge.length}

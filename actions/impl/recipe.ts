@@ -1,0 +1,27 @@
+'use server';
+
+import { Recipe, IRecipe, IRecipeDB } from '@/actions/models/Recipe';
+import { createClient } from '@/utils/supabase/server';
+
+const createInstance = () => {
+  const supabase = createClient();
+  return new Recipe(supabase);
+};
+
+export const uploadRecipeCover = async (file: File) => {
+  return createInstance().uploadImage(file);
+};
+
+export const createRecipe = async (
+  recipe: Omit<IRecipeDB, 'id' | 'user_id'>,
+) => {
+  return createInstance().insert(recipe);
+};
+
+export const getRecipeAll = async () => {
+  return createInstance().selectAll();
+};
+
+export const getRecipe = async (recipeId: IRecipe['id']) => {
+  return createInstance().selectFullData(recipeId);
+};

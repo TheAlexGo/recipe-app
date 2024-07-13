@@ -1,33 +1,44 @@
 'use client';
 
-import { FC, JSX, useState } from 'react';
+import { FC, JSX, useCallback, useState } from 'react';
 
-import { Content } from '@/app/recipe/[id]/_components/TabsContent/Content';
 import { Tabs } from '@/components/Tabs';
 import { ITab } from '@/components/Tabs/types';
 
 interface ITabsContent {
-  items: ITab[];
+  items: {
+    tab: ITab;
+    panel: JSX.Element;
+  }[];
 }
 
 export const TabsContent: FC<ITabsContent> = ({ items }): JSX.Element => {
-  const [activeTab, setActiveTab] = useState(items[0]);
+  const [selectedItem, setSelectedItem] = useState(items[0]);
+
+  const changeTabHandler = useCallback(
+    (tab: ITab) => {
+      const currentItem = items.find((item) => item.tab.id === tab.id)!;
+      setSelectedItem(currentItem);
+    },
+    [items],
+  );
 
   return (
     <div>
       <Tabs
         label="Элементы меню"
         className="mt-6"
-        defaultActiveTab={items[0].id}
-        onChangeTab={setActiveTab}
+        defaultActiveTab={items[0].tab.id}
+        onChangeTab={changeTabHandler}
       >
-        {items.map((tab) => (
+        {items.map(({ tab }) => (
           <Tabs.Item key={tab.id} {...tab}>
             {tab.id}
           </Tabs.Item>
         ))}
       </Tabs>
-      <Content activeTab={activeTab} />
+
+      <div className="mt-6">{selectedItem.panel}</div>
     </div>
   );
 };
