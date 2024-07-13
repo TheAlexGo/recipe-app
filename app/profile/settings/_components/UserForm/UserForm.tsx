@@ -15,7 +15,7 @@ import Image from 'next/image';
 import { IUser } from '@/actions/getUser';
 import { SubmitButton } from '@/app/profile/settings/_components/UserForm/SubmitButton';
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
-import { Input } from '@/components/Input/Input';
+import { Input } from '@/components/Input';
 import { useLoadImage } from '@/hooks/useLoadImage';
 import { getLocal } from '@/utils/local';
 
