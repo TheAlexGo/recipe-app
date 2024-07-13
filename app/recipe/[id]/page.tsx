@@ -78,7 +78,7 @@ export default async function Recipe({ params }: { params: { id: string } }) {
             },
             {
               tab: {
-                id: 'instructions',
+                id: 'instruction',
               },
               panel: <InstructionPanel recipe={recipe_text} />,
             },

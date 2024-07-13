@@ -3,6 +3,7 @@ import { getRecipeAll } from '@/actions/impl/recipe';
 import { Chip } from '@/components/Chip';
 import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';
+import { getLocal } from '@/utils/local';
 
 import { Header } from './_components/Header';
 
@@ -13,7 +14,9 @@ export default async function Home() {
     <div className="flex flex-col gap-y-6">
       <Header user={user} />
       <Section>
-        <Section.Header moreLink="/">Category</Section.Header>
+        <Section.Header moreLink="/">
+          {getLocal('sector.category.title')}
+        </Section.Header>
         <Section.Scroll>
           <Section.Scroll.Item>
             <Chip active>Breakfast</Chip>
@@ -30,7 +33,9 @@ export default async function Home() {
         </Section.Scroll>
       </Section>
       <Section>
-        <Section.Header moreLink="/">Popular Recipes</Section.Header>
+        <Section.Header moreLink="/">
+          {getLocal('sector.popular.title')}
+        </Section.Header>
         <Section.Scroll>
           {recipes.map((recipe) => (
             <Section.Scroll.Item key={recipe.id}>

@@ -4,6 +4,8 @@ import { FC, JSX, PropsWithChildren, useState } from 'react';
 
 import cn from 'classnames';
 
+import { getLocal } from '@/utils/local';
+
 interface ICollapsedText extends PropsWithChildren {}
 
 export const CollapsedText: FC<ICollapsedText> = ({
@@ -29,7 +31,7 @@ export const CollapsedText: FC<ICollapsedText> = ({
         className="text-brand-primary"
         onClick={clickHandler}
       >
-        View {collapsed ? 'Less' : 'More'}
+        {collapsed ? getLocal('button.less') : getLocal('button.more')}
       </button>
     </div>
   );

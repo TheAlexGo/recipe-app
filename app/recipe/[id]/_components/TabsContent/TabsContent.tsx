@@ -4,6 +4,7 @@ import { FC, JSX, useCallback, useState } from 'react';
 
 import { Tabs } from '@/components/Tabs';
 import { ITab } from '@/components/Tabs/types';
+import { getLocal } from '@/utils/local';
 
 interface ITabsContent {
   items: {
@@ -33,7 +34,7 @@ export const TabsContent: FC<ITabsContent> = ({ items }): JSX.Element => {
       >
         {items.map(({ tab }) => (
           <Tabs.Item key={tab.id} {...tab}>
-            {tab.id}
+            {getLocal(`tab.${tab.id as 'instruction' | 'ingredients'}`)}
           </Tabs.Item>
         ))}
       </Tabs>
