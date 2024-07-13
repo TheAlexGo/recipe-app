@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "description": "Приложение для рецептов",
-  "author": "Aleksandr Gordeev <alexander.gordeev@vk.team>",
+  "author": "Aleksandr Gordeev <alex280702@mail.ru>",
   "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "locales:download": "localazy download",
+    "locales:upload": "localazy upload"
   },
   "dependencies": {
     "@supabase/ssr": "^0.4.0",

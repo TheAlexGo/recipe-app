@@ -51,7 +51,7 @@ export default tseslint.config(
           controlComponents: ['Input'],
         },
       ],
-      'import/extensions': ['error', { tsx: 'never' }],
+      'import/extensions': ['error', { tsx: 'never', json: 'ignorePackages' }],
       'import/order': [
         'error',
         {

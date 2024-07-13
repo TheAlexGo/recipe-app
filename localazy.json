@@ -1,0 +1,14 @@
+{
+    "writeKey": "a7303620450164926913-64280507ba1ccca8452dd28000211d521dcae7ae268d0fe0432d86c63f1c5400",
+    "readKey": "a7303620450164926913-0dd1c3160e93b1ecb1a60f4a3a69c51c5787f9e8cf000a5b24c75398a41a6db1",
+
+    "upload": {
+        "type": "json",
+        "files": "locales/ru.json"
+    },
+
+    "download": {
+        "files": "locales/${lang}.json",
+        "includeSourceLang": true
+    }
+}
