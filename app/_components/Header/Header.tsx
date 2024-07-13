@@ -1,7 +1,6 @@
-'use client';
-
 import { FC, JSX, useMemo } from 'react';
 
+import { toZonedTime } from 'date-fns-tz';
 import { IconType } from 'react-icons';
 import {
   WiDayCloudy,
@@ -22,7 +21,7 @@ export const Header: FC<IHeader> = ({ user }): JSX.Element => {
     'morning' | 'day' | 'evening' | 'night',
     IconType,
   ] => {
-    const hours = new Date().getHours();
+    const hours = toZonedTime(new Date(), 'Europe/Moscow').getHours();
 
     if (hours >= 5 && hours < 9) {
       return ['morning', WiDayCloudy];
