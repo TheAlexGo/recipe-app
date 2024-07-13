@@ -23,7 +23,6 @@ export default async function Recipe({ params }: { params: { id: string } }) {
   }
 
   const {
-    title,
     less_title,
     description,
     cover_url: _cover_url,
