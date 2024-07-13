@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { Lato } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 
 import { Footer } from '@/app/_components/Footer/Footer';
 import { ModalProvider } from '@/providers/ModalProvider';
@@ -40,6 +41,7 @@ export default function RootLayout({
       <body
         className={`${lato.className} flex flex-1 flex-col text-neutral-dark`}
       >
+        <NextTopLoader color="#70B9BE" showSpinner={false} />
         <main className="flex min-h-full flex-1 flex-col px-6 py-3 pb-nav">
           {children}
         </main>

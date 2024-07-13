@@ -93,4 +93,5 @@ export default withPWA({
   skipWaiting: true,
   disable: isDev,
   reloadOnOnline: true,
+  maximumFileSizeToCacheInBytes: 6000000,
 })(nextConfigWithSentry);
