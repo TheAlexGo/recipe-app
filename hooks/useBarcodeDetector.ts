@@ -24,6 +24,9 @@ export const useBarcodeDetector = ({
 
   const checkVideoState = useCallback(async () => {
     const video = videoRef.current!;
+    if (!video) {
+      return false;
+    }
     if (video.readyState === 4) {
       return true;
     }
@@ -43,15 +46,18 @@ export const useBarcodeDetector = ({
   }, []);
 
   const stop = useCallback(() => {
+    clearTimeout(timeoutIdRef.current);
     if (stream) {
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
     }
-    clearTimeout(timeoutIdRef.current);
   }, [stream]);
 
   const collectBarcode = useCallback(() => {
     const video = videoRef.current!;
+    if (!video) {
+      return;
+    }
 
     barcodeDetector!
       .detect(video)
@@ -68,23 +74,25 @@ export const useBarcodeDetector = ({
       });
   }, [barcodeDetector, delay, onCollect]);
 
-  const continueCollect = useCallback(() => {
-    window.setTimeout(collectBarcode, delay);
-  }, [collectBarcode, delay]);
-
   useEffect(() => {
     setBarcodeDetector(
       new window.BarcodeDetector({
-        formats: ['code_39', 'codabar', 'ean_13'],
+        formats: ['code_39', 'codabar', 'ean_13', 'ean_8'],
       }),
     );
   }, []);
 
   useEffect(() => {
     const video = videoRef.current!;
-    if (stream) {
+    if (video && stream) {
       video.srcObject = stream;
-      checkVideoState().then(collectBarcode);
+      checkVideoState().then((result) => {
+        if (result) {
+          collectBarcode();
+        } else {
+          clearTimeout(timeoutIdRef.current);
+        }
+      });
     } else {
       clearTimeout(timeoutIdRef.current);
     }
@@ -94,7 +102,6 @@ export const useBarcodeDetector = ({
 
   return {
     start,
-    continue: continueCollect,
     stop,
     videoRef,
   };

@@ -38,6 +38,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
       product = await getProductByBarcode(barcode);
 
       if (!product) {
+        setLoading(false);
         // eslint-disable-next-line no-alert
         alert('Товар с таким barcode не нашли');
         throw new Error('Товар с таким barcode не нашли');
@@ -48,6 +49,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
         product.image_url,
       );
       if (!imageData) {
+        setLoading(false);
         throw new Error('При загрузке изображения произошла ошибка');
       }
 

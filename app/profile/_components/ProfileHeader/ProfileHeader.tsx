@@ -3,6 +3,7 @@
 import { FC, JSX } from 'react';
 
 import { useRouter } from 'next/navigation';
+import NProgress from 'nprogress';
 import { IoSettingsOutline } from 'react-icons/io5';
 
 import { Header } from '@/components/Header';
@@ -14,6 +15,7 @@ export const ProfileHeader: FC<IProfileHeader> = (): JSX.Element => {
   const router = useRouter();
 
   const clickHandler = () => {
+    NProgress.start();
     router.push('profile/settings');
   };
 
