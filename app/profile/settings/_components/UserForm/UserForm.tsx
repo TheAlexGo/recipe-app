@@ -50,7 +50,9 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
 
   const avatarChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
     ({ target }) => {
-      setAvatar(URL.createObjectURL(target.files![0]));
+      if (target.files!.length) {
+        setAvatar(URL.createObjectURL(target.files![0]));
+      }
     },
     [],
   );
