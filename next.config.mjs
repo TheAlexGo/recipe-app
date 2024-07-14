@@ -5,6 +5,12 @@ const isDev = process.env.NODE_ENV === 'development';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverActions: {
+      // TODO: УБРАТЬ И СДЕЛАТЬ НОРМАЛЬНО
+      bodySizeLimit: '20mb',
+    },
+  },
   reactStrictMode: true,
   output: process.env.BUILD_OUTPUT || 'standalone',
   images: {
