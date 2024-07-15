@@ -17,6 +17,7 @@ import { SubmitButton } from '@/app/profile/settings/_components/UserForm/Submit
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
 import { Input } from '@/components/Input';
 import { useLoadImage } from '@/hooks/useLoadImage';
+import { compressFile, mutateInputFiles } from '@/utils/file';
 import { getLocal } from '@/utils/local';
 
 interface IUserForm {
@@ -49,9 +50,16 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
     }, []);
 
   const avatarChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
-    ({ target }) => {
-      if (target.files!.length) {
-        setAvatar(URL.createObjectURL(target.files![0]));
+    async ({ target }) => {
+      if (target.files?.length) {
+        let file = target.files[0];
+        if (file.size > 1_000_000) {
+          file = await compressFile(target.files[0], {
+            maxSizeMB: 1,
+          });
+        }
+        setAvatar(URL.createObjectURL(file));
+        mutateInputFiles(target, file);
       }
     },
     [],
