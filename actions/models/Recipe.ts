@@ -13,6 +13,7 @@ import { BaseModel, ITableDB } from '@/actions/models/base';
 import { catchError } from '@/utils/decorators';
 
 export interface IRecipeDB extends ITableDB {
+  id: number;
   cover_url: string;
   title: string;
   less_title: string;

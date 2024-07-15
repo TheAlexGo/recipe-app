@@ -16,7 +16,7 @@ import { getLocal } from '@/utils/local';
 import { Close } from './_components/Close/Close';
 
 export default async function Recipe({ params }: { params: { id: string } }) {
-  const recipe = await getRecipe(params.id);
+  const recipe = await getRecipe(Number(params.id));
 
   if (!recipe) {
     notFound();

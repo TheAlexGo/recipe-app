@@ -1,7 +1,15 @@
 import { FC, JSX, PropsWithChildren } from 'react';
 
-interface ISection extends PropsWithChildren {}
+import cn from 'classnames';
 
-export const Section: FC<ISection> = ({ children }): JSX.Element => {
-  return <section className="flex flex-col gap-y-3">{children}</section>;
+interface ISection extends PropsWithChildren {
+  className?: string;
+}
+
+export const Section: FC<ISection> = ({ className, children }): JSX.Element => {
+  return (
+    <section className={cn('flex flex-col gap-y-3', className)}>
+      {children}
+    </section>
+  );
 };

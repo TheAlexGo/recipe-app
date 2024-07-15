@@ -1,4 +1,9 @@
 import { getUser } from '@/actions/getUser';
+import {
+  addToFavorite,
+  getFavoriteRecipesAsObject,
+  removeFromFavorite,
+} from '@/actions/impl/favorite';
 import { getRecipeAll } from '@/actions/impl/recipe';
 import { Chip } from '@/components/Chip';
 import { RecipeCard } from '@/components/RecipeCard';
@@ -10,6 +15,7 @@ import { Header } from './_components/Header';
 export default async function Home() {
   const user = await getUser();
   const recipes = await getRecipeAll();
+  const favorites = await getFavoriteRecipesAsObject();
   return (
     <div className="flex flex-col gap-y-6">
       <Header user={user} />
@@ -39,7 +45,12 @@ export default async function Home() {
         <Section.Scroll>
           {recipes.map((recipe) => (
             <Section.Scroll.Item key={recipe.id}>
-              <RecipeCard {...recipe} />
+              <RecipeCard
+                {...recipe}
+                onAddFavorite={addToFavorite}
+                onRemoveFavorite={removeFromFavorite}
+                favorite={favorites[recipe.id] !== undefined}
+              />
             </Section.Scroll.Item>
           ))}
         </Section.Scroll>
