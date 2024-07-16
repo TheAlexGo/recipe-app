@@ -1,12 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { TbEdit } from 'react-icons/tb';
+import { MdOutlineGrass } from 'react-icons/md';
+import { PiAvocado, PiPizza } from 'react-icons/pi';
+import { TbCampfire, TbEdit } from 'react-icons/tb';
 
 import { getUser } from '@/actions/getUser';
 import { isFavoriteRecipe } from '@/actions/impl/favorite';
 import { getRecipe } from '@/actions/impl/recipe';
-import { Units } from '@/actions/models/Nutritions';
+import { NutritionTypes, Units } from '@/actions/models/Nutritions';
 import { Button } from '@/components/Button';
 import { CollapsedText } from '@/components/CollapsedText';
 import { DetailTime } from '@/components/Detail/DetailTime';
@@ -80,11 +82,30 @@ export default async function Recipe({ params }: { params: { id: string } }) {
         <CollapsedText>{description}</CollapsedText>
         {Boolean(nutritions.length) && (
           <Nutritions className="mt-4">
-            {nutritions.map(({ type, unit, value, icon }) => {
+            {nutritions.map(({ type, unit, value }) => {
+              let icon;
+              switch (type) {
+                case NutritionTypes.CARBS:
+                  icon = MdOutlineGrass;
+                  break;
+                case NutritionTypes.PROTEINS:
+                  icon = PiAvocado;
+                  break;
+                case NutritionTypes.KCAL:
+                  icon = TbCampfire;
+                  break;
+                case NutritionTypes.FATS:
+                  icon = PiPizza;
+                  break;
+                default:
+                  break;
+              }
+
               return (
-                <Nutritions.Item key={type} icon={icon}>
+                <Nutritions.Item key={type} icon={icon!}>
                   {value}
-                  {unit !== Units.KCAL && unit} {type}
+                  {unit !== Units.KCAL && unit}{' '}
+                  {getLocal(`nutrition.${type}.title`)}
                 </Nutritions.Item>
               );
             })}

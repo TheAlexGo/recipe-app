@@ -12,6 +12,10 @@ export const uploadRecipeCover = async (file: File) => {
   return createInstance().uploadImage(file);
 };
 
+export const deleteRecipeCover = async (filePath: string) => {
+  return createInstance().deleteImage(filePath);
+};
+
 export const createRecipe = async (
   recipe: Omit<IRecipeDB, 'id' | 'user_id'>,
 ) => {

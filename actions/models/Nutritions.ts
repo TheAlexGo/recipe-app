@@ -1,5 +1,4 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { IconType } from 'react-icons';
 
 import { BaseModel, ITableDB } from '@/actions/models/base';
 
@@ -22,9 +21,7 @@ export interface INutritionDB extends ITableDB {
   recipe_id: string;
 }
 
-export interface INutrition extends INutritionDB {
-  icon: IconType;
-}
+export interface INutrition extends INutritionDB {}
 
 export class Nutritions extends BaseModel<INutritionDB> {
   constructor(supabase: SupabaseClient) {

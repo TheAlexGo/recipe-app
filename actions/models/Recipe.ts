@@ -1,14 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { MdOutlineGrass } from 'react-icons/md';
-import { PiAvocado, PiPizza } from 'react-icons/pi';
-import { TbCampfire } from 'react-icons/tb';
 
 import { IProductApi } from '@/actions/getProductByBarcode';
-import {
-  INutrition,
-  INutritionDB,
-  NutritionTypes,
-} from '@/actions/models/Nutritions';
+import { INutrition } from '@/actions/models/Nutritions';
 import { BaseModel, ITableDB } from '@/actions/models/base';
 import { catchError } from '@/utils/decorators';
 
@@ -46,7 +39,7 @@ export class Recipe extends BaseModel<IRecipeDB> {
     const { data: productData, error: productError } = await this.supabase
       .from('product')
       .select(`*, count:ingredients!inner(id)`)
-      .eq('id', recipeId);
+      .eq('ingredients.recipe_id', recipeId);
 
     if (error || productError) {
       throw error || productError;
@@ -60,29 +53,6 @@ export class Recipe extends BaseModel<IRecipeDB> {
 
     return {
       ...currentItem,
-      nutritions: currentItem.nutritions.map((nutrition: INutritionDB) => {
-        let icon;
-        switch (nutrition.type) {
-          case NutritionTypes.CARBS:
-            icon = MdOutlineGrass;
-            break;
-          case NutritionTypes.PROTEINS:
-            icon = PiAvocado;
-            break;
-          case NutritionTypes.KCAL:
-            icon = TbCampfire;
-            break;
-          case NutritionTypes.FATS:
-            icon = PiPizza;
-            break;
-          default:
-            break;
-        }
-        return {
-          ...nutrition,
-          icon,
-        };
-      }),
       ingredients: productData,
     };
   }

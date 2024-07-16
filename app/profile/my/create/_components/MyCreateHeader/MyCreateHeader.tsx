@@ -20,7 +20,7 @@ export const MyCreateHeader: FC<IMyCreateHeader> = ({
 
   const clickHandler = () => {
     NProgress.start();
-    router.replace('/profile/my');
+    router.back();
   };
 
   return (

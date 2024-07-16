@@ -53,6 +53,15 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
+  async deleteImage(filePath: string) {
+    const { error } = await this.fromImagesStorage().remove([filePath]);
+
+    if (error) {
+      throw error;
+    }
+  }
+
+  @catchError
   async insert(recipe: Omit<T, 'id' | 'user_id'>): Promise<T> {
     const user = await getUser();
     const { data, error } = await this.fromTable()
