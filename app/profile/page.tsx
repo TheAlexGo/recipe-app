@@ -1,9 +1,7 @@
+import Link from 'next/link';
+
 import { getUser } from '@/actions/getUser';
-import {
-  addToFavorite,
-  getFavoriteRecipes,
-  removeFromFavorite,
-} from '@/actions/impl/favorite';
+import { getFavoriteRecipes } from '@/actions/impl/favorite';
 import { LogoutButton } from '@/app/profile/_components/LogoutButton/LogoutButton';
 import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';
@@ -22,13 +20,15 @@ export default async function Profile() {
       <ProfileHeader />
       <div className="flex flex-1 flex-col justify-between">
         <div>
-          <UserCard
-            className="relative z-10 mt-3"
-            avatar={user.avatarUrl}
-            firstname={user.firstname}
-            lastname={user.lastname}
-            userRole={UserRole.DEVELOPER}
-          />
+          <Link href="/profile/my">
+            <UserCard
+              className="relative z-10 mt-3"
+              avatar={user.avatarUrl}
+              firstname={user.firstname}
+              lastname={user.lastname}
+              userRole={UserRole.DEVELOPER}
+            />
+          </Link>
           {Boolean(favoriteRecipes.length) && (
             <Section className="mt-6">
               <Section.Header moreLink="/">
@@ -37,13 +37,7 @@ export default async function Profile() {
               <Section.Stack>
                 {favoriteRecipes.map((recipe) => (
                   <Section.Stack.Item key={recipe.id}>
-                    <RecipeCard
-                      {...recipe}
-                      onAddFavorite={addToFavorite}
-                      onRemoveFavorite={removeFromFavorite}
-                      favorite
-                      small
-                    />
+                    <RecipeCard {...recipe} favorite small />
                   </Section.Stack.Item>
                 ))}
               </Section.Stack>

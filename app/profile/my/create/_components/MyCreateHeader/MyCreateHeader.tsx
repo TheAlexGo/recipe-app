@@ -9,24 +9,32 @@ import { FaArrowLeft } from 'react-icons/fa6';
 import { Header } from '@/components/Header';
 import { getLocal } from '@/utils/local';
 
-interface ISettingsHeader {}
+interface IMyCreateHeader {
+  recipeEdit?: boolean;
+}
 
-export const SettingsHeader: FC<ISettingsHeader> = (): JSX.Element => {
+export const MyCreateHeader: FC<IMyCreateHeader> = ({
+  recipeEdit,
+}): JSX.Element => {
   const router = useRouter();
 
   const clickHandler = () => {
     NProgress.start();
-    router.replace('/profile');
+    router.replace('/profile/my');
   };
 
   return (
     <Header>
       <Header.Icon
         icon={FaArrowLeft}
-        label={getLocal('action.backProfile.label')}
+        label={getLocal('action.backMyRecipe.label')}
         onClick={clickHandler}
       />
-      <Header.Title>{getLocal('page.settings.title')}</Header.Title>
+      <Header.Title>
+        {getLocal(
+          recipeEdit ? 'page.myEditRecipe.title' : 'page.myCreateRecipe.title',
+        )}
+      </Header.Title>
       <Header.Empty />
     </Header>
   );

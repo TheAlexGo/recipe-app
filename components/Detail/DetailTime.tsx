@@ -14,7 +14,7 @@ export const DetailTime: FC<IDetailTime> = ({
 }): JSX.Element => {
   return (
     <Detail {...props} icon={TbClock}>
-      {time / 60} мин
+      {(time / 60).toFixed()} мин
     </Detail>
   );
 };

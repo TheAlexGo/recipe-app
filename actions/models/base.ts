@@ -70,6 +70,20 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
+  async update(
+    itemId: T['id'],
+    item: Omit<T, 'id' | 'user_id'>,
+  ): Promise<void> {
+    const { data, error } = await this.fromTable()
+      .update(item)
+      .eq('id', itemId);
+
+    if (error) {
+      throw data;
+    }
+  }
+
+  @catchError
   async select(itemId: T['id']): Promise<T> {
     const { data, error } = await this.fromTable().select().eq('id', itemId);
 

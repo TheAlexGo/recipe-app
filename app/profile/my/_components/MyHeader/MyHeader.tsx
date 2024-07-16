@@ -9,9 +9,9 @@ import { FaArrowLeft } from 'react-icons/fa6';
 import { Header } from '@/components/Header';
 import { getLocal } from '@/utils/local';
 
-interface ISettingsHeader {}
+interface IMyHeader {}
 
-export const SettingsHeader: FC<ISettingsHeader> = (): JSX.Element => {
+export const MyHeader: FC<IMyHeader> = (): JSX.Element => {
   const router = useRouter();
 
   const clickHandler = () => {
@@ -26,7 +26,7 @@ export const SettingsHeader: FC<ISettingsHeader> = (): JSX.Element => {
         label={getLocal('action.backProfile.label')}
         onClick={clickHandler}
       />
-      <Header.Title>{getLocal('page.settings.title')}</Header.Title>
+      <Header.Title>{getLocal('page.myRecipes.title')}</Header.Title>
       <Header.Empty />
     </Header>
   );

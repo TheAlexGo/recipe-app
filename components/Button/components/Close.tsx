@@ -1,22 +1,29 @@
-import { ButtonHTMLAttributes, FC, JSX } from 'react';
+'use client';
 
-import cn from 'classnames';
+import { FC, JSX } from 'react';
+
+import { useRouter } from 'next/navigation';
 import { IoClose } from 'react-icons/io5';
 
-interface IClose extends ButtonHTMLAttributes<HTMLButtonElement> {}
+import { getLocal } from '@/utils/local';
+
+import { Icon, IIcon } from './Icon';
+
+interface IClose extends Omit<IIcon, 'icon'> {}
 
 export const Close: FC<IClose> = ({ ...props }): JSX.Element => {
+  const router = useRouter();
+
+  const clickHandler = () => {
+    router.back();
+  };
+
   return (
-    <button
+    <Icon
       {...props}
-      type="button"
-      className={cn(
-        'absolute left-6 top-3 rounded-xl bg-white p-2',
-        props.className,
-      )}
-      aria-label="Закрыть"
-    >
-      <IoClose className="size-6" />
-    </button>
+      icon={IoClose}
+      onClick={clickHandler}
+      aria-label={getLocal('actions.card.close')}
+    />
   );
 };

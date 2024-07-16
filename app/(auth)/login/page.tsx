@@ -1,9 +1,8 @@
 import Link from 'next/link';
 
 import { signIn } from '@/actions/login';
+import { Button } from '@/components/Button';
 import { getLocal } from '@/utils/local';
-
-import { SubmitButton } from '../_components/SubmitButton/SubmitButton';
 
 export default function Login({
   searchParams,
@@ -34,13 +33,13 @@ export default function Login({
             required
           />
         </label>
-        <SubmitButton
+        <Button.Submit
           formAction={signIn}
           className="mb-2 rounded-md bg-green-700 px-4 py-2 text-white"
           pendingText={getLocal('actions.login.pending')}
         >
           {getLocal('actions.login.button')}
-        </SubmitButton>
+        </Button.Submit>
         <span>
           {getLocal('actions.login.link.withoutAccount')}?{' '}
           <Link href="/registration">

@@ -1,9 +1,5 @@
 import { getUser } from '@/actions/getUser';
-import {
-  addToFavorite,
-  getFavoriteRecipesAsObject,
-  removeFromFavorite,
-} from '@/actions/impl/favorite';
+import { getFavoriteRecipesAsObject } from '@/actions/impl/favorite';
 import { getRecipeAll } from '@/actions/impl/recipe';
 import { Chip } from '@/components/Chip';
 import { RecipeCard } from '@/components/RecipeCard';
@@ -47,8 +43,6 @@ export default async function Home() {
             <Section.Scroll.Item key={recipe.id}>
               <RecipeCard
                 {...recipe}
-                onAddFavorite={addToFavorite}
-                onRemoveFavorite={removeFromFavorite}
                 favorite={favorites[recipe.id] !== undefined}
               />
             </Section.Scroll.Item>

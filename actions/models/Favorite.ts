@@ -1,6 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { getUser } from '@/actions/getUser';
 import { IRecipeDB } from '@/actions/models/Recipe';
 import { BaseModel, ITableDB } from '@/actions/models/base';
 import { catchError } from '@/utils/decorators';
@@ -26,6 +25,20 @@ export class Favorite extends BaseModel<IFavoriteDB> {
     }
 
     return data as IRecipeDB[];
+  }
+
+  @catchError
+  async selectByRecipeId(recipe_id: IRecipeDB['id']) {
+    const { data, error } = await this.fromTable()
+      .select('...recipes!inner(*)')
+      .eq('recipe_id', recipe_id)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data as IRecipeDB | null;
   }
 
   @catchError

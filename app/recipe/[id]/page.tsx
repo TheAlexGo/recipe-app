@@ -1,26 +1,34 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { TbHeartPlus } from 'react-icons/tb';
+import { TbEdit } from 'react-icons/tb';
 
+import { getUser } from '@/actions/getUser';
+import { isFavoriteRecipe } from '@/actions/impl/favorite';
 import { getRecipe } from '@/actions/impl/recipe';
 import { Units } from '@/actions/models/Nutritions';
-import { IngredientsPanel } from '@/app/recipe/[id]/_components/TabsContent/IngredientsPanel';
-import { InstructionPanel } from '@/app/recipe/[id]/_components/TabsContent/InstructionPanel';
-import { TabsContent } from '@/app/recipe/[id]/_components/TabsContent/TabsContent';
+import { Button } from '@/components/Button';
 import { CollapsedText } from '@/components/CollapsedText';
 import { DetailTime } from '@/components/Detail/DetailTime';
 import { Nutritions } from '@/components/Nutritions';
 import { useLoadImage } from '@/hooks/useLoadImage';
 import { getLocal } from '@/utils/local';
 
-import { Close } from './_components/Close/Close';
+import { IngredientsPanel } from './_components/TabsContent/IngredientsPanel';
+import { InstructionPanel } from './_components/TabsContent/InstructionPanel';
+import { TabsContent } from './_components/TabsContent/TabsContent';
 
 export default async function Recipe({ params }: { params: { id: string } }) {
-  const recipe = await getRecipe(Number(params.id));
+  const { id } = await getUser();
+  const recipeId = Number(params.id);
+  const recipe = await getRecipe(recipeId);
+  const isFavorite = await isFavoriteRecipe(recipeId);
 
   if (!recipe) {
     notFound();
   }
+
+  const isOwner = id === recipe.user_id;
 
   const {
     less_title,
@@ -43,14 +51,26 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           alt={getLocal('images.alt.recipe.cover')}
           fill
         />
-        <Close />
-        <button
-          type="button"
-          className="absolute right-6 top-3 rounded-xl bg-white p-2"
-          aria-label={getLocal('actions.card.inFavorite')}
-        >
-          <TbHeartPlus className="size-6" />
-        </button>
+        <div className="absolute inset-x-6 top-3 flex justify-between">
+          <Button.Close size="normal" />
+          <div className="flex gap-x-3">
+            {isOwner && (
+              <Link href={`/profile/my/create?recipeId=${recipeId}`}>
+                <Button.Icon
+                  icon={TbEdit}
+                  size="normal"
+                  tabIndex={-1}
+                  aria-hidden
+                />
+              </Link>
+            )}
+            <Button.Favorite
+              id={recipeId}
+              size="normal"
+              favorite={isFavorite}
+            />
+          </div>
+        </div>
       </div>
       <div className="-my-10 flex-1 rounded-se-recipe-container rounded-ss-recipe-container bg-white px-6 pb-10 before:mx-auto before:mb-6 before:mt-3 before:block before:h-1 before:w-14 before:bg-neutral-gray-3">
         <header className="flex justify-between">
@@ -58,16 +78,18 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           <DetailTime className="text-neutral-gray-5" time={cooking_time} />
         </header>
         <CollapsedText>{description}</CollapsedText>
-        <Nutritions className="mt-4">
-          {nutritions.map(({ type, unit, value, icon }) => {
-            return (
-              <Nutritions.Item key={type} icon={icon}>
-                {value}
-                {unit !== Units.KCAL && unit} {type}
-              </Nutritions.Item>
-            );
-          })}
-        </Nutritions>
+        {Boolean(nutritions.length) && (
+          <Nutritions className="mt-4">
+            {nutritions.map(({ type, unit, value, icon }) => {
+              return (
+                <Nutritions.Item key={type} icon={icon}>
+                  {value}
+                  {unit !== Units.KCAL && unit} {type}
+                </Nutritions.Item>
+              );
+            })}
+          </Nutritions>
+        )}
         <TabsContent
           items={[
             {

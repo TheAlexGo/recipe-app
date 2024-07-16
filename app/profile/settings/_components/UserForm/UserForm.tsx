@@ -13,11 +13,11 @@ import {
 import Image from 'next/image';
 
 import { IUser } from '@/actions/getUser';
-import { SubmitButton } from '@/app/profile/settings/_components/UserForm/SubmitButton';
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
+import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { useLoadImage } from '@/hooks/useLoadImage';
-import { compressFile, mutateInputFiles } from '@/utils/file';
+import { useUploadImage } from '@/hooks/useUploadImage';
 import { getLocal } from '@/utils/local';
 
 interface IUserForm {
@@ -49,21 +49,9 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
       setLastname(target.value);
     }, []);
 
-  const avatarChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async ({ target }) => {
-      if (target.files?.length) {
-        let file = target.files[0];
-        if (file.size > 1_000_000) {
-          file = await compressFile(target.files[0], {
-            maxSizeMB: 1,
-          });
-        }
-        setAvatar(URL.createObjectURL(file));
-        mutateInputFiles(target, file);
-      }
-    },
-    [],
-  );
+  const { changeHandler } = useUploadImage({
+    setImage: setAvatar,
+  });
 
   useEffect(() => {
     setFirstname(user.firstname);
@@ -72,7 +60,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
   }, [avatarSrc, user.firstname, user.lastname]);
 
   return (
-    <form className="mt-3 flex flex-col gap-y-3" action={submitHandler}>
+    <form className="mt-3 flex flex-col gap-y-3">
       <label htmlFor="avatar">
         <Image
           className="size-32 object-cover"
@@ -87,7 +75,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
           id="avatar"
           type="file"
           name="avatar"
-          onChange={avatarChangeHandler}
+          onChange={changeHandler}
           accept="image/*"
         />
       </label>
@@ -111,7 +99,11 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
           name="lastname"
         />
       </label>
-      {dataChanged && <SubmitButton>{getLocal('form.save')}</SubmitButton>}
+      {dataChanged && (
+        <Button.Submit view="primary" formAction={submitHandler}>
+          {getLocal('form.save')}
+        </Button.Submit>
+      )}
     </form>
   );
 };

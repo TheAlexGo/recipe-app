@@ -27,7 +27,7 @@ export interface IRecipeProduct extends IProductApi {
   count: { id: string }[];
 }
 
-export interface IRecipe extends Omit<IRecipeDB, 'user_id'> {
+export interface IRecipe extends IRecipeDB {
   nutritions: INutrition[];
   ingredients: IRecipeProduct[];
 }
@@ -38,20 +38,25 @@ export class Recipe extends BaseModel<IRecipeDB> {
   }
 
   @catchError
-  async selectFullData(recipeId: IRecipeDB['id']): Promise<IRecipe> {
+  async selectFullData(recipeId: IRecipeDB['id']): Promise<IRecipe | null> {
     const { data, error } = await this.fromTable()
       .select('*, nutritions(*)')
       .eq('id', recipeId);
 
     const { data: productData, error: productError } = await this.supabase
       .from('product')
-      .select(`*, count:ingredients!inner(id)`);
+      .select(`*, count:ingredients!inner(id)`)
+      .eq('id', recipeId);
 
     if (error || productError) {
       throw error || productError;
     }
 
     const currentItem = data![0];
+
+    if (!currentItem) {
+      return null;
+    }
 
     return {
       ...currentItem,

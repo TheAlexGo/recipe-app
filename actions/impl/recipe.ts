@@ -18,8 +18,19 @@ export const createRecipe = async (
   return createInstance().insert(recipe);
 };
 
+export const updateRecipe = async (
+  recipeId: IRecipeDB['id'],
+  recipe: Omit<IRecipeDB, 'id' | 'user_id'>,
+) => {
+  return createInstance().update(recipeId, recipe);
+};
+
 export const getRecipeAll = async () => {
   return createInstance().selectAll();
+};
+
+export const getMyRecipeAll = async () => {
+  return createInstance().selectAllByUserId();
 };
 
 export const getRecipe = async (recipeId: IRecipe['id']) => {

@@ -98,7 +98,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
   return (
     <Modal isOpen={isOpen}>
-      <Button.Close className="z-10" onClick={onClose} />
+      <Button.Close size="normal" className="z-10" onClick={onClose} />
       <div className="fixed inset-0 flex items-center justify-center bg-black">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video width="100%" height="100%" autoPlay playsInline ref={videoRef} />

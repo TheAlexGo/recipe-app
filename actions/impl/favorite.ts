@@ -27,6 +27,14 @@ export const getFavoriteRecipes = async () => {
   return createInstance().selectAllRecipes();
 };
 
+export const getFavoriteByRecipeId = async (recipe_id: IRecipeDB['id']) => {
+  return createInstance().selectByRecipeId(recipe_id);
+};
+
+export const isFavoriteRecipe = async (recipe_id: IRecipeDB['id']) => {
+  return Boolean(await getFavoriteByRecipeId(recipe_id));
+};
+
 export const getFavoriteRecipesAsObject = async () => {
   return (await createInstance().selectAllByUserId()).reduce<
     Record<IRecipeDB['id'], number>
