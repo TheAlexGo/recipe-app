@@ -1,4 +1,4 @@
-import { getUser } from '@/actions/getUser';
+import { getUser } from '@/actions/user';
 import { UserForm } from '@/app/profile/settings/_components/UserForm/UserForm';
 
 import { SettingsHeader } from './_components/SettingsHeader/SettingsHeader';

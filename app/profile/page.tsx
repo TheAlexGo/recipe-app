@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
-import { getUser } from '@/actions/getUser';
-import { getFavoriteRecipes } from '@/actions/impl/favorite';
+import { getFavoriteRecipes } from '@/actions/favorite';
+import { getUser } from '@/actions/user';
 import { LogoutButton } from '@/app/profile/_components/LogoutButton/LogoutButton';
 import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';

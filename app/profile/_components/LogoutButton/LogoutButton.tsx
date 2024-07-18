@@ -2,7 +2,7 @@
 
 import { FC, JSX } from 'react';
 
-import { logOut } from '@/actions/login';
+import { logOut } from '@/actions/user';
 import { Button } from '@/components/Button/Button';
 import { getLocal } from '@/utils/local';
 

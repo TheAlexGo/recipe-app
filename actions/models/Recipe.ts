@@ -1,8 +1,8 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
-import { IProductApi } from '@/actions/getProductByBarcode';
 import { INutrition } from '@/actions/models/Nutritions';
 import { BaseModel, ITableDB } from '@/actions/models/base';
+import { IProductDB } from '@/types/db';
 import { catchError } from '@/utils/decorators';
 
 export interface IRecipeDB extends ITableDB {
@@ -16,7 +16,7 @@ export interface IRecipeDB extends ITableDB {
   recipe_text: string;
 }
 
-export interface IRecipeProduct extends IProductApi {
+export interface IRecipeProduct extends IProductDB {
   count: { id: string }[];
 }
 

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { signUp } from '@/actions/login';
+import { signUp } from '@/actions/user';
 import { Button } from '@/components/Button';
 import { getLocal } from '@/utils/local';
 

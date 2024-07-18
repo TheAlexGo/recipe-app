@@ -2,16 +2,19 @@
 
 import { FC, JSX, useState } from 'react';
 
+import cn from 'classnames';
 import Image from 'next/image';
+import { CgSpinner } from 'react-icons/cg';
 import { IoClose } from 'react-icons/io5';
 
-import { IProductApi } from '@/actions/getProductByBarcode';
 import { IRecipe } from '@/actions/models/Recipe';
-import { create, update } from '@/app/profile/my/create/action';
+import { ProductsSearch } from '@/app/_components/ProductsSearch/ProductsSearch';
+import { create, update } from '@/app/recipe/action';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { useLoadImage } from '@/hooks/useLoadImage';
 import { useUploadImage } from '@/hooks/useUploadImage';
+import { IProductDB } from '@/types/db';
 import { IMAGE_PLACEHOLDER } from '@/utils/image';
 import { getLocal } from '@/utils/local';
 
@@ -24,11 +27,11 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
   const [cover, setCover] = useState<string>(prevCover || IMAGE_PLACEHOLDER);
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
 
-  const { changeHandler } = useUploadImage({
+  const { changeHandler, loading } = useUploadImage({
     setImage: setCover,
   });
 
-  const removeIngredientHandler = (productId: IProductApi['id']) => {
+  const removeIngredientHandler = (productId: IProductDB['id']) => {
     return () =>
       setIngredients((prevIngredients) =>
         prevIngredients.filter(({ id }) => id !== productId),
@@ -118,14 +121,21 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
       <label htmlFor="cover">
         <span>{getLocal('form.cover.label')}</span>
         <div className="relative size-32">
-          <Image
-            className="size-32 object-cover"
-            src={cover}
-            width={128}
-            height={128}
-            priority
-            alt={getLocal('images.alt.avatar')}
-          />
+          <div className="relative">
+            <Image
+              className={cn('size-32 object-cover', {
+                'opacity-50': loading,
+              })}
+              src={cover}
+              width={128}
+              height={128}
+              priority
+              alt={getLocal('images.alt.avatar')}
+            />
+            {loading && (
+              <CgSpinner className="absolute inset-0 m-auto size-16 animate-spin text-brand-dark" />
+            )}
+          </div>
           <Input
             id="cover"
             className="absolute inset-0 opacity-0"
@@ -134,18 +144,21 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
             accept="image/*"
             onChange={changeHandler}
             required={!prevCover}
+            disabled={loading}
           />
         </div>
       </label>
       <div>
         <h2>{getLocal('ingredients.title')}</h2>
+        <ProductsSearch />
         <ul>
           {ingredients.map((ingredient) => {
             return (
               <li key={ingredient.id}>
-                <label htmlFor={ingredient.id}>
+                <label htmlFor={`product-${ingredient.id}`}>
                   {ingredient.title}
                   <input
+                    id={`product-${ingredient.id}`}
                     className="hidden"
                     type="text"
                     name="product"
@@ -163,7 +176,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
           })}
         </ul>
       </div>
-      <Button.Submit formAction={recipe ? update : create}>
+      <Button.Submit formAction={recipe ? update : create} disabled={loading}>
         {getLocal('form.create')}
       </Button.Submit>
     </form>

@@ -5,15 +5,15 @@ import { FC, JSX, useCallback } from 'react';
 import cn from 'classnames';
 import Image from 'next/image';
 
-import { IProduct } from '@/actions/getProductByBarcode';
 import { Counter } from '@/components/Counter/Counter';
 import { useLoadImage } from '@/hooks/useLoadImage';
+import { IProductDB } from '@/types/db';
 
-export interface IProductChip extends IProduct {
+export interface IProductChip extends IProductDB {
   count?: number;
   withoutClamp?: boolean;
-  onRemove?: (productId: IProduct['id']) => void;
-  onAdd?: (productId: IProduct['id']) => void;
+  onRemove?: (productId: IProductDB['id']) => void;
+  onAdd?: (productId: IProductDB['id']) => void;
 }
 
 export const ProductChip: FC<IProductChip> = ({

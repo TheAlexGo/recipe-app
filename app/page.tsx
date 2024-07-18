@@ -1,6 +1,6 @@
-import { getUser } from '@/actions/getUser';
-import { getFavoriteRecipesAsObject } from '@/actions/impl/favorite';
-import { getRecipeAll } from '@/actions/impl/recipe';
+import { getFavoriteRecipesAsObject } from '@/actions/favorite';
+import { getRecipeAll } from '@/actions/recipe';
+import { getUser } from '@/actions/user';
 import { Chip } from '@/components/Chip';
 import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';

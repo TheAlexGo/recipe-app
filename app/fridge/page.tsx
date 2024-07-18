@@ -1,10 +1,10 @@
-import { getProducts } from '@/actions/fridge';
+import { getProductInFridge } from '@/actions/product';
 import { Chip } from '@/app/fridge/_components/Chip/Chip';
 
 import { FridgeHeader } from './_components/FridgeHeader/FridgeHeader';
 
 export default async function Fridge() {
-  const products = await getProducts();
+  const products = await getProductInFridge();
   return (
     <div>
       <FridgeHeader />

@@ -5,7 +5,7 @@ import { FC, JSX, MouseEventHandler } from 'react';
 import NProgress from 'nprogress';
 import { TbHeartPlus } from 'react-icons/tb';
 
-import { addToFavorite, removeFromFavorite } from '@/actions/impl/favorite';
+import { addToFavorite, removeFromFavorite } from '@/actions/favorite';
 import { getLocal } from '@/utils/local';
 
 import { Icon, IIcon } from './Icon';

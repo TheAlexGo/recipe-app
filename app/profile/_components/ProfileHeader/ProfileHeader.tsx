@@ -16,7 +16,7 @@ export const ProfileHeader: FC<IProfileHeader> = (): JSX.Element => {
 
   const clickHandler = () => {
     NProgress.start();
-    router.push('profile/settings');
+    router.push('settings');
   };
 
   return (

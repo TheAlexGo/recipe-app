@@ -2,14 +2,14 @@
 
 import { redirect } from 'next/navigation';
 
-import { updateIngredients } from '@/actions/impl/ingredients';
+import { updateIngredients } from '@/actions/ingredients';
+import { IRecipeDB } from '@/actions/models/Recipe';
 import {
   createRecipe,
   deleteRecipeCover,
   updateRecipe,
   uploadRecipeCover,
-} from '@/actions/impl/recipe';
-import { IRecipeDB } from '@/actions/models/Recipe';
+} from '@/actions/recipe';
 
 const prepareData = async (formData: FormData) => {
   const title = formData.get('title') as string;

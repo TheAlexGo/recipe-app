@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { CookieOptions } from '@supabase/ssr/src/types';
 import { NextRequest, NextResponse } from 'next/server';
 
-const notProtectedUrls = ['/login', '/registration'];
+const notProtectedUrls = ['/login/', '/registration/'];
 
 export const updateSession = async (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({

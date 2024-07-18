@@ -1,4 +1,4 @@
-import { getMyRecipeAll } from '@/actions/impl/recipe';
+import { getMyRecipeAll } from '@/actions/recipe';
 import { Button } from '@/components/Button/Button';
 import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';
@@ -11,7 +11,7 @@ export default async function My() {
   return (
     <div className="flex flex-1 flex-col pb-11">
       <MyHeader />
-      <Button view="primary" href="/profile/my/create">
+      <Button view="primary" href="/recipe/create">
         {getLocal('actions.createRecipe.button')}
       </Button>
       {Boolean(myRecipes.length) && (

@@ -1,7 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
-import { v4 as uuidv4 } from 'uuid';
 
-import { getUser } from '@/actions/getUser';
+import { getUser } from '@/actions/user';
+import { Database } from '@/types/supabase';
 import { catchError } from '@/utils/decorators';
 
 export interface ITableDB {
@@ -16,7 +16,11 @@ export class BaseModel<T extends ITableDB> {
 
   protected readonly supabase: SupabaseClient;
 
-  constructor(supabase: SupabaseClient, table: string, imagesStorage?: string) {
+  constructor(
+    supabase: SupabaseClient<Database>,
+    table: string,
+    imagesStorage?: string,
+  ) {
     this.supabase = supabase;
     this.TABLE = table;
     this.IMAGES_STORAGE = imagesStorage;
@@ -26,6 +30,7 @@ export class BaseModel<T extends ITableDB> {
     return this.supabase.from(this.TABLE);
   }
 
+  @catchError
   private fromImagesStorage() {
     if (!this.IMAGES_STORAGE) {
       throw new Error('IMAGES_STORAGE не объявлен!');
@@ -34,10 +39,9 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
-  async uploadImage(file: File) {
-    const uniqueID = uuidv4();
+  async uploadImage(fileName: string, file: File) {
     const { data, error } = await this.fromImagesStorage().upload(
-      uniqueID,
+      fileName,
       file,
       {
         cacheControl: '3600',
@@ -62,14 +66,16 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
-  async insert(recipe: Omit<T, 'id' | 'user_id'>): Promise<T> {
-    const user = await getUser();
-    const { data, error } = await this.fromTable()
-      .insert({
-        ...recipe,
+  async insert(item: Omit<T, 'id' | 'user_id'>, withUserId = true): Promise<T> {
+    const insertData = item;
+    if (withUserId) {
+      const user = await getUser();
+      Object.assign(insertData, {
         user_id: user.id,
-      })
-      .select();
+      });
+    }
+
+    const { data, error } = await this.fromTable().insert(insertData).select();
 
     if (error) {
       throw error;
@@ -126,5 +132,19 @@ export class BaseModel<T extends ITableDB> {
     }
 
     return data!;
+  }
+
+  @catchError
+  async deleteById(id: T['id']) {
+    const { data, error } = await this.fromTable()
+      .delete()
+      .eq('id', id)
+      .select();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
   }
 }

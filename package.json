@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "next lint",
     "locales:download": "localazy download",
-    "locales:upload": "localazy upload"
+    "locales:upload": "localazy upload",
+    "update-types": "npx supabase gen types --lang=typescript --project-id \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"ldahtvsnwulnkxrsnekw\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" > types/supabase.ts"
   },
   "dependencies": {
     "@sentry/core": "^8.17.0",
@@ -23,6 +24,7 @@
     "classnames": "^2.5.1",
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.1.3",
+    "lodash.debounce": "^4.0.8",
     "next": "14.2.5",
     "next-pwa": "^5.6.0",
     "nextjs-toploader": "^1.6.12",
@@ -43,6 +45,7 @@
     "@svgr/webpack": "^8.1.0",
     "@types/cookie": "^0.6.0",
     "@types/eslint__js": "^8.42.3",
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
     "@types/nprogress": "^0.2.3",
     "@types/react": "^18",
@@ -61,6 +64,7 @@
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
+    "supabase": "^1.183.5",
     "tailwindcss": "^3.4.1",
     "typescript": "5.4.5",
     "typescript-eslint": "^7.16.0"

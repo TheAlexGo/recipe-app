@@ -1,51 +1,23 @@
 'use server';
 
-import { IProduct, IProductDB } from '@/actions/getProductByBarcode';
-import { getUser } from '@/actions/getUser';
-import logger from '@/utils/logger';
+import { Fridge } from '@/actions/models/Fridge';
+import { getUser } from '@/actions/user';
+import { IProductDB } from '@/types/db';
 import { createClient } from '@/utils/supabase/server';
 
-export const getProducts = async (): Promise<IProductDB[]> => {
+const createInstance = () => {
   const supabase = createClient();
-
-  const { data, error } = await supabase.from('product').select(`
-      id,
-      title,
-      code,
-      image_url,
-      brand,
-      barcode,
-      inFridge:fridge!inner(id)
-    `);
-  if (error) {
-    throw new Error(`addProduct: ${error.message}`);
-  }
-
-  return data || [];
+  return new Fridge(supabase);
 };
 
-export const addProduct = async (productId: IProduct['id']) => {
-  const supabase = createClient();
+export const addProductInFridge = async (product_id: IProductDB['id']) => {
   const user = await getUser();
-
-  const { error } = await supabase.from('fridge').insert({
+  return createInstance().insert({
     user_id: user.id,
-    product_id: productId,
+    product_id,
   });
-  if (error) {
-    throw new Error(`addProduct: ${error.message}`);
-  }
 };
 
-export const removeProduct = async (productFridgeId: string) => {
-  const supabase = createClient();
-
-  const { error } = await supabase
-    .from('fridge')
-    .delete()
-    .eq('id', productFridgeId)
-    .select();
-  if (error) {
-    logger.log(`removeProduct: ${error.message}`);
-  }
+export const removeProductFromFridge = async (id: string) => {
+  return createInstance().deleteById(id);
 };

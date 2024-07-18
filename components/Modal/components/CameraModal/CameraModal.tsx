@@ -4,27 +4,22 @@ import { FC, JSX, useCallback, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { addProduct } from '@/actions/fridge';
-import {
-  getProductByBarcode,
-  getProductByBarcodeDB,
-  IProduct,
-  IProductApi,
-} from '@/actions/getProductByBarcode';
-import { createProduct, uploadProductImage } from '@/actions/product';
+import { addProductInFridge } from '@/actions/fridge';
+import { getProductByBarcode } from '@/actions/product';
 import { Chip } from '@/app/fridge/_components/Chip/Chip';
 import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal/Modal';
 import { ProductChipStub } from '@/components/ProductChip/ProductChipStub';
 import { useBarcodeDetector } from '@/hooks/useBarcodeDetector';
 import { useCameraModal } from '@/hooks/useCameraModal';
+import { IProductDB } from '@/types/db';
 
 const TAKE_PHOTO_DELAY = 500;
 
 interface ICameraModal {}
 
 export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
-  const [foundedItem, setFoundedItem] = useState<IProductApi | null>(null);
+  const [foundedItem, setFoundedItem] = useState<IProductDB | null>(null);
   const [disabled, setDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -33,36 +28,15 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
   const collectHandler = useCallback(async (barcode: string) => {
     setLoading(true);
-    let product = await getProductByBarcodeDB(barcode);
-    if (!product) {
-      product = await getProductByBarcode(barcode);
 
-      if (!product) {
-        setLoading(false);
-        // eslint-disable-next-line no-alert
-        alert('Товар с таким barcode не нашли');
-        throw new Error('Товар с таким barcode не нашли');
-      }
-
-      const imageData = await uploadProductImage(
-        `${product.code}-cover`,
-        product.image_url,
-      );
-      if (!imageData) {
-        setLoading(false);
-        throw new Error('При загрузке изображения произошла ошибка');
-      }
-
-      product = (await createProduct({
-        title: product.title,
-        code: product.code,
-        brand: product.brand,
-        image_url: imageData.path,
-        barcode,
-      })) as IProduct;
+    const product = await getProductByBarcode(barcode);
+    if (product) {
+      setFoundedItem(product);
+    } else {
+      // eslint-disable-next-line no-alert
+      alert(`Товар с таким barcode (${barcode}) не нашли!`);
     }
 
-    setFoundedItem(product);
     setLoading(false);
   }, []);
 
@@ -73,7 +47,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
   const addHandler = () => {
     setDisabled(true);
-    addProduct(foundedItem!.id).then(() => {
+    addProductInFridge(foundedItem!.id).then(() => {
       setDisabled(false);
       onClose();
       router.refresh();
@@ -98,7 +72,11 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
   return (
     <Modal isOpen={isOpen}>
-      <Button.Close size="normal" className="z-10" onClick={onClose} />
+      <Button.Close
+        size="normal"
+        className="absolute left-6 top-3 z-10"
+        onClick={onClose}
+      />
       <div className="fixed inset-0 flex items-center justify-center bg-black">
         {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
         <video width="100%" height="100%" autoPlay playsInline ref={videoRef} />

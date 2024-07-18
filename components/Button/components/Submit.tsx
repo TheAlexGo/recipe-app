@@ -20,7 +20,7 @@ export const Submit: FC<ISubmit> = ({
   const isPending = pending && action === props.formAction;
 
   return (
-    <Button {...props} type="submit" disabled={pending}>
+    <Button {...props} type="submit" disabled={props.disabled || pending}>
       {isPending && pendingText ? pendingText : children}
     </Button>
   );

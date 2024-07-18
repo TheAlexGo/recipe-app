@@ -5,10 +5,11 @@ import { MdOutlineGrass } from 'react-icons/md';
 import { PiAvocado, PiPizza } from 'react-icons/pi';
 import { TbCampfire, TbEdit } from 'react-icons/tb';
 
-import { getUser } from '@/actions/getUser';
-import { isFavoriteRecipe } from '@/actions/impl/favorite';
-import { getRecipe } from '@/actions/impl/recipe';
+import { isFavoriteRecipe } from '@/actions/favorite';
 import { NutritionTypes, Units } from '@/actions/models/Nutritions';
+import { getRecipe } from '@/actions/recipe';
+import { getUser } from '@/actions/user';
+import { ButtonClose } from '@/app/recipe/[id]/_components/ButtonClose/ButtonClose';
 import { Button } from '@/components/Button';
 import { CollapsedText } from '@/components/CollapsedText';
 import { DetailTime } from '@/components/Detail/DetailTime';
@@ -54,10 +55,10 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           fill
         />
         <div className="absolute inset-x-6 top-3 flex justify-between">
-          <Button.Close size="normal" />
+          <ButtonClose />
           <div className="flex gap-x-3">
             {isOwner && (
-              <Link href={`/profile/my/create?recipeId=${recipeId}`}>
+              <Link href="edit">
                 <Button.Icon
                   icon={TbEdit}
                   size="normal"

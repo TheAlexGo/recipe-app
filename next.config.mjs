@@ -7,6 +7,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const nextConfig = {
   reactStrictMode: true,
   output: process.env.BUILD_OUTPUT || 'standalone',
+  trailingSlash: true,
   images: {
     remotePatterns: [
       {

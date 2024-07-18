@@ -1,5 +1,6 @@
-import { ChangeEventHandler, useCallback } from 'react';
+import { ChangeEventHandler, useCallback, useState } from 'react';
 
+import { useIsMounted } from '@/hooks/useIsMounted';
 import { compressFile, mutateInputFiles } from '@/utils/file';
 
 interface IUseUploadImage {
@@ -7,23 +8,40 @@ interface IUseUploadImage {
 }
 
 export const useUploadImage = ({ setImage }: IUseUploadImage) => {
+  const [loading, setLoading] = useState(false);
+
+  const isMounted = useIsMounted();
+
   const changeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
-    async ({ target }) => {
+    ({ target }) => {
       if (target.files?.length) {
-        let file = target.files[0];
+        const file = target.files[0];
         if (file.size > 1_000_000) {
-          file = await compressFile(target.files[0], {
+          setLoading(true);
+          compressFile(target.files[0], {
             maxSizeMB: 1,
-          });
+          })
+            .then((file) => {
+              if (!isMounted()) {
+                return;
+              }
+              setImage(URL.createObjectURL(file));
+              mutateInputFiles(target, file);
+            })
+            .finally(() => {
+              if (!isMounted()) {
+                return;
+              }
+              setLoading(false);
+            });
         }
-        setImage(URL.createObjectURL(file));
-        mutateInputFiles(target, file);
       }
     },
-    [setImage],
+    [isMounted, setImage],
   );
 
   return {
+    loading,
     changeHandler,
   };
 };

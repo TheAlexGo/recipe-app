@@ -12,7 +12,7 @@ import {
 
 import Image from 'next/image';
 
-import { IUser } from '@/actions/getUser';
+import { IUser } from '@/actions/user';
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';

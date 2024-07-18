@@ -9,7 +9,7 @@ import {
   WiNightClear,
 } from 'react-icons/wi';
 
-import { IUser } from '@/actions/getUser';
+import { IUser } from '@/actions/user';
 import { getLocal } from '@/utils/local';
 
 interface IHeader {

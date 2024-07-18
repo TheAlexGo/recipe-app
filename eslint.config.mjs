@@ -19,8 +19,11 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
+const ignoresConfig = includeIgnoreFile(gitignorePath);
+ignoresConfig.ignores.push('types/supabase.ts');
+
 export default tseslint.config(
-  includeIgnoreFile(gitignorePath),
+  ignoresConfig,
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   ...fixupConfigRules(compat.extends('airbnb')),

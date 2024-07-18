@@ -1,5 +1,7 @@
 'use server';
 
+import { v4 as uuidv4 } from 'uuid';
+
 import { Recipe, IRecipe, IRecipeDB } from '@/actions/models/Recipe';
 import { createClient } from '@/utils/supabase/server';
 
@@ -9,7 +11,8 @@ const createInstance = () => {
 };
 
 export const uploadRecipeCover = async (file: File) => {
-  return createInstance().uploadImage(file);
+  const uniqueID = uuidv4();
+  return createInstance().uploadImage(uniqueID, file);
 };
 
 export const deleteRecipeCover = async (filePath: string) => {

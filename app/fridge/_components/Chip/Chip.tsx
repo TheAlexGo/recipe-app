@@ -4,23 +4,23 @@ import { FC, JSX } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { addProduct, removeProduct } from '@/actions/fridge';
-import { IProductApi, IProductDB } from '@/actions/getProductByBarcode';
+import { addProductInFridge, removeProductFromFridge } from '@/actions/fridge';
 import {
   IProductChip,
   ProductChip,
 } from '@/components/ProductChip/ProductChip';
+import { IProductDB, IProductDBInFridge } from '@/types/db';
 import { getLocal } from '@/utils/local';
 
-interface IChip extends IProductApi, Pick<IProductChip, 'withoutClamp'> {
-  inFridge?: IProductDB['inFridge'];
+interface IChip extends IProductDB, Pick<IProductChip, 'withoutClamp'> {
+  inFridge?: IProductDBInFridge['inFridge'];
 }
 
 export const Chip: FC<IChip> = ({ inFridge = [], ...product }): JSX.Element => {
   const router = useRouter();
 
   const addHandler = (productId: IProductDB['id']) => {
-    addProduct(productId).then(() => router.refresh());
+    addProductInFridge(productId).then(() => router.refresh());
   };
 
   const removeHandler = () => {
@@ -32,7 +32,7 @@ export const Chip: FC<IChip> = ({ inFridge = [], ...product }): JSX.Element => {
         return;
       }
     }
-    removeProduct(inFridge[0].id).then(() => router.refresh());
+    removeProductFromFridge(inFridge[0].id).then(() => router.refresh());
   };
 
   return (
