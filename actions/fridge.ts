@@ -13,7 +13,6 @@ const createInstance = () => {
 export const addProductInFridge = async (product_id: IProductDB['id']) => {
   const user = await getUser();
   return createInstance().insert({
-    user_id: user.id,
     product_id,
   });
 };
