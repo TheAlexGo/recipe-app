@@ -160,6 +160,7 @@ export type Database = {
           id: number
           image_url: string
           title: string
+          user_id: string
         }
         Insert: {
           barcode?: string | null
@@ -168,6 +169,7 @@ export type Database = {
           id?: number
           image_url: string
           title?: string
+          user_id: string
         }
         Update: {
           barcode?: string | null
@@ -176,8 +178,17 @@ export type Database = {
           id?: number
           image_url?: string
           title?: string
+          user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "product_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       recipes: {
         Row: {

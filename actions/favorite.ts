@@ -18,7 +18,7 @@ export const addToFavorite = async (recipe_id: IRecipeDB['id']) => {
 };
 
 export const removeFromFavorite = async (recipe_id: IRecipeDB['id']) => {
-  const result = createInstance().deleteById(recipe_id);
+  const result = createInstance().deleteByRecipeId(recipe_id);
   revalidatePath('/');
   return result;
 };

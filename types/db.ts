@@ -9,8 +9,6 @@ export interface INutritionDB extends Tables<'nutritions'> {}
 
 export interface IProductDBInFridge extends IProductDB {
   inFridge: {
-    fridge: {
-      id: string;
-    };
+    id: IFridgeDB['id'];
   }[];
 }

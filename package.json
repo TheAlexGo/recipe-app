@@ -10,9 +10,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "tsc": "tsc",
     "locales:download": "localazy download",
     "locales:upload": "localazy upload",
-    "update-types": "npx supabase gen types --lang=typescript --project-id \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"ldahtvsnwulnkxrsnekw\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" > types/supabase.ts"
+    "update-types": "npx supabase gen types --lang=typescript --project-id \"ldahtvsnwulnkxrsnekw\" > types/supabase.ts"
   },
   "dependencies": {
     "@sentry/core": "^8.17.0",
@@ -67,7 +68,7 @@
     "supabase": "^1.183.5",
     "tailwindcss": "^3.4.1",
     "typescript": "5.4.5",
-    "typescript-eslint": "^7.16.0"
+    "typescript-eslint": "^7.16.1"
   },
   "resolutions": {
     "eslint": "^9.6.0",

@@ -1,5 +1,6 @@
 class Logger {
-  log(...args: string[]) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  log(...args: any[]) {
     // eslint-disable-next-line no-console
     console.log(...args);
   }

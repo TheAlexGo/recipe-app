@@ -15,7 +15,7 @@ const createInstance = () => {
 };
 
 export const createProduct = async (
-  product: Omit<IProductDB, 'id'>,
+  product: Omit<IProductDB, 'id' | 'user_id'>,
 ): Promise<IProductDB> => {
   return createInstance().insert(product);
 };
@@ -94,12 +94,12 @@ export const searchInLenta = async (productName: string) => {
         return productExist;
       }
 
-      const imageData = await uploadProductImage(
+      const imagePath = await uploadProductImage(
         `${product.code}-cover`,
         product.image_url,
       );
 
-      if (!imageData) {
+      if (!imagePath) {
         throw new Error('При загрузке изображения произошла ошибка');
       }
 
@@ -107,7 +107,7 @@ export const searchInLenta = async (productName: string) => {
         title: product.title,
         code: product.code,
         brand: product.brand,
-        image_url: imageData.path,
+        image_url: imagePath,
         barcode: '',
       });
     }),

@@ -1,14 +1,12 @@
+// @ts-check
+
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import {
-  includeIgnoreFile,
-  fixupConfigRules,
-  fixupPluginRules,
-} from '@eslint/compat';
+import { includeIgnoreFile, fixupConfigRules } from '@eslint/compat';
 import { FlatCompat } from '@eslint/eslintrc';
 import eslint from '@eslint/js';
-import prettier from 'eslint-plugin-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -30,10 +28,8 @@ export default tseslint.config(
   ...fixupConfigRules(compat.extends('airbnb/hooks')),
   ...fixupConfigRules(compat.extends('next/core-web-vitals')),
   ...fixupConfigRules(compat.extends('plugin:prettier/recommended')),
+  eslintConfigPrettier,
   {
-    plugins: {
-      prettier: fixupPluginRules(prettier),
-    },
     rules: {
       camelcase: 'off',
       'no-return-await': 'off',

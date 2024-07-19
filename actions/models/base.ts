@@ -94,11 +94,15 @@ export class BaseModel<T extends ITableDB> {
   ): Promise<void> {
     const { data, error } = await this.fromTable()
       .update(item)
-      .eq('id', itemId);
+      .eq('id', itemId)
+      .select()
+      .single();
 
     if (error) {
-      throw data;
+      throw error;
     }
+
+    return data;
   }
 
   @catchError
@@ -138,11 +142,12 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
-  async deleteById(id: T['id']) {
+  async deleteById(id: number): Promise<T> {
     const { data, error } = await this.fromTable()
       .delete()
       .eq('id', id)
-      .select();
+      .select()
+      .single();
 
     if (error) {
       throw error;

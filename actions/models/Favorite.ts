@@ -15,7 +15,7 @@ export class Favorite extends BaseModel<IFavoriteDB> {
   }
 
   @catchError
-  async selectAllRecipes() {
+  async selectAllRecipes(): Promise<IRecipeDB[]> {
     const { data, error } = await this.fromTable().select(
       '...recipes!inner(*)',
     );
@@ -24,11 +24,13 @@ export class Favorite extends BaseModel<IFavoriteDB> {
       throw error;
     }
 
-    return data as IRecipeDB[];
+    return data;
   }
 
   @catchError
-  async selectByRecipeId(recipe_id: IRecipeDB['id']) {
+  async selectByRecipeId(
+    recipe_id: IRecipeDB['id'],
+  ): Promise<IRecipeDB | null> {
     const { data, error } = await this.fromTable()
       .select('...recipes!inner(*)')
       .eq('recipe_id', recipe_id)
@@ -38,17 +40,21 @@ export class Favorite extends BaseModel<IFavoriteDB> {
       throw error;
     }
 
-    return data as IRecipeDB | null;
+    return data;
   }
 
   @catchError
-  async deleteById(recipe_id: IFavoriteDB['id']): Promise<void> {
-    const { error } = await this.fromTable()
+  async deleteByRecipeId(recipe_id: IFavoriteDB['id']): Promise<IFavoriteDB> {
+    const { data, error } = await this.fromTable()
       .delete()
-      .eq('recipe_id', recipe_id);
+      .eq('recipe_id', recipe_id)
+      .select()
+      .single();
 
     if (error) {
       throw error;
     }
+
+    return data;
   }
 }
