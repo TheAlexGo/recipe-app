@@ -1,18 +1,19 @@
-import imageCompression from 'browser-image-compression';
+import imageCompression, { Options } from 'browser-image-compression';
 
-const defaultOptions = {
+const defaultOptions: Options = {
   maxSizeMB: 1,
+  fileType: 'image/webp',
 };
 
 export const compressFile = async (
   imageFile: File,
-  options = defaultOptions,
+  options: Options = defaultOptions,
 ): Promise<File> => {
   const blob = await imageCompression(imageFile, options);
 
   return new File([blob], imageFile.name, {
-    lastModified: imageFile.lastModified,
-    type: imageFile.type,
+    lastModified: blob.lastModified,
+    type: blob.type,
   });
 };
 

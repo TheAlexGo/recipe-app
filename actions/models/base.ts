@@ -31,7 +31,7 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
-  private fromImagesStorage() {
+  protected fromImagesStorage() {
     if (!this.IMAGES_STORAGE) {
       throw new Error('IMAGES_STORAGE не объявлен!');
     }

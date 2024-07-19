@@ -1,4 +1,5 @@
 import { SupabaseClient } from '@supabase/supabase-js';
+import { v4 as uuidv4 } from 'uuid';
 
 import { INutrition } from '@/actions/models/Nutritions';
 import { BaseModel, ITableDB } from '@/actions/models/base';
@@ -28,6 +29,31 @@ export interface IRecipe extends IRecipeDB {
 export class Recipe extends BaseModel<IRecipeDB> {
   constructor(supabase: SupabaseClient) {
     super(supabase, 'recipes', 'recipe_covers');
+  }
+
+  @catchError
+  async selectCover(recipeId: IRecipeDB['id']): Promise<string | null> {
+    const { data, error } = await this.fromTable()
+      .select('cover_url')
+      .eq('id', recipeId)
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    return data?.cover_url || null;
+  }
+
+  @catchError
+  async updateCover(recipeId: IRecipeDB['id'], file: File): Promise<string> {
+    const oldCover = await this.selectCover(recipeId);
+    if (oldCover) {
+      await this.deleteImage(oldCover);
+    }
+
+    const uniqueID = uuidv4();
+    return this.uploadImage(uniqueID, file);
   }
 
   @catchError

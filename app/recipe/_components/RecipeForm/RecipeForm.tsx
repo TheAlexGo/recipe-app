@@ -27,7 +27,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
   const [cover, setCover] = useState<string>(prevCover || IMAGE_PLACEHOLDER);
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
 
-  const { changeHandler, loading } = useUploadImage({
+  const { changeHandler, loading, error } = useUploadImage({
     setImage: setCover,
   });
 
@@ -41,22 +41,13 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
   return (
     <form className="flex flex-col gap-y-3">
       {recipe && (
-        <>
-          <Input
-            className="hidden"
-            type="text"
-            name="recipeId"
-            defaultValue={recipe.id}
-            hidden
-          />
-          <Input
-            className="hidden"
-            type="text"
-            name="oldCover"
-            defaultValue={recipe.cover_url}
-            hidden
-          />
-        </>
+        <Input
+          className="hidden"
+          type="text"
+          name="recipeId"
+          defaultValue={recipe.id}
+          hidden
+        />
       )}
       <label htmlFor="title">
         <span>{getLocal('form.title.label')}</span>
@@ -146,6 +137,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
             required={!prevCover}
             disabled={loading}
           />
+          {error && <span className="text-brand-danger">{error}</span>}
         </div>
       </label>
       <div>

@@ -62,7 +62,7 @@ export const uploadAvatar = async (file: File) => {
     .from('user_avatars')
     .upload(`${user.id}-avatar`, file, {
       cacheControl: '3600',
-      upsert: true,
+      upsert: false,
     });
 
   if (error) {

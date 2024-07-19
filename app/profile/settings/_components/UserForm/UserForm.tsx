@@ -10,7 +10,9 @@ import {
   useState,
 } from 'react';
 
+import cn from 'classnames';
 import Image from 'next/image';
+import { CgSpinner } from 'react-icons/cg';
 
 import { IUser } from '@/actions/user';
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
@@ -49,7 +51,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
       setLastname(target.value);
     }, []);
 
-  const { changeHandler } = useUploadImage({
+  const { changeHandler, loading } = useUploadImage({
     setImage: setAvatar,
   });
 
@@ -62,14 +64,22 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
   return (
     <form className="mt-3 flex flex-col gap-y-3">
       <label htmlFor="avatar">
-        <Image
-          className="size-32 object-cover"
-          src={avatar}
-          width={128}
-          height={128}
-          priority
-          alt={getLocal('images.alt.avatar')}
-        />
+        <span>{getLocal('form.avatar.label')}</span>
+        <div className="relative size-32">
+          <Image
+            className={cn('size-32 object-cover', {
+              'opacity-50': loading,
+            })}
+            src={avatar}
+            width={128}
+            height={128}
+            priority
+            alt={getLocal('images.alt.avatar')}
+          />
+          {loading && (
+            <CgSpinner className="absolute inset-0 m-auto size-16 animate-spin text-brand-dark" />
+          )}
+        </div>
         <Input
           className="hidden"
           id="avatar"
@@ -100,7 +110,11 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
         />
       </label>
       {dataChanged && (
-        <Button.Submit view="primary" formAction={submitHandler}>
+        <Button.Submit
+          view="primary"
+          formAction={submitHandler}
+          disabled={loading}
+        >
           {getLocal('form.save')}
         </Button.Submit>
       )}

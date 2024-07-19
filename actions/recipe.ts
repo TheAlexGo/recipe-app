@@ -32,6 +32,10 @@ export const updateRecipe = async (
   return createInstance().update(recipeId, recipe);
 };
 
+export const updateCover = async (recipeId: IRecipeDB['id'], file: File) => {
+  return createInstance().updateCover(recipeId, file);
+};
+
 export const getRecipeAll = async () => {
   return createInstance().selectAll();
 };

@@ -9,32 +9,29 @@ interface IUseUploadImage {
 
 export const useUploadImage = ({ setImage }: IUseUploadImage) => {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const isMounted = useIsMounted();
 
   const changeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
-    ({ target }) => {
+    async ({ target }) => {
       if (target.files?.length) {
-        const file = target.files[0];
-        if (file.size > 1_000_000) {
-          setLoading(true);
-          compressFile(target.files[0], {
-            maxSizeMB: 1,
-          })
-            .then((file) => {
-              if (!isMounted()) {
-                return;
-              }
-              setImage(URL.createObjectURL(file));
-              mutateInputFiles(target, file);
-            })
-            .finally(() => {
-              if (!isMounted()) {
-                return;
-              }
-              setLoading(false);
-            });
+        let file = target.files[0];
+
+        setLoading(true);
+        try {
+          file = await compressFile(file);
+          if (!isMounted()) {
+            return;
+          }
+
+          mutateInputFiles(target, file);
+        } catch (e) {
+          setError((e as Error).message);
         }
+        setLoading(false);
+
+        setImage(URL.createObjectURL(file));
       }
     },
     [isMounted, setImage],
@@ -42,6 +39,7 @@ export const useUploadImage = ({ setImage }: IUseUploadImage) => {
 
   return {
     loading,
+    error,
     changeHandler,
   };
 };
