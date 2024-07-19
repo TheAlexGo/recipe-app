@@ -66,7 +66,10 @@ export class BaseModel<T extends ITableDB> {
   }
 
   @catchError
-  async insert(item: Omit<T, 'id' | 'user_id'>, withUserId = true): Promise<T> {
+  async insert(
+    item: Omit<T, 'id' | 'user_id' | 'created_at'>,
+    withUserId = true,
+  ): Promise<T> {
     const insertData = item;
     if (withUserId) {
       const user = await getUser();

@@ -1,7 +1,6 @@
 'use server';
 
 import { Fridge } from '@/actions/models/Fridge';
-import { getUser } from '@/actions/user';
 import { IProductDB } from '@/types/db';
 import { createClient } from '@/utils/supabase/server';
 
@@ -11,7 +10,6 @@ const createInstance = () => {
 };
 
 export const addProductInFridge = async (product_id: IProductDB['id']) => {
-  const user = await getUser();
   return createInstance().insert({
     product_id,
   });
