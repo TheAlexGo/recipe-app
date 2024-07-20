@@ -6,25 +6,23 @@ const { PROXY_URL, API_URL } = process.env;
 
 export const getProductByBarcodeFromLenta = async (
   barcode: IProductDB['barcode'],
-) => {
-  return fetch(
+): Promise<IProductDB | null> => {
+  const { skus } = await fetch(
     `${PROXY_URL}/${API_URL}/search?value=${barcode}&searchSource=Sku`,
     {
       headers: {
         'X-Requested-With': 'XMLHttpRequest',
       },
     },
-  )
-    .then((res) => res.json())
-    .then((json) => json.skus[0])
-    .then((res) => {
-      if (res) {
-        const { imageUrl, ...product } = res;
-        return {
-          ...product,
-          image_url: imageUrl,
-        };
-      }
-      return null;
-    });
+  ).then((res) => res.json());
+
+  if (!skus.length) {
+    return null;
+  }
+
+  const { imageUrl, ...product } = skus[0];
+  return {
+    ...product,
+    image_url: imageUrl,
+  };
 };

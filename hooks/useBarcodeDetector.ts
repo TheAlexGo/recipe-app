@@ -6,8 +6,13 @@ import { BarcodeDetector } from 'barcode-detector';
 import logger from '@/utils/logger';
 import { wait } from '@/utils/wait';
 
+export interface CollectHandler {
+  barcode: string;
+  continueCollect: () => void;
+}
+
 interface IUseBarcodeDetectorOptions {
-  onCollect: (barcode: string) => void;
+  onCollect: (props: CollectHandler) => void;
   delay: number;
 }
 
@@ -67,7 +72,12 @@ export const useBarcodeDetector = ({
         }
         return barcodes[0].rawValue;
       })
-      .then(onCollect)
+      .then((barcode) => {
+        onCollect({
+          barcode,
+          continueCollect: () => window.setTimeout(collectBarcode, delay),
+        });
+      })
       .catch((err) => {
         logger.log(err);
         timeoutIdRef.current = window.setTimeout(collectBarcode, delay);

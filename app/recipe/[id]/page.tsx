@@ -53,7 +53,7 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           alt={getLocal('images.alt.recipe.cover')}
           fill
         />
-        <div className="absolute inset-x-6 top-3 flex justify-between">
+        <div className="fixed inset-x-6 top-3 flex justify-between">
           <ButtonClose />
           <div className="flex gap-x-3">
             {isOwner && (
@@ -76,7 +76,10 @@ export default async function Recipe({ params }: { params: { id: string } }) {
       <div className="-my-10 flex-1 rounded-se-recipe-container rounded-ss-recipe-container bg-white px-6 pb-10 before:mx-auto before:mb-6 before:mt-3 before:block before:h-1 before:w-14 before:bg-neutral-gray-3">
         <header className="flex justify-between">
           <h1 className="text-2xl font-bold">{less_title}</h1>
-          <DetailTime className="text-neutral-gray-5" time={cooking_time} />
+          <DetailTime
+            className="shrink-0 text-neutral-gray-5"
+            time={cooking_time}
+          />
         </header>
         <CollapsedText>{description}</CollapsedText>
         {Boolean(nutritions.length) && (

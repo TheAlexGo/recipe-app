@@ -90,8 +90,8 @@ export class BaseModel<T extends ITableDB> {
   @catchError
   async update(
     itemId: T['id'],
-    item: Omit<T, 'id' | 'user_id'>,
-  ): Promise<void> {
+    item: Partial<Omit<T, 'id' | 'user_id'>>,
+  ): Promise<T> {
     const { data, error } = await this.fromTable()
       .update(item)
       .eq('id', itemId)

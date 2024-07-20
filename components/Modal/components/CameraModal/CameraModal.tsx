@@ -10,7 +10,7 @@ import { Chip } from '@/app/fridge/_components/Chip/Chip';
 import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal/Modal';
 import { ProductChipStub } from '@/components/ProductChip/ProductChipStub';
-import { useBarcodeDetector } from '@/hooks/useBarcodeDetector';
+import { CollectHandler, useBarcodeDetector } from '@/hooks/useBarcodeDetector';
 import { useCameraModal } from '@/hooks/useCameraModal';
 import { IProductDB } from '@/types/db';
 
@@ -26,19 +26,23 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
   const { isOpen, onClose } = useCameraModal();
   const router = useRouter();
 
-  const collectHandler = useCallback(async (barcode: string) => {
-    setLoading(true);
+  const collectHandler = useCallback(
+    async ({ barcode, continueCollect }: CollectHandler) => {
+      setLoading(true);
 
-    const product = await getProductByBarcode(barcode);
-    if (product) {
-      setFoundedItem(product);
-    } else {
-      // eslint-disable-next-line no-alert
-      alert(`Товар с таким barcode (${barcode}) не нашли!`);
-    }
+      const product = await getProductByBarcode(barcode);
+      if (product) {
+        setFoundedItem(product);
+      } else {
+        // eslint-disable-next-line no-alert
+        alert(`Товар с таким barcode (${barcode}) не нашли!`);
+        continueCollect();
+      }
 
-    setLoading(false);
-  }, []);
+      setLoading(false);
+    },
+    [],
+  );
 
   const { videoRef, start, stop } = useBarcodeDetector({
     delay: TAKE_PHOTO_DELAY,

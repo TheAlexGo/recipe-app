@@ -20,6 +20,13 @@ export const createProduct = async (
   return createInstance().insert(product);
 };
 
+export const updateProduct = async (
+  productId: IProductDB['id'],
+  product: Partial<Omit<IProductDB, 'id' | 'user_id'>>,
+) => {
+  return createInstance().update(productId, product);
+};
+
 export const uploadProductImage = async (
   imageName: string,
   imageUrl: string,
@@ -32,12 +39,27 @@ export const uploadProductImage = async (
   return createInstance().uploadImage(imageName, imageFile);
 };
 
+export const getProductByCode = async (code: IProductDB['code']) => {
+  return createInstance().selectByCode(code);
+};
+
 const getAndSaveProductByBarcodeFromLenta = async (
   barcode: IProductDB['barcode'],
 ): Promise<IProductDB | null> => {
   const productFromLenta = await getProductByBarcodeFromLenta(barcode);
   if (!productFromLenta) {
     return null;
+  }
+
+  const existedProductInDB = await getProductByCode(productFromLenta.code);
+
+  /**
+   * Если продукт с таким кодом у нас уже есть, значит нам надо только обновить его barcode
+   */
+  if (existedProductInDB) {
+    return updateProduct(existedProductInDB.id, {
+      barcode,
+    });
   }
 
   const image_url = await uploadProductImage(
@@ -56,10 +78,6 @@ const getAndSaveProductByBarcodeFromLenta = async (
     image_url,
     barcode,
   });
-};
-
-export const getProductByCode = async (code: IProductDB['code']) => {
-  return createInstance().selectByCode(code);
 };
 
 export const getProductByBarcode = async (
