@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MdOutlineGrass } from 'react-icons/md';
 import { PiAvocado, PiPizza } from 'react-icons/pi';
@@ -58,14 +57,13 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           <ButtonClose />
           <div className="flex gap-x-3">
             {isOwner && (
-              <Link href="edit">
-                <Button.Icon
-                  icon={TbEdit}
-                  size="normal"
-                  tabIndex={-1}
-                  aria-hidden
-                />
-              </Link>
+              <Button.Icon
+                href="edit"
+                icon={TbEdit}
+                size="normal"
+                tabIndex={-1}
+                aria-hidden
+              />
             )}
             <Button.Favorite
               id={recipeId}

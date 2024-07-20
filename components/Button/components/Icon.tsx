@@ -4,12 +4,13 @@ import cn from 'classnames';
 import { IconType } from 'react-icons';
 
 import { Button, IButton } from '@/components/Button/Button';
+import { OmitOfUnion } from '@/utils/react';
 
-export interface IIcon extends Omit<IButton, 'view' | 'type'> {
+export type IIcon = OmitOfUnion<IButton, 'view'> & {
   icon: IconType;
   size: 'small' | 'normal';
   active?: boolean;
-}
+};
 
 export const Icon: FC<IIcon> = ({
   icon: Icon,
@@ -34,7 +35,6 @@ export const Icon: FC<IIcon> = ({
         },
         className,
       )}
-      type="button"
       fill={false}
     >
       <Icon

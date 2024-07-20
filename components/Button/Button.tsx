@@ -9,22 +9,27 @@ interface IMainProps {
   fill?: boolean;
 }
 
-interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    IMainProps {
   href?: never;
 }
 
-interface ILinkProps
+type LinkPropsExt = Omit<LinkProps, 'href' | 'as'>;
+
+export interface ILinkProps
   extends Omit<
       AnchorHTMLAttributes<HTMLAnchorElement>,
-      keyof LinkProps | 'type'
+      keyof LinkPropsExt | 'type'
     >,
-    LinkProps {}
+    LinkPropsExt,
+    IMainProps {
+  href: string;
+}
 
-export interface IButton extends IMainProps, IButtonProps {}
+export type IButton = IButtonProps | ILinkProps;
 
-export interface IButtonLink extends IMainProps, ILinkProps {}
-
-export const Button: FC<IButton | IButtonLink> = ({
+export const Button: FC<IButton> = ({
   className,
   children,
   view = 'primary',

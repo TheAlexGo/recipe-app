@@ -32,6 +32,20 @@ export class Recipe extends BaseModel<IRecipeDB> {
   }
 
   @catchError
+  async selectRandom(): Promise<IRecipeDB> {
+    const { data, error } = await this.supabase
+      .rpc('get_random_recipe')
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  }
+
+  @catchError
   async selectCover(recipeId: IRecipeDB['id']): Promise<string | null> {
     const { data, error } = await this.fromTable()
       .select('cover_url')

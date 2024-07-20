@@ -2,7 +2,7 @@ import imageCompression, { Options } from 'browser-image-compression';
 
 const defaultOptions: Options = {
   maxSizeMB: 1,
-  fileType: 'image/webp',
+  fileType: 'image/jpeg',
 };
 
 export const compressFile = async (

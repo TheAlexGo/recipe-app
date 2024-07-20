@@ -4,9 +4,9 @@ import { FC, JSX } from 'react';
 
 import { useFormStatus } from 'react-dom';
 
-import { Button, IButton } from '@/components/Button/Button';
+import { Button, IButtonProps } from '@/components/Button/Button';
 
-interface ISubmit extends Omit<IButton, 'type'> {
+interface ISubmit extends Omit<IButtonProps, 'type'> {
   pendingText?: string;
 }
 

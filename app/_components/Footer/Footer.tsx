@@ -2,51 +2,69 @@
 
 import { FC, JSX } from 'react';
 
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { useRouter } from 'next/navigation';
+import NProgress from 'nprogress';
 import { FaSearch } from 'react-icons/fa';
 import { FaHouse, FaRegUser } from 'react-icons/fa6';
 import { PiChefHat } from 'react-icons/pi';
 import { TbFridge } from 'react-icons/tb';
 
+import { getRandomRecipe } from '@/actions/recipe';
 import { Nav } from '@/components/Nav';
 import { INavItem } from '@/components/Nav/Item';
 import { getLocal } from '@/utils/local';
 
-const navigations: INavItem[] = [
-  {
-    href: '/',
-    icon: FaHouse,
-    label: getLocal('nav.general.label'),
-  },
-  {
-    href: '/search',
-    icon: FaSearch,
-    label: getLocal('nav.search.label'),
-  },
-  {
-    href: '/chef',
-    icon: PiChefHat,
-    float: true,
-    label: getLocal('nav.chef.label'),
-  },
-  {
-    href: '/fridge',
-    icon: TbFridge,
-    label: getLocal('nav.fridge.label'),
-  },
-  {
-    href: '/profile',
-    icon: FaRegUser,
-    label: getLocal('nav.profile.label'),
-  },
-];
+const getNavigations = (router: AppRouterInstance): INavItem[] => {
+  return [
+    {
+      id: 'general',
+      href: '/',
+      icon: FaHouse,
+      label: getLocal('nav.general.label'),
+    },
+    {
+      id: 'search',
+      href: '/search',
+      icon: FaSearch,
+      label: getLocal('nav.search.label'),
+    },
+    {
+      id: 'chef',
+      icon: PiChefHat,
+      float: true,
+      label: getLocal('nav.chef.label'),
+      fill: false,
+      onClick: async () => {
+        NProgress.start();
+        const { id } = await getRandomRecipe();
+        router.push(`/recipe/${id}`);
+      },
+    },
+    {
+      id: 'fridge',
+      href: '/fridge',
+      icon: TbFridge,
+      label: getLocal('nav.fridge.label'),
+    },
+    {
+      id: 'profile',
+      href: '/profile',
+      icon: FaRegUser,
+      label: getLocal('nav.profile.label'),
+    },
+  ];
+};
 
 interface IFooter {}
 
 export const Footer: FC<IFooter> = (): JSX.Element => {
+  const router = useRouter();
+
   return (
     <Nav>
-      {navigations.map((nav) => (
-        <Nav.Item key={nav.href} {...nav} />
+      {getNavigations(router).map((nav) => (
+        <Nav.Item key={nav.id} {...nav} />
       ))}
     </Nav>
   );

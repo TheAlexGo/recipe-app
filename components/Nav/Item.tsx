@@ -3,32 +3,36 @@
 import { FC, JSX, memo, useMemo } from 'react';
 
 import cn from 'classnames';
-import { LinkProps } from 'next/dist/client/link';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IconType } from 'react-icons';
 
-export interface INavItem extends Omit<LinkProps, 'href'> {
-  href: string;
+import { Button } from '@/components/Button';
+import { IButton } from '@/components/Button/Button';
+
+export type INavItem = IButton & {
   icon: IconType;
   label: string;
   float?: boolean;
-}
+};
 
 export const Item: FC<INavItem> = memo(
   ({ icon: Icon, float, label, ...props }): JSX.Element => {
     const pathname = usePathname();
 
     const isActiveUrl = useMemo(() => {
+      if (!props.href) {
+        return false;
+      }
       if (props.href === '/') {
         return pathname === props.href;
       }
       return pathname.startsWith(props.href);
-    }, [pathname, props.href]);
+    }, [props.href, pathname]);
 
     return (
-      <Link
+      <Button
         {...props}
+        view="custom"
         className={cn(
           isActiveUrl ? 'text-brand-secondary' : 'text-neutral-gray-2',
           float
@@ -38,7 +42,7 @@ export const Item: FC<INavItem> = memo(
         aria-label={label}
       >
         <Icon className="h-6 w-6" />
-      </Link>
+      </Button>
     );
   },
 );

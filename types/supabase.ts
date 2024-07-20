@@ -242,7 +242,21 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_random_recipe: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          cooking_time: number
+          cover_url: string
+          created_at: string
+          description: string
+          id: number
+          kcal: number
+          less_title: string
+          recipe_text: string | null
+          title: string
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       NutritionTypes: "carbs" | "proteins" | "fats" | "kcal"

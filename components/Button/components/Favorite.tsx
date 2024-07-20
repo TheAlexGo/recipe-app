@@ -1,28 +1,31 @@
 'use client';
 
-import { FC, JSX, MouseEventHandler } from 'react';
+import { FC, JSX, MouseEvent } from 'react';
 
 import NProgress from 'nprogress';
 import { TbHeartPlus } from 'react-icons/tb';
 
 import { addToFavorite, removeFromFavorite } from '@/actions/favorite';
 import { getLocal } from '@/utils/local';
+import { OmitOfUnion } from '@/utils/react';
 
 import { Icon, IIcon } from './Icon';
 
-interface IFavorite extends Omit<IIcon, 'id' | 'icon'> {
+type IFavorite = OmitOfUnion<IIcon, 'icon' | 'id'> & {
   id: number;
   favorite?: boolean;
   activeClassName?: string;
   inactiveClassName?: string;
-}
+};
 
 export const Favorite: FC<IFavorite> = ({
   id,
   favorite,
   ...props
 }): JSX.Element => {
-  const favoriteClickHandler: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const favoriteClickHandler = (
+    e: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLAnchorElement>,
+  ) => {
     e.preventDefault();
     NProgress.start();
     if (favorite) {
@@ -37,7 +40,7 @@ export const Favorite: FC<IFavorite> = ({
       {...props}
       icon={TbHeartPlus}
       aria-label={getLocal('actions.card.inFavorite')}
-      onClickCapture={favoriteClickHandler}
+      onClick={favoriteClickHandler}
       active={favorite}
     />
   );
