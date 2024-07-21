@@ -1,3 +1,5 @@
+'use client';
+
 import { FC, JSX } from 'react';
 
 interface IProductChipStub {}

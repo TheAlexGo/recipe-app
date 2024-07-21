@@ -57,6 +57,7 @@ export const Button: FC<IButton> = ({
   return (
     <button
       {...props}
+      type={props.type || 'button'}
       className={cn(classes, {
         'opacity-70': props.disabled,
       })}

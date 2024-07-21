@@ -6,10 +6,10 @@ import { useRouter } from 'next/navigation';
 
 import { updateProductInFridge } from '@/actions/fridge';
 import { getProductByBarcode } from '@/actions/product';
-import { Chip } from '@/app/fridge/_components/Chip/Chip';
+import { ProductFridgeChip } from '@/app/_components/ProductFridgeChip/ProductFridgeChip';
 import { Button } from '@/components/Button';
 import { Modal } from '@/components/Modal/Modal';
-import { ProductChipStub } from '@/components/ProductChip/ProductChipStub';
+import { ProductChip } from '@/components/ProductChip';
 import { CollectHandler, useBarcodeDetector } from '@/hooks/useBarcodeDetector';
 import { useCameraModal } from '@/hooks/useCameraModal';
 import { IProductDB } from '@/types/db';
@@ -87,8 +87,10 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
       </div>
       {(foundedItem || loading) && (
         <div className="fixed inset-x-6 bottom-3 z-10">
-          {loading && <ProductChipStub />}
-          {foundedItem && <Chip {...foundedItem} withoutClamp count={0} />}
+          {loading && <ProductChip.Stub />}
+          {foundedItem && (
+            <ProductFridgeChip {...foundedItem} withoutClamp count={0} />
+          )}
           {foundedItem && (
             <Button className="mt-3" onClick={addHandler} disabled={disabled}>
               Добавить

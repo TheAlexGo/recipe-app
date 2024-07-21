@@ -5,8 +5,8 @@ import { FC, JSX } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { useRouter } from 'next/navigation';
 import NProgress from 'nprogress';
-import { FaSearch } from 'react-icons/fa';
 import { FaHouse, FaRegUser } from 'react-icons/fa6';
+import { IoSearch } from 'react-icons/io5';
 import { PiChefHat } from 'react-icons/pi';
 import { TbFridge } from 'react-icons/tb';
 
@@ -26,7 +26,7 @@ const getNavigations = (router: AppRouterInstance): INavItem[] => {
     {
       id: 'search',
       href: '/search',
-      icon: FaSearch,
+      icon: IoSearch,
       label: getLocal('nav.search.label'),
     },
     {

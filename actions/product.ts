@@ -2,9 +2,8 @@
 
 import { getProductByBarcodeFromLenta } from '@/actions/lenta';
 import { Product } from '@/actions/models/Product';
-import { IProductDB } from '@/types/db';
+import { IProductDB, IProductDBInFridge } from '@/types/db';
 import { downloadImage } from '@/utils/image';
-import logger from '@/utils/logger';
 import { createClient } from '@/utils/supabase/server';
 
 const { PROXY_URL, API_URL } = process.env;
@@ -33,7 +32,7 @@ export const uploadProductImage = async (
 ) => {
   const imageBlob = await downloadImage(imageUrl);
   const imageFile = new File([imageBlob], imageName, {
-    type: 'image/webp',
+    type: 'image/jpeg',
   });
 
   return createInstance().uploadImage(imageName, imageFile);
@@ -95,7 +94,9 @@ export const getProductInFridge = async () => {
   return createInstance().selectAllInFridge();
 };
 
-export const searchInLenta = async (productName: string) => {
+export const searchInLenta = async (
+  productName: string,
+): Promise<IProductDBInFridge[]> => {
   const { skus } = await fetch(
     `${PROXY_URL}/${API_URL}/search?value=${productName}&searchSource=Sku`,
     {
@@ -105,33 +106,40 @@ export const searchInLenta = async (productName: string) => {
     },
   ).then((res) => res.json());
 
-  const result = await Promise.all(
-    skus.map(async (product: IProductDB) => {
-      const productExist = getProductByCode(product.code);
-      if (productExist) {
-        return productExist;
-      }
+  if (!skus.length) {
+    return [];
+  }
 
-      const imagePath = await uploadProductImage(
-        `${product.code}-cover`,
-        product.image_url,
-      );
+  return Promise.all(
+    skus.map(
+      async (product: Omit<IProductDB, 'image_url'> & { imageUrl: string }) => {
+        const productExist = await getProductByCode(product.code);
+        if (productExist) {
+          return productExist;
+        }
 
-      if (!imagePath) {
-        throw new Error('При загрузке изображения произошла ошибка');
-      }
+        const imagePath = await uploadProductImage(
+          `${product.code}-cover`,
+          product.imageUrl,
+        );
 
-      return await createProduct({
-        title: product.title,
-        code: product.code,
-        brand: product.brand,
-        image_url: imagePath,
-        barcode: '',
-      });
-    }),
+        if (!imagePath) {
+          throw new Error('При загрузке изображения произошла ошибка');
+        }
+
+        const newProduct = await createProduct({
+          title: product.title,
+          code: product.code,
+          brand: product.brand,
+          image_url: imagePath,
+          barcode: '',
+        });
+
+        return {
+          ...newProduct,
+          count: 0,
+        };
+      },
+    ),
   );
-
-  logger.log(result);
-
-  return result;
 };

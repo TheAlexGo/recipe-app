@@ -8,7 +8,5 @@ export interface IIngredientDB extends Tables<'ingredients'> {}
 export interface INutritionDB extends Tables<'nutritions'> {}
 
 export interface IProductDBInFridge extends IProductDB {
-  fridge: {
-    count: number;
-  }[];
+  count: number;
 }

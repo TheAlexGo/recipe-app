@@ -1,15 +1,15 @@
 import Link from 'next/link';
+import { IoSettingsOutline } from 'react-icons/io5';
 
 import { getFavoriteRecipes } from '@/actions/favorite';
 import { getUser } from '@/actions/user';
 import { LogoutButton } from '@/app/profile/_components/LogoutButton/LogoutButton';
+import { Header } from '@/components/Header';
 import { RecipeCard } from '@/components/RecipeCard';
 import { Section } from '@/components/Section';
 import { UserCard } from '@/components/UserCard/UserCard';
 import { UserRole } from '@/types';
 import { getLocal } from '@/utils/local';
-
-import { ProfileHeader } from './_components/ProfileHeader/ProfileHeader';
 
 export default async function Profile() {
   const user = await getUser();
@@ -17,10 +17,18 @@ export default async function Profile() {
 
   return (
     <div className="flex flex-1 flex-col pb-11">
-      <ProfileHeader />
+      <Header>
+        <Header.Empty />
+        <Header.Title>{getLocal('page.profile.title')}</Header.Title>
+        <Header.Icon
+          icon={IoSettingsOutline}
+          label={getLocal('page.profile.action.settings.label')}
+          href="settings"
+        />
+      </Header>
       <div className="flex flex-1 flex-col justify-between">
         <div>
-          <Link href="/profile/my">
+          <Link href="my">
             <UserCard
               className="relative z-10 mt-3"
               avatar={user.avatarUrl}

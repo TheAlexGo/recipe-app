@@ -10,18 +10,36 @@ export class Product extends BaseModel<IProductDB> {
     super(supabase, 'product', 'product_images');
   }
 
+  private covertFridgeCount(
+    product: (IProductDB & { fridge: { count: number }[] }) | null,
+  ) {
+    if (!product) {
+      return null;
+    }
+    const { fridge, ...restParams } = product;
+    return {
+      ...restParams,
+      count: fridge.length ? fridge[0].count : 0,
+    };
+  }
+
   @catchError
-  async selectByCode(code: IProductDB['code']): Promise<IProductDB> {
+  async selectByCode(code: IProductDB['code']): Promise<IProductDB | null> {
     const { data, error } = await this.fromTable()
-      .select()
+      .select(
+        `
+        *,
+        fridge(count)
+      `,
+      )
       .eq('code', code)
-      .single();
+      .maybeSingle();
 
     if (error) {
       throw error;
     }
 
-    return data;
+    return this.covertFridgeCount(data);
   }
 
   @catchError
@@ -51,6 +69,6 @@ export class Product extends BaseModel<IProductDB> {
       throw error;
     }
 
-    return data;
+    return data?.map((product) => this.covertFridgeCount(product)!);
   }
 }

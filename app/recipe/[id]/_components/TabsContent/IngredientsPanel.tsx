@@ -2,7 +2,7 @@ import { FC, JSX } from 'react';
 
 import { IRecipeProduct } from '@/actions/models/Recipe';
 import { Ingredients } from '@/components/Ingredients';
-import { ProductChip } from '@/components/ProductChip/ProductChip';
+import { ProductChip } from '@/components/ProductChip';
 
 import { IPanel, Panel } from './Panel';
 

@@ -55,7 +55,7 @@ export const ProductChip: FC<IProductChip> = ({
           {title}
         </span>
       </div>
-      {Boolean(count) && (
+      {typeof count !== 'undefined' && (
         <Counter value={count!} onRemove={removeHandler} onAdd={addHandler} />
       )}
     </article>
