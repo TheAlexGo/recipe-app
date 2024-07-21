@@ -5,7 +5,7 @@ import { Database } from '@/types/supabase';
 import { catchError } from '@/utils/decorators';
 
 export interface ITableDB {
-  id: string | number;
+  id?: string | number;
   user_id: string;
 }
 

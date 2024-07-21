@@ -4,7 +4,7 @@ import { FC, JSX, useCallback, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/navigation';
 
-import { addProductInFridge } from '@/actions/fridge';
+import { updateProductInFridge } from '@/actions/fridge';
 import { getProductByBarcode } from '@/actions/product';
 import { Chip } from '@/app/fridge/_components/Chip/Chip';
 import { Button } from '@/components/Button';
@@ -51,7 +51,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
 
   const addHandler = () => {
     setDisabled(true);
-    addProductInFridge(foundedItem!.id).then(() => {
+    updateProductInFridge(foundedItem!.id, 1).then(() => {
       setDisabled(false);
       onClose();
       router.refresh();
@@ -88,7 +88,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
       {(foundedItem || loading) && (
         <div className="fixed inset-x-6 bottom-3 z-10">
           {loading && <ProductChipStub />}
-          {foundedItem && <Chip {...foundedItem} inFridge={[]} withoutClamp />}
+          {foundedItem && <Chip {...foundedItem} withoutClamp count={0} />}
           {foundedItem && (
             <Button className="mt-3" onClick={addHandler} disabled={disabled}>
               Добавить

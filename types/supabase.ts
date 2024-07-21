@@ -47,20 +47,20 @@ export type Database = {
       }
       fridge: {
         Row: {
+          count: number
           created_at: string
-          id: number
           product_id: number
           user_id: string
         }
         Insert: {
+          count: number
           created_at?: string
-          id?: number
           product_id: number
           user_id: string
         }
         Update: {
+          count?: number
           created_at?: string
-          id?: number
           product_id?: number
           user_id?: string
         }

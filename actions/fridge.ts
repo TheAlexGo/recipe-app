@@ -1,7 +1,7 @@
 'use server';
 
 import { Fridge } from '@/actions/models/Fridge';
-import { IFridgeDB, IProductDB } from '@/types/db';
+import { IProductDB } from '@/types/db';
 import { createClient } from '@/utils/supabase/server';
 
 const createInstance = () => {
@@ -9,12 +9,14 @@ const createInstance = () => {
   return new Fridge(supabase);
 };
 
-export const addProductInFridge = async (product_id: IProductDB['id']) => {
-  return createInstance().insert({
-    product_id,
+export const updateProductInFridge = async (
+  product_id: IProductDB['id'],
+  count: number,
+) => {
+  if (count === 0) {
+    return createInstance().deleteByProductId(product_id);
+  }
+  return createInstance().updateByProductId(product_id, {
+    count,
   });
-};
-
-export const removeProductFromFridge = async (id: IFridgeDB['id']) => {
-  return createInstance().deleteById(id);
 };

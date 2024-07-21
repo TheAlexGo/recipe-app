@@ -11,7 +11,7 @@ export default async function Fridge() {
       <ul className="flex flex-col gap-y-3">
         {products.map((product) => (
           <li key={product.code}>
-            <Chip {...product} />
+            <Chip {...product} count={product.fridge[0].count} />
           </li>
         ))}
       </ul>

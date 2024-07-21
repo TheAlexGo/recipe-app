@@ -44,7 +44,7 @@ export class Product extends BaseModel<IProductDB> {
   async selectAllInFridge(): Promise<IProductDBInFridge[]> {
     const { data, error } = await this.fromTable().select(`
       *,
-      inFridge:fridge!inner(id)
+      fridge!inner(count)
     `);
 
     if (error) {
