@@ -13,7 +13,7 @@ import { getLocal } from '@/utils/local';
 interface IProductFridgeChip
   extends IProductDB,
     Pick<IProductChip, 'withoutClamp'> {
-  count: number;
+  count?: number;
 }
 
 export const ProductFridgeChip: FC<IProductFridgeChip> = ({
@@ -23,7 +23,7 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
 
   const addHandler = useCallback(
     (productId: IProductDB['id']) => {
-      updateProductInFridge(productId, product.count + 1).then(() =>
+      updateProductInFridge(productId, product.count! + 1).then(() =>
         router.refresh(),
       );
     },
@@ -40,7 +40,7 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
           return;
         }
       }
-      updateProductInFridge(productId, product.count - 1).then(() =>
+      updateProductInFridge(productId, product.count! - 1).then(() =>
         router.refresh(),
       );
     },

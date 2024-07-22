@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { Input } from '@/components/Input';
 import { useDebounceCallback } from '@/hooks/useDebounceCallback';
+import { getLocal } from '@/utils/local';
 
 interface ISearchInput {
   defaultValue?: string;
@@ -34,5 +35,12 @@ export const SearchInput: FC<ISearchInput> = ({
     invokeFetch(value);
   };
 
-  return <Input.Search onChange={changeHandler} defaultValue={defaultValue} />;
+  return (
+    <Input.Search
+      onChange={changeHandler}
+      defaultValue={defaultValue}
+      aria-label={getLocal('input.title.product.search')}
+      placeholder={getLocal('input.placeholder.product.search')}
+    />
+  );
 };

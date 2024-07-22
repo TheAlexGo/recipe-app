@@ -54,7 +54,8 @@ export const ProductChip: FC<IProductChip> = ({
             src={image_url}
             width={32}
             height={32}
-            alt={title}
+            alt=""
+            aria-hidden
           />
         </div>
         <span

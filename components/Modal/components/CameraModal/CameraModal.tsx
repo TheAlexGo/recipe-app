@@ -13,6 +13,7 @@ import { ProductChip } from '@/components/ProductChip';
 import { CollectHandler, useBarcodeDetector } from '@/hooks/useBarcodeDetector';
 import { useCameraModal } from '@/hooks/useCameraModal';
 import { IProductDB } from '@/types/db';
+import { getLocal } from '@/utils/local';
 
 const TAKE_PHOTO_DELAY = 500;
 
@@ -75,25 +76,21 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
   }, [isOpen, stop]);
 
   return (
-    <Modal isOpen={isOpen}>
+    <Modal className="bg-opacity-100" isOpen={isOpen}>
       <Button.Close
         size="normal"
         className="absolute left-6 top-3 z-10"
         onClick={onClose}
       />
-      <div className="fixed inset-0 flex items-center justify-center bg-black">
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-        <video width="100%" height="100%" autoPlay playsInline ref={videoRef} />
-      </div>
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+      <video width="100%" height="100%" autoPlay playsInline ref={videoRef} />
       {(foundedItem || loading) && (
         <div className="fixed inset-x-6 bottom-3 z-10">
           {loading && <ProductChip.Stub />}
-          {foundedItem && (
-            <ProductFridgeChip {...foundedItem} withoutClamp count={0} />
-          )}
+          {foundedItem && <ProductFridgeChip {...foundedItem} />}
           {foundedItem && (
             <Button className="mt-3" onClick={addHandler} disabled={disabled}>
-              Добавить
+              {getLocal('actions.addProductInFridge.button')}
             </Button>
           )}
         </div>
