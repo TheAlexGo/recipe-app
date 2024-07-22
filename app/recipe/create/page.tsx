@@ -3,7 +3,7 @@ import { RecipeForm } from '@/app/recipe/_components/RecipeForm/RecipeForm';
 
 export default async function RecipeCreate() {
   return (
-    <div className="pb-11">
+    <div>
       <MyCreateHeader />
       <RecipeForm />
     </div>

@@ -16,7 +16,7 @@ export default async function Profile() {
   const favoriteRecipes = await getFavoriteRecipes();
 
   return (
-    <div className="flex flex-1 flex-col pb-11">
+    <div className="flex flex-1 flex-col">
       <Header>
         <Header.Empty />
         <Header.Title>{getLocal('page.profile.title')}</Header.Title>

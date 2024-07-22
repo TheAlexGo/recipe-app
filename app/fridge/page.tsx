@@ -8,7 +8,7 @@ export default async function Fridge() {
   return (
     <div>
       <FridgeHeader />
-      <ul className="flex flex-col gap-y-3">
+      <ul className="mt-3 flex flex-col gap-y-3">
         {products.map((product) => (
           <li key={product.code}>
             <ProductFridgeChip {...product} />

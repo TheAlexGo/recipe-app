@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 
+import { CgSpinner } from 'react-icons/cg';
 import { FaArrowLeft } from 'react-icons/fa6';
 
 import { SearchResult } from '@/app/fridge/search/_components/SearchResult';
@@ -14,8 +15,8 @@ export default async function FridgeSearchPage({
   searchParams: { query: string };
 }) {
   return (
-    <div>
-      <Header>
+    <div className="flex flex-1 flex-col">
+      <Header className="z-10">
         <Header.Icon
           href="/fridge"
           icon={FaArrowLeft}
@@ -25,9 +26,16 @@ export default async function FridgeSearchPage({
         <Header.Empty />
       </Header>
       <SearchInput defaultValue={query} />
-      <Suspense key={query} fallback={<div>Loading...</div>}>
-        <SearchResult query={query} />
-      </Suspense>
+      <div className="relative flex-1">
+        <Suspense
+          key={query}
+          fallback={
+            <CgSpinner className="absolute inset-0 m-auto size-16 animate-spin text-brand-dark" />
+          }
+        >
+          <SearchResult query={query} />
+        </Suspense>
+      </div>
     </div>
   );
 }

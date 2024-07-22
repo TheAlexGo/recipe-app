@@ -40,7 +40,7 @@ const config: Config = {
         card: '0px 2px 16px rgba(6, 51, 54, 0.1)',
       },
       padding: {
-        nav: '5.3125rem',
+        nav: '8.0625rem',
       },
       width: {
         productCardSmall: '8.25rem',

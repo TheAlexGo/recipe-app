@@ -4,6 +4,7 @@ import { getProductByBarcodeFromLenta } from '@/actions/lenta';
 import { Product } from '@/actions/models/Product';
 import { IProductDB, IProductDBInFridge } from '@/types/db';
 import { downloadImage } from '@/utils/image';
+import { getLocal } from '@/utils/local';
 import { createClient } from '@/utils/supabase/server';
 
 const { PROXY_URL, API_URL } = process.env;
@@ -96,8 +97,11 @@ export const getProductInFridge = async () => {
 
 export const searchInLenta = async (
   productName: string,
-): Promise<IProductDBInFridge[]> => {
-  const { skus } = await fetch(
+): Promise<{
+  data: IProductDBInFridge[];
+  message: string;
+}> => {
+  const { skus, message } = await fetch(
     `${PROXY_URL}/${API_URL}/search?value=${productName}&searchSource=Sku`,
     {
       headers: {
@@ -106,40 +110,57 @@ export const searchInLenta = async (
     },
   ).then((res) => res.json());
 
-  if (!skus.length) {
-    return [];
+  if (message || !skus.length) {
+    return {
+      data: [],
+      message,
+    };
   }
 
-  return Promise.all(
-    skus.map(
-      async (product: Omit<IProductDB, 'image_url'> & { imageUrl: string }) => {
-        const productExist = await getProductByCode(product.code);
-        if (productExist) {
-          return productExist;
-        }
+  try {
+    const data = await Promise.all(
+      skus.map(
+        async (
+          product: Omit<IProductDB, 'image_url'> & { imageUrl: string },
+        ) => {
+          const productExist = await getProductByCode(product.code);
+          if (productExist) {
+            return productExist;
+          }
 
-        const imagePath = await uploadProductImage(
-          `${product.code}-cover`,
-          product.imageUrl,
-        );
+          const imagePath = await uploadProductImage(
+            `${product.code}-cover`,
+            product.imageUrl,
+          );
 
-        if (!imagePath) {
-          throw new Error('При загрузке изображения произошла ошибка');
-        }
+          if (!imagePath) {
+            throw new Error('При загрузке изображения произошла ошибка');
+          }
 
-        const newProduct = await createProduct({
-          title: product.title,
-          code: product.code,
-          brand: product.brand,
-          image_url: imagePath,
-          barcode: '',
-        });
+          const newProduct = await createProduct({
+            title: product.title,
+            code: product.code,
+            brand: product.brand,
+            image_url: imagePath,
+            barcode: '',
+          });
 
-        return {
-          ...newProduct,
-          count: 0,
-        };
-      },
-    ),
-  );
+          return {
+            ...newProduct,
+            count: 0,
+          };
+        },
+      ),
+    );
+
+    return {
+      data,
+      message: '',
+    };
+  } catch (e) {
+    return {
+      data: [],
+      message: getLocal('error.search.unknown'),
+    };
+  }
 };

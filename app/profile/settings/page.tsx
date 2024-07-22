@@ -9,7 +9,7 @@ export default async function Settings() {
   const user = await getUser();
 
   return (
-    <div className="flex flex-1 flex-col pb-11">
+    <div className="flex flex-1 flex-col">
       <Header>
         <Header.Icon
           href="/profile"

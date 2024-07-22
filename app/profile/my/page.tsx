@@ -9,7 +9,7 @@ import { MyHeader } from './_components/MyHeader/MyHeader';
 export default async function My() {
   const myRecipes = await getMyRecipeAll();
   return (
-    <div className="flex flex-1 flex-col pb-11">
+    <div className="flex flex-1 flex-col">
       <MyHeader />
       <Button view="primary" href="/recipe/create">
         {getLocal('actions.createRecipe.button')}

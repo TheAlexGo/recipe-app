@@ -18,7 +18,7 @@ export default async function RecipeEdit({
   }
 
   return (
-    <div className="pb-11">
+    <div>
       <MyCreateHeader recipeEdit />
       <RecipeForm recipe={recipe} />
     </div>
