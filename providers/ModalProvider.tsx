@@ -3,6 +3,7 @@
 import { FC, JSX, useEffect, useState } from 'react';
 
 import { CameraModal } from '@/components/Modal/components/CameraModal/CameraModal';
+import { ProductModal } from '@/components/Modal/components/ProductModal/ProductModal';
 
 interface IModalProvider {}
 
@@ -17,5 +18,10 @@ export const ModalProvider: FC<IModalProvider> = (): JSX.Element | null => {
     return null;
   }
 
-  return <CameraModal />;
+  return (
+    <>
+      <CameraModal />
+      <ProductModal />
+    </>
+  );
 };
