@@ -18,7 +18,7 @@ export const ProductModal: FC<IProductModal> = (): JSX.Element | null => {
   }
   return (
     <Modal isOpen={isOpen}>
-      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+      <div className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-75">
         <Button.Close
           size="normal"
           className="absolute left-6 top-3 z-10"
