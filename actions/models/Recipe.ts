@@ -18,7 +18,7 @@ export interface IRecipeDB extends ITableDB {
 }
 
 export interface IRecipeProduct extends IProductDB {
-  count: { id: string }[];
+  count: number;
 }
 
 export interface IRecipe extends IRecipeDB {
@@ -78,7 +78,7 @@ export class Recipe extends BaseModel<IRecipeDB> {
 
     const { data: productData, error: productError } = await this.supabase
       .from('product')
-      .select(`*, count:ingredients!inner(id)`)
+      .select(`*, ingredients!inner(product_id, count)`)
       .eq('ingredients.recipe_id', recipeId);
 
     if (error || productError) {
@@ -93,7 +93,13 @@ export class Recipe extends BaseModel<IRecipeDB> {
 
     return {
       ...currentItem,
-      ingredients: productData,
+      ingredients: productData?.map((ingredient) => {
+        const { ingredients, ...data } = ingredient;
+        return {
+          ...data,
+          count: ingredients[0].count,
+        };
+      }),
     };
   }
 }

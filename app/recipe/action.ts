@@ -10,6 +10,7 @@ import {
   updateRecipe,
   uploadRecipeCover,
 } from '@/actions/recipe';
+import { IIngredientDB } from '@/types/db';
 
 const prepareData = async (formData: FormData) => {
   const title = formData.get('title') as string;
@@ -20,6 +21,7 @@ const prepareData = async (formData: FormData) => {
   const recipe_text = formData.get('recipe_text') as string;
   const cover = formData.get('cover') as File;
   const ingredients = formData.getAll('product') as string[];
+  const ingredientsCounts = formData.getAll('count') as string[];
 
   const result = {
     title,
@@ -28,10 +30,13 @@ const prepareData = async (formData: FormData) => {
     kcal,
     cooking_time,
     recipe_text,
-    ingredients: ingredients.map((id) => Number(id)),
+    ingredients: ingredients.map((id, index) => ({
+      product_id: Number(id),
+      count: Number(ingredientsCounts[index]),
+    })),
     cover: null,
   } as Omit<IRecipeDB, 'id' | 'user_id'> & {
-    ingredients: number[];
+    ingredients: IIngredientDB[];
     cover: File | null;
   };
 

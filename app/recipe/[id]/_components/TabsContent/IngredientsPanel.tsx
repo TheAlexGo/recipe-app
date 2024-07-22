@@ -19,7 +19,8 @@ export const IngredientsPanel: FC<IIngredientsPanel> = ({
       <Ingredients count={items.length}>
         {items.map((item) => (
           <Ingredients.Item key={item.id}>
-            <ProductChip {...item} count={item.count.length} />
+            <ProductChip {...item} />
+            {item.count}
           </Ingredients.Item>
         ))}
       </Ingredients>

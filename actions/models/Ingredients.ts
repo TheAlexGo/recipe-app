@@ -1,14 +1,10 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 
 import { IRecipeDB } from '@/actions/models/Recipe';
-import { BaseModel, ITableDB } from '@/actions/models/base';
+import { BaseModel } from '@/actions/models/base';
+import { getUser } from '@/actions/user';
+import { IIngredientDB } from '@/types/db';
 import { catchError } from '@/utils/decorators';
-
-export interface IIngredientDB extends ITableDB {
-  id: number;
-  recipe_id: number;
-  product_id: number;
-}
 
 export class Ingredients extends BaseModel<IIngredientDB> {
   constructor(supabase: SupabaseClient) {
@@ -18,7 +14,7 @@ export class Ingredients extends BaseModel<IIngredientDB> {
   @catchError
   async updateIngredients(
     recipe_id: IRecipeDB['id'],
-    currentIngredients: IIngredientDB['id'][],
+    currentIngredients: Omit<IIngredientDB, 'id' | 'created_at' | 'user_id'>[],
   ) {
     const { error: deleteError } = await this.fromTable()
       .delete()
@@ -28,10 +24,12 @@ export class Ingredients extends BaseModel<IIngredientDB> {
       throw deleteError;
     }
 
+    const user = await getUser();
     const { error: addedError } = await this.fromTable().insert(
-      currentIngredients.map((id) => ({
+      currentIngredients.map((data) => ({
+        ...data,
         recipe_id,
-        product_id: id,
+        user_id: user.id,
       })),
     );
 

@@ -4,42 +4,48 @@ import { FC, JSX, useCallback } from 'react';
 
 import cn from 'classnames';
 import Image from 'next/image';
+import { CiSquarePlus } from 'react-icons/ci';
 
 import { Button } from '@/components/Button';
 import { Counter } from '@/components/Counter/Counter';
 import { useLoadImage } from '@/hooks/useLoadImage';
 import { useProductModal } from '@/hooks/useProductModal';
 import { IProductDB } from '@/types/db';
+import { getLocal } from '@/utils/local';
 
 export interface IProductChip extends IProductDB {
   count?: number;
   withoutClamp?: boolean;
-  onRemove?: (productId: IProductDB['id']) => void;
-  onAdd?: (productId: IProductDB['id']) => void;
+  withCounter?: boolean;
+  withAdd?: boolean;
+  onRemove?: (product: IProductDB) => void;
+  onAdd?: (product: IProductDB) => void;
 }
 
 export const ProductChip: FC<IProductChip> = ({
   withoutClamp,
   count,
+  withCounter,
+  withAdd,
   onRemove,
   onAdd,
   ...product
 }): JSX.Element => {
-  const { id, title, image_url: _image_url } = product;
+  const { title, image_url: _image_url } = product;
   const image_url = useLoadImage('product_images', _image_url);
   const { onOpen } = useProductModal();
 
   const clickHandler = useCallback(() => {
-    onOpen({ ...product, image_url });
-  }, [image_url, onOpen, product]);
+    onOpen(product);
+  }, [product, onOpen]);
 
   const removeHandler = useCallback(() => {
-    onRemove?.(id);
-  }, [id, onRemove]);
+    onRemove?.(product);
+  }, [product, onRemove]);
 
   const addHandler = useCallback(() => {
-    onAdd?.(id);
-  }, [id, onAdd]);
+    onAdd?.(product);
+  }, [product, onAdd]);
 
   return (
     <article className="flex items-center justify-between gap-x-4 rounded-xl bg-white p-4 shadow-card">
@@ -59,7 +65,7 @@ export const ProductChip: FC<IProductChip> = ({
           />
         </div>
         <span
-          className={cn('break-all text-lg font-bold', {
+          className={cn('break-all text-left text-lg font-bold', {
             'line-clamp-1': !withoutClamp,
             'line-clamp-none': withoutClamp,
           })}
@@ -67,8 +73,18 @@ export const ProductChip: FC<IProductChip> = ({
           {title}
         </span>
       </Button>
-      {typeof count !== 'undefined' && (
+      {withCounter && (
         <Counter value={count!} onRemove={removeHandler} onAdd={addHandler} />
+      )}
+      {withAdd && (
+        <Button.Icon
+          className="text-brand-secondary"
+          icon={CiSquarePlus}
+          size="normal"
+          onClick={addHandler}
+          aria-label={getLocal('actions.add')}
+          withPadding={false}
+        />
       )}
     </article>
   );

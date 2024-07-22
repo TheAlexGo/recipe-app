@@ -41,6 +41,7 @@ export default tseslint.config(
       'react/button-has-type': 'off',
       'no-unused-vars': 'off',
       'no-shadow': 'off',
+      'no-undef': 'off',
       'class-methods-use-this': 'off',
       'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],

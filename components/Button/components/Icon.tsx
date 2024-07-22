@@ -9,6 +9,7 @@ import { OmitOfUnion } from '@/utils/react';
 export type IIcon = OmitOfUnion<IButton, 'view'> & {
   icon: IconType;
   size: 'small' | 'normal';
+  withPadding?: boolean;
   active?: boolean;
 };
 
@@ -17,6 +18,7 @@ export const Icon: FC<IIcon> = ({
   size,
   className,
   active = false,
+  withPadding = true,
   ...props
 }): JSX.Element => {
   const isSmall = size === 'small';
@@ -30,8 +32,8 @@ export const Icon: FC<IIcon> = ({
         {
           'bg-brand-secondary text-white': active,
           'bg-white': !active,
-          'size-7 rounded': isSmall,
-          'size-10 rounded-xl': isNormal,
+          'size-7 rounded': withPadding && isSmall,
+          'size-10 rounded-xl': withPadding && isNormal,
         },
         className,
       )}

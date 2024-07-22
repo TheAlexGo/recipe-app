@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, JSX, useState } from 'react';
+import { FC, JSX, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 import Image from 'next/image';
@@ -12,6 +12,11 @@ import { ProductsSearch } from '@/app/_components/ProductsSearch/ProductsSearch'
 import { create, update } from '@/app/recipe/action';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
+import { ProductChip } from '@/components/ProductChip';
+import {
+  IAddIngredientModalStore,
+  useAddIngredientModal,
+} from '@/hooks/useAddIngredientModal';
 import { useLoadImage } from '@/hooks/useLoadImage';
 import { useUploadImage } from '@/hooks/useUploadImage';
 import { IProductDB } from '@/types/db';
@@ -26,6 +31,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
   const prevCover = useLoadImage('recipe_covers', recipe?.cover_url);
   const [cover, setCover] = useState<string>(prevCover || IMAGE_PLACEHOLDER);
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
+  const { onClose } = useAddIngredientModal();
 
   const { changeHandler, loading, error } = useUploadImage({
     setImage: setCover,
@@ -37,6 +43,29 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
         prevIngredients.filter(({ id }) => id !== productId),
       );
   };
+
+  const selectProductHandler: IAddIngredientModalStore['onSelect'] =
+    useCallback(
+      ({ product, count }) => {
+        setIngredients((prevIngredients) => {
+          const existedProduct = prevIngredients.find(
+            ({ id }) => id === product.id,
+          );
+          if (existedProduct) {
+            return [...prevIngredients];
+          }
+          return [
+            ...prevIngredients,
+            {
+              ...product,
+              count,
+            },
+          ];
+        });
+        onClose();
+      },
+      [onClose],
+    );
 
   return (
     <form className="flex flex-col gap-y-3">
@@ -142,22 +171,24 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
       </label>
       <div>
         <h2>{getLocal('ingredients.title')}</h2>
-        <ProductsSearch />
+        <ProductsSearch onSelect={selectProductHandler} />
         <ul>
           {ingredients.map((ingredient) => {
             return (
               <li key={ingredient.id}>
-                <label htmlFor={`product-${ingredient.id}`}>
-                  {ingredient.title}
-                  <input
-                    id={`product-${ingredient.id}`}
-                    className="hidden"
-                    type="text"
-                    name="product"
-                    defaultValue={ingredient.id}
-                    readOnly
-                  />
-                </label>
+                <ProductChip {...ingredient} />
+                <input
+                  className="hidden"
+                  type="text"
+                  name="product"
+                  defaultValue={ingredient.id}
+                  readOnly
+                />
+                <input
+                  type="number"
+                  name="count"
+                  defaultValue={ingredient.count}
+                />
                 <Button.Icon
                   icon={IoClose}
                   size="small"

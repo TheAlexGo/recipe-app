@@ -1,19 +1,26 @@
-'use client';
-
-import { FC, JSX, MouseEventHandler, useCallback } from 'react';
+import {
+  FC,
+  FormEventHandler,
+  JSX,
+  MouseEventHandler,
+  useCallback,
+} from 'react';
 
 import Image from 'next/image';
 
 import { Button } from '@/components/Button';
+import { Input } from '@/components/Input';
 import { Modal } from '@/components/Modal';
+import { useAddIngredientModal } from '@/hooks/useAddIngredientModal';
 import { useLoadImage } from '@/hooks/useLoadImage';
-import { useProductModal } from '@/hooks/useProductModal';
 import { getLocal } from '@/utils/local';
 
-interface IProductModal {}
+interface IAddIngredient {}
 
-export const ProductModal: FC<IProductModal> = (): JSX.Element | null => {
-  const { isOpen, onClose, product } = useProductModal();
+export const AddIngredientModal: FC<
+  IAddIngredient
+> = (): JSX.Element | null => {
+  const { isOpen, product, onClose, onSelect } = useAddIngredientModal();
 
   const image_url = useLoadImage('product_images', product?.image_url);
 
@@ -23,6 +30,16 @@ export const ProductModal: FC<IProductModal> = (): JSX.Element | null => {
       onClose();
     },
     [onClose],
+  );
+
+  const submitHandler: FormEventHandler<HTMLFormElement> = useCallback(
+    (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.currentTarget);
+      const count = Number(formData.get('count'));
+      onSelect({ product: product!, count });
+    },
+    [onSelect, product],
   );
 
   if (!product) {
@@ -45,6 +62,13 @@ export const ProductModal: FC<IProductModal> = (): JSX.Element | null => {
           alt={getLocal('image.cover')}
         />
         <h1 className="mt-3 text-xl font-bold">{product.title}</h1>
+        <form className="mt-3 flex flex-col gap-y-3" onSubmit={submitHandler}>
+          <label htmlFor="count">
+            <span>{getLocal('input.label.inputCount')}</span>
+            <Input type="number" name="count" />
+          </label>
+          <Button.Submit>{getLocal('form.create')}</Button.Submit>
+        </form>
       </Modal.Content>
     </Modal>
   );

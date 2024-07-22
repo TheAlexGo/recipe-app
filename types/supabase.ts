@@ -83,22 +83,25 @@ export type Database = {
       }
       ingredients: {
         Row: {
+          count: number
           created_at: string
-          id: number
           product_id: number
           recipe_id: number
+          user_id: string
         }
         Insert: {
+          count: number
           created_at?: string
-          id?: number
           product_id: number
           recipe_id: number
+          user_id: string
         }
         Update: {
+          count?: number
           created_at?: string
-          id?: number
           product_id?: number
           recipe_id?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -113,6 +116,13 @@ export type Database = {
             columns: ["recipe_id"]
             isOneToOne: false
             referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ingredients_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]

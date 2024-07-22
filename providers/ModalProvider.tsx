@@ -2,6 +2,7 @@
 
 import { FC, JSX, useEffect, useState } from 'react';
 
+import { AddIngredientModal } from '@/components/Modal/components/AddIngredientModal/AddIngredientModal';
 import { CameraModal } from '@/components/Modal/components/CameraModal/CameraModal';
 import { ProductModal } from '@/components/Modal/components/ProductModal/ProductModal';
 
@@ -22,6 +23,7 @@ export const ModalProvider: FC<IModalProvider> = (): JSX.Element | null => {
     <>
       <CameraModal />
       <ProductModal />
+      <AddIngredientModal />
     </>
   );
 };

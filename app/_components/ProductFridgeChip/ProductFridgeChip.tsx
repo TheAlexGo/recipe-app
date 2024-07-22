@@ -22,8 +22,8 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
   const router = useRouter();
 
   const addHandler = useCallback(
-    (productId: IProductDB['id']) => {
-      updateProductInFridge(productId, product.count! + 1).then(() =>
+    ({ id }: IProductDB) => {
+      updateProductInFridge(id, product.count! + 1).then(() =>
         router.refresh(),
       );
     },
@@ -31,7 +31,7 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
   );
 
   const removeHandler = useCallback(
-    (productId: IProductDB['id']) => {
+    ({ id }: IProductDB) => {
       if (product.count === 1) {
         if (
           // eslint-disable-next-line no-alert
@@ -40,7 +40,7 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
           return;
         }
       }
-      updateProductInFridge(productId, product.count! - 1).then(() =>
+      updateProductInFridge(id, product.count! - 1).then(() =>
         router.refresh(),
       );
     },
@@ -48,6 +48,11 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
   );
 
   return (
-    <ProductChip {...product} onAdd={addHandler} onRemove={removeHandler} />
+    <ProductChip
+      {...product}
+      onAdd={addHandler}
+      onRemove={removeHandler}
+      withCounter
+    />
   );
 };
