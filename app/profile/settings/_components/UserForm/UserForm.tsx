@@ -12,12 +12,12 @@ import {
 
 import cn from 'classnames';
 import Image from 'next/image';
-import { CgSpinner } from 'react-icons/cg';
 
 import { IUser } from '@/actions/user';
 import { submitHandler } from '@/app/profile/settings/_components/UserForm/action';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
+import { Spinner } from '@/components/Spinner';
 import { useLoadImage } from '@/hooks/useLoadImage';
 import { useUploadImage } from '@/hooks/useUploadImage';
 import { getLocal } from '@/utils/local';
@@ -76,9 +76,7 @@ export const UserForm: FC<IUserForm> = ({ user }): JSX.Element => {
             priority
             alt={getLocal('images.alt.avatar')}
           />
-          {loading && (
-            <CgSpinner className="absolute inset-0 m-auto size-16 animate-spin text-brand-dark" />
-          )}
+          {loading && <Spinner size="normal" position="absolute" />}
         </div>
         <Input
           className="hidden"

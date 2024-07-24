@@ -20,8 +20,8 @@ const prepareData = async (formData: FormData) => {
   const cooking_time = Number(formData.get('cooking_time'));
   const recipe_text = formData.get('recipe_text') as string;
   const cover = formData.get('cover') as File;
-  const ingredients = formData.getAll('product') as string[];
-  const ingredientsCounts = formData.getAll('count') as string[];
+  const ingredientIds = formData.getAll('productId') as string[];
+  const ingredientCounts = formData.getAll('productCount') as string[];
 
   const result = {
     title,
@@ -30,9 +30,9 @@ const prepareData = async (formData: FormData) => {
     kcal,
     cooking_time,
     recipe_text,
-    ingredients: ingredients.map((id, index) => ({
+    ingredients: ingredientIds.map((id, index) => ({
       product_id: Number(id),
-      count: Number(ingredientsCounts[index]),
+      count: Number(ingredientCounts[index]),
     })),
     cover: null,
   } as Omit<IRecipeDB, 'id' | 'user_id'> & {
@@ -77,8 +77,10 @@ export const update = async (formData: FormData) => {
       });
     }
 
-    await updateRecipe(id, data);
-    await updateIngredients(id, ingredients);
+    await Promise.all([
+      updateRecipe(id, data),
+      updateIngredients(id, ingredients),
+    ]);
 
     redirect(`/recipe/${idRaw}`);
   }

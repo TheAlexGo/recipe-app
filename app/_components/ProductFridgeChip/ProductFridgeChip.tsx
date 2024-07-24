@@ -13,13 +13,14 @@ import { getLocal } from '@/utils/local';
 interface IProductFridgeChip
   extends IProductDB,
     Pick<IProductChip, 'withoutClamp'> {
-  count?: number;
+  count: number;
 }
 
 export const ProductFridgeChip: FC<IProductFridgeChip> = ({
   ...product
 }): JSX.Element => {
   const router = useRouter();
+  const { count, ...productData } = product;
 
   const addHandler = useCallback(
     ({ id }: IProductDB) => {
@@ -48,11 +49,13 @@ export const ProductFridgeChip: FC<IProductFridgeChip> = ({
   );
 
   return (
-    <ProductChip
-      {...product}
-      onAdd={addHandler}
-      onRemove={removeHandler}
-      withCounter
-    />
+    <ProductChip product={productData}>
+      <ProductChip.Counter
+        count={count}
+        product={productData}
+        onAdd={addHandler}
+        onRemove={removeHandler}
+      />
+    </ProductChip>
   );
 };

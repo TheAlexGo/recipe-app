@@ -1,10 +1,10 @@
 import { Suspense } from 'react';
 
-import { CgSpinner } from 'react-icons/cg';
 import { FaArrowLeft } from 'react-icons/fa6';
 
 import { SearchResult } from '@/app/fridge/search/_components/SearchResult';
 import { Header } from '@/components/Header';
+import { Spinner } from '@/components/Spinner';
 import { getLocal } from '@/utils/local';
 
 import { SearchInput } from './_components/SearchInput';
@@ -29,9 +29,7 @@ export default async function FridgeSearchPage({
       <div className="relative flex-1">
         <Suspense
           key={query}
-          fallback={
-            <CgSpinner className="absolute inset-0 m-auto size-16 animate-spin text-brand-dark" />
-          }
+          fallback={<Spinner size="normal" position="absolute" />}
         >
           <SearchResult query={query} />
         </Suspense>

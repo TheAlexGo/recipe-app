@@ -2,10 +2,25 @@ import { FC, InputHTMLAttributes, JSX } from 'react';
 
 import cn from 'classnames';
 
-import { inputClasses } from '@/components/Input/class';
+import { getInputClasses } from '@/components/Input/class';
+import { InputSizes } from '@/components/Input/types';
 
-export interface IInput extends InputHTMLAttributes<HTMLInputElement> {}
+export interface IInput
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  size?: InputSizes;
+  fill?: boolean;
+}
 
-export const Input: FC<IInput> = ({ className, ...props }): JSX.Element => {
-  return <input {...props} className={cn(inputClasses, className)} />;
+export const Input: FC<IInput> = ({
+  className,
+  size = 'normal',
+  fill = true,
+  ...props
+}): JSX.Element => {
+  return (
+    <input
+      {...props}
+      className={cn(getInputClasses({ size, fill }), className)}
+    />
+  );
 };

@@ -4,8 +4,6 @@ import { FC, JSX, useCallback, useState } from 'react';
 
 import cn from 'classnames';
 import Image from 'next/image';
-import { CgSpinner } from 'react-icons/cg';
-import { IoClose } from 'react-icons/io5';
 
 import { IRecipe } from '@/actions/models/Recipe';
 import { ProductsSearch } from '@/app/_components/ProductsSearch/ProductsSearch';
@@ -13,6 +11,7 @@ import { create, update } from '@/app/recipe/action';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { ProductChip } from '@/components/ProductChip';
+import { Spinner } from '@/components/Spinner';
 import {
   IAddIngredientModalStore,
   useAddIngredientModal,
@@ -152,9 +151,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
               priority
               alt={getLocal('images.alt.avatar')}
             />
-            {loading && (
-              <CgSpinner className="absolute inset-0 m-auto size-16 animate-spin text-brand-dark" />
-            )}
+            {loading && <Spinner size="normal" position="absolute" />}
           </div>
           <Input
             id="cover"
@@ -163,7 +160,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
             name="cover"
             accept="image/*"
             onChange={changeHandler}
-            required={!prevCover}
+            required={prevCover === IMAGE_PLACEHOLDER}
             disabled={loading}
           />
           {error && <span className="text-brand-danger">{error}</span>}
@@ -172,27 +169,29 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
       <div>
         <h2>{getLocal('ingredients.title')}</h2>
         <ProductsSearch onSelect={selectProductHandler} />
-        <ul>
+        <ul className="min-h-64">
           {ingredients.map((ingredient) => {
             return (
               <li key={ingredient.id}>
-                <ProductChip {...ingredient} />
+                <ProductChip product={ingredient}>
+                  <ProductChip.Input
+                    defaultValue={ingredient.count}
+                    size="small"
+                    name="productCount"
+                    fill={false}
+                    aria-label={getLocal('input.label.inputCount')}
+                  />
+                  <ProductChip.Remove
+                    product={ingredient}
+                    onRemove={removeIngredientHandler(ingredient.id)}
+                  />
+                </ProductChip>
                 <input
                   className="hidden"
                   type="text"
-                  name="product"
+                  name="productId"
                   defaultValue={ingredient.id}
                   readOnly
-                />
-                <input
-                  type="number"
-                  name="count"
-                  defaultValue={ingredient.count}
-                />
-                <Button.Icon
-                  icon={IoClose}
-                  size="small"
-                  onClick={removeIngredientHandler(ingredient.id)}
                 />
               </li>
             );

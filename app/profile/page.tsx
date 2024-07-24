@@ -30,7 +30,7 @@ export default async function Profile() {
         <div>
           <Link href="my">
             <UserCard
-              className="relative z-10 mt-3"
+              className="mt-3"
               avatar={user.avatarUrl}
               firstname={user.firstname}
               lastname={user.lastname}

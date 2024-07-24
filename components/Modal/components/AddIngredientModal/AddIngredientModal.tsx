@@ -65,7 +65,7 @@ export const AddIngredientModal: FC<
         <form className="mt-3 flex flex-col gap-y-3" onSubmit={submitHandler}>
           <label htmlFor="count">
             <span>{getLocal('input.label.inputCount')}</span>
-            <Input type="number" name="count" />
+            <Input type="number" name="count" required />
           </label>
           <Button.Submit>{getLocal('form.create')}</Button.Submit>
         </form>
