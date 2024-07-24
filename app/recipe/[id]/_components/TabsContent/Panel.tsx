@@ -9,6 +9,7 @@ export const Panel: FC<IPanel> = ({ id, children }): JSX.Element => {
     <div
       role="tabpanel"
       id={`tabpanel-${id}`}
+      className="whitespace-pre-wrap"
       aria-labelledby={`tab-${id}`}
       tabIndex={0}
     >

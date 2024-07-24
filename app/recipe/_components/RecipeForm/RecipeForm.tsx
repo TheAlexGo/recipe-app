@@ -74,6 +74,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
           type="text"
           name="recipeId"
           defaultValue={recipe.id}
+          readOnly
           hidden
         />
       )}
