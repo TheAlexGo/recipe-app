@@ -4,6 +4,7 @@ import {
   FocusEventHandler,
   JSX,
   KeyboardEventHandler,
+  MouseEventHandler,
   useCallback,
   useEffect,
   useRef,
@@ -44,6 +45,7 @@ export const ProductsSearch: FC<IProductsSearch> = ({
   });
 
   const debounced = useDebounceCallback((title: string) => {
+    setShowResults(true);
     setLoading(true);
     if (controllerRef.current) {
       controllerRef.current?.abort();
@@ -71,6 +73,12 @@ export const ProductsSearch: FC<IProductsSearch> = ({
     },
     [debounced],
   );
+
+  const clickHandler: MouseEventHandler<HTMLInputElement> = useCallback(() => {
+    if (!showResults) {
+      setShowResults(true);
+    }
+  }, [showResults]);
 
   const keyDownHandler: KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.key === Keys.ESCAPE) {
@@ -105,9 +113,11 @@ export const ProductsSearch: FC<IProductsSearch> = ({
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div onKeyDown={keyDownHandler} onFocus={focusHandler} ref={containerRef}>
+    <div onKeyDown={keyDownHandler} ref={containerRef}>
       <Input.Search
         onChange={changeHandler}
+        onFocus={focusHandler}
+        onClick={clickHandler}
         aria-label={getLocal('input.title.product.search')}
         placeholder={getLocal('input.placeholder.product.search')}
       />
@@ -120,7 +130,11 @@ export const ProductsSearch: FC<IProductsSearch> = ({
               <ul className="flex flex-col gap-y-3">
                 {products.map((product) => (
                   <li key={product.id}>
-                    <ProductChip product={product}>
+                    <ProductChip
+                      product={product}
+                      withPadding={false}
+                      withShadow={false}
+                    >
                       <ProductChip.Add product={product} onAdd={addHandler} />
                     </ProductChip>
                   </li>

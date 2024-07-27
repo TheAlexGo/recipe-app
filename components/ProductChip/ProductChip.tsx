@@ -12,11 +12,15 @@ import { IProductDB } from '@/types/db';
 
 export interface IProductChip extends PropsWithChildren {
   product: IProductDB;
-  withoutClamp?: boolean;
+  withClamp?: boolean;
+  withShadow?: boolean;
+  withPadding?: boolean;
 }
 
 export const ProductChip: FC<IProductChip> = ({
-  withoutClamp,
+  withClamp = true,
+  withShadow = true,
+  withPadding = true,
   children,
   ...props
 }): JSX.Element => {
@@ -30,7 +34,15 @@ export const ProductChip: FC<IProductChip> = ({
   }, [product, onOpen]);
 
   return (
-    <article className="flex items-center justify-between gap-x-4 rounded-xl bg-white p-4 shadow-card">
+    <article
+      className={cn(
+        'flex items-center justify-between gap-x-4 rounded-xl bg-white',
+        {
+          'shadow-card': withShadow,
+          'p-4': withPadding,
+        },
+      )}
+    >
       <Button
         view="custom"
         className="flex items-center gap-x-4"
@@ -48,8 +60,8 @@ export const ProductChip: FC<IProductChip> = ({
         </div>
         <span
           className={cn('break-all text-left text-lg font-bold', {
-            'line-clamp-1': !withoutClamp,
-            'line-clamp-none': withoutClamp,
+            'line-clamp-1': withClamp,
+            'line-clamp-none': !withClamp,
           })}
         >
           {title}

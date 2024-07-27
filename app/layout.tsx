@@ -38,13 +38,15 @@ export default function RootLayout({
   return (
     <html lang="ru" className="flex min-h-full flex-col">
       <body
-        className={`${lato.className} flex flex-1 flex-col text-neutral-dark`}
+        className={`${lato.className} m-auto flex w-full max-w-5xl flex-1 flex-col text-neutral-dark`}
       >
         <NextTopLoader color="#70B9BE" showSpinner={false} />
         <main className="flex min-h-full flex-1 flex-col px-6 py-3 pb-nav">
           {children}
         </main>
-        <Footer />
+        <div className="relative">
+          <Footer />
+        </div>
         <ModalProvider />
       </body>
     </html>

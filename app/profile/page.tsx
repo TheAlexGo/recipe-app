@@ -37,6 +37,7 @@ export default async function Profile() {
               userRole={UserRole.DEVELOPER}
             />
           </Link>
+          <LogoutButton className="mt-3" />
           {Boolean(favoriteRecipes.length) && (
             <Section className="mt-6">
               <Section.Header moreLink="/">
@@ -52,7 +53,6 @@ export default async function Profile() {
             </Section>
           )}
         </div>
-        <LogoutButton />
       </div>
     </div>
   );

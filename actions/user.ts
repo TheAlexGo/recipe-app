@@ -2,7 +2,9 @@
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
+import { createDataFromZodScheme } from '@/utils/form';
 import { createClient } from '@/utils/supabase/server';
 
 export interface IUser {
@@ -74,9 +76,13 @@ export const uploadAvatar = async (file: File) => {
   return data;
 };
 
+const SignInSchema = z.object({
+  email: z.string(),
+  password: z.string(),
+});
+
 export const signIn = async (formData: FormData) => {
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
+  const { email, password } = createDataFromZodScheme(formData, SignInSchema);
   const supabase = createClient();
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -85,19 +91,30 @@ export const signIn = async (formData: FormData) => {
   });
 
   if (error) {
-    return redirect(`/login?message=${error.message}`);
+    const code = error.message
+      .split(' ')
+      .map((word) => word.toLowerCase())
+      .join('_');
+    return redirect(`/login?message=${code}`);
   }
 
   return redirect('/');
 };
 
+const SignUpSchema = z
+  .object({
+    firstname: z.string(),
+    lastname: z.string(),
+  })
+  .merge(SignInSchema);
+
 export const signUp = async (formData: FormData) => {
   const origin = headers().get('origin');
 
-  const email = formData.get('email') as string;
-  const password = formData.get('password') as string;
-  const firstname = formData.get('firstname') as string;
-  const lastname = formData.get('lastname') as string;
+  const { email, password, firstname, lastname } = createDataFromZodScheme(
+    formData,
+    SignUpSchema,
+  );
 
   const supabase = createClient();
 
@@ -114,7 +131,7 @@ export const signUp = async (formData: FormData) => {
   });
 
   if (error) {
-    return redirect(`/registration?message=${error.message}`);
+    return redirect(`/registration?message=${error.code}`);
   }
 
   return redirect('/');

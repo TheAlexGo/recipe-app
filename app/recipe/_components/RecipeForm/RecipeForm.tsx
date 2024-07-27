@@ -170,7 +170,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
       <div>
         <h2>{getLocal('ingredients.title')}</h2>
         <ProductsSearch onSelect={selectProductHandler} />
-        <ul className="min-h-64">
+        <ul className="mt-3 flex min-h-64 flex-col gap-y-3">
           {ingredients.map((ingredient) => {
             return (
               <li key={ingredient.id}>

@@ -12,7 +12,7 @@ import { getLocal } from '@/utils/local';
 
 interface IProductFridgeChip
   extends IProductDB,
-    Pick<IProductChip, 'withoutClamp'> {
+    Pick<IProductChip, 'withClamp'> {
   count: number;
 }
 

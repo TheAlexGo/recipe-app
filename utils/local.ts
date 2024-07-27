@@ -1,3 +1,5 @@
 import pkg from '@/locales/ru.json';
 
-export const getLocal = (key: keyof typeof pkg) => pkg[key];
+export type PkgKeys = keyof typeof pkg;
+
+export const getLocal = (key: PkgKeys) => pkg[key];
