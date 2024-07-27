@@ -73,7 +73,7 @@ export const uploadAvatar = async (file: File) => {
     throw new Error(`uploadAvatar: ${error.message}`);
   }
 
-  return data;
+  return data?.path;
 };
 
 const SignInSchema = z.object({

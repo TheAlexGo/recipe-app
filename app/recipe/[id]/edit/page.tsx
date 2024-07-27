@@ -2,8 +2,8 @@ import { redirect } from 'next/navigation';
 
 import { getRecipe } from '@/actions/recipe';
 import { getUser } from '@/actions/user';
-import { MyCreateHeader } from '@/app/recipe/_components/MyCreateHeader/MyCreateHeader';
 import { RecipeForm } from '@/app/recipe/_components/RecipeForm/RecipeForm';
+import { RecipeFormHeader } from '@/app/recipe/_components/RecipeFormHeader/RecipeFormHeader';
 
 export default async function RecipeEdit({
   params: { id },
@@ -13,13 +13,13 @@ export default async function RecipeEdit({
   const recipe = await getRecipe(Number(id));
   const user = await getUser();
 
-  if (!recipe || !user || recipe.user_id !== user.id) {
+  if (!recipe || recipe.user_id !== user.id) {
     redirect('/recipe/create');
   }
 
   return (
     <div>
-      <MyCreateHeader recipeEdit />
+      <RecipeFormHeader recipeEdit />
       <RecipeForm recipe={recipe} />
     </div>
   );

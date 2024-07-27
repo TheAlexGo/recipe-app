@@ -5,9 +5,15 @@ import { compressFile, mutateInputFiles } from '@/utils/file';
 
 interface IUseUploadImage {
   setImage: (image: string) => void;
+  onLoading?: () => void;
+  onLoaded?: () => void;
 }
 
-export const useUploadImage = ({ setImage }: IUseUploadImage) => {
+export const useUploadImage = ({
+  setImage,
+  onLoading,
+  onLoaded,
+}: IUseUploadImage) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -18,6 +24,7 @@ export const useUploadImage = ({ setImage }: IUseUploadImage) => {
       if (target.files?.length) {
         let file = target.files[0];
 
+        onLoading?.();
         setLoading(true);
         try {
           file = await compressFile(file);
@@ -29,12 +36,13 @@ export const useUploadImage = ({ setImage }: IUseUploadImage) => {
         } catch (e) {
           setError((e as Error).message);
         }
+        onLoaded?.();
         setLoading(false);
 
         setImage(URL.createObjectURL(file));
       }
     },
-    [isMounted, setImage],
+    [isMounted, onLoaded, onLoading, setImage],
   );
 
   return {

@@ -53,7 +53,7 @@ export default async function Recipe({ params }: { params: { id: string } }) {
           alt={getLocal('images.alt.recipe.cover')}
           fill
         />
-        <div className="fixed inset-x-6 top-3 flex justify-between">
+        <div className="fixed top-3 m-auto flex w-full max-w-5xl justify-between px-6">
           <ButtonClose />
           <div className="flex gap-x-3">
             {isOwner && (

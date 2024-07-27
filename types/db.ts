@@ -6,6 +6,9 @@ export interface IFavoritesDB extends Tables<'favorites'> {}
 export interface IRecipeDB extends Tables<'recipes'> {}
 export interface IIngredientDB extends Tables<'ingredients'> {}
 export interface INutritionDB extends Tables<'nutritions'> {}
+export interface IRowDB {
+  id: string;
+}
 
 export interface IProductDBInFridge extends IProductDB {
   count: number;

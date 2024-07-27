@@ -12,7 +12,7 @@ export default async function My() {
     <div className="flex flex-1 flex-col">
       <MyHeader />
       <Button view="primary" href="/recipe/create">
-        {getLocal('actions.createRecipe.button')}
+        {getLocal('actions.add')}
       </Button>
       {Boolean(myRecipes.length) && (
         <Section className="mt-6">

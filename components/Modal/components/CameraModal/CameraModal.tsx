@@ -89,7 +89,7 @@ export const CameraModal: FC<ICameraModal> = (): JSX.Element => {
           {foundedItem && <ProductChip product={foundedItem} />}
           {foundedItem && (
             <Button className="mt-3" onClick={addHandler} disabled={disabled}>
-              {getLocal('actions.addProductInFridge.button')}
+              {getLocal('actions.add')}
             </Button>
           )}
         </div>

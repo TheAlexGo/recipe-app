@@ -1,29 +1,32 @@
 'use server';
 
-import { captureMessage } from '@sentry/core';
-import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
 import { changeMetadata, uploadAvatar } from '@/actions/user';
+import { createDataFromZodScheme } from '@/utils/form';
+
+const SubmitHandlerSchema = z.object({
+  firstname: z.string(),
+  lastname: z.string(),
+  avatar: z.instanceof(File),
+});
 
 export const submitHandler = async (formData: FormData) => {
-  const firstname = formData.get('firstname') as string;
-  const lastname = formData.get('lastname') as string;
-  const avatar = formData.get('avatar') as File;
+  const { firstname, lastname, avatar } = createDataFromZodScheme(
+    formData,
+    SubmitHandlerSchema,
+  );
 
   const data: Record<string, string> = {
     firstname,
     lastname,
   };
 
-  captureMessage(
-    `Пользователь загружает аватарку... Данные: ${JSON.stringify(avatar)}`,
-    'debug',
-  );
   if (avatar.size) {
-    const imageData = await uploadAvatar(avatar);
-    data.avatarUrl = `${imageData?.path}?${Date.now()}`;
+    data.avatarUrl = await uploadAvatar(avatar);
   }
   await changeMetadata(data);
 
-  revalidatePath('/profile/settings');
+  redirect('/profile');
 };

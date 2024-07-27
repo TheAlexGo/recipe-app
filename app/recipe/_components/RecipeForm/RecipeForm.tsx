@@ -2,22 +2,18 @@
 
 import { FC, JSX, useCallback, useState } from 'react';
 
-import cn from 'classnames';
-import Image from 'next/image';
-
 import { IRecipe } from '@/actions/models/Recipe';
 import { ProductsSearch } from '@/app/_components/ProductsSearch/ProductsSearch';
+import { DynamicInstruction } from '@/app/recipe/_components/DynamicInstruction/DynamicInstruction';
 import { create, update } from '@/app/recipe/action';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { ProductChip } from '@/components/ProductChip';
-import { Spinner } from '@/components/Spinner';
 import {
   IAddIngredientModalStore,
   useAddIngredientModal,
 } from '@/hooks/useAddIngredientModal';
 import { useLoadImage } from '@/hooks/useLoadImage';
-import { useUploadImage } from '@/hooks/useUploadImage';
 import { IProductDB } from '@/types/db';
 import { IMAGE_PLACEHOLDER } from '@/utils/image';
 import { getLocal } from '@/utils/local';
@@ -30,11 +26,8 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
   const prevCover = useLoadImage('recipe_covers', recipe?.cover_url);
   const [cover, setCover] = useState<string>(prevCover || IMAGE_PLACEHOLDER);
   const [ingredients, setIngredients] = useState(recipe?.ingredients || []);
+  const [loadingCover, setLoadingCover] = useState(false);
   const { onClose } = useAddIngredientModal();
-
-  const { changeHandler, loading, error } = useUploadImage({
-    setImage: setCover,
-  });
 
   const removeIngredientHandler = (productId: IProductDB['id']) => {
     return () =>
@@ -65,6 +58,14 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
       },
       [onClose],
     );
+
+  const loadingCoverHandler = useCallback(() => {
+    setLoadingCover(true);
+  }, []);
+
+  const loadedCoverHandler = useCallback(() => {
+    setLoadingCover(false);
+  }, []);
 
   return (
     <form className="flex flex-col gap-y-3">
@@ -128,6 +129,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
           required
         />
       </label>
+      <DynamicInstruction />
       <label htmlFor="recipe_text">
         <span>{getLocal('form.recipe_text.label')}</span>
         <Input.TextArea
@@ -140,32 +142,16 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
       </label>
       <label htmlFor="cover">
         <span>{getLocal('form.cover.label')}</span>
-        <div className="relative size-32">
-          <div className="relative">
-            <Image
-              className={cn('size-32 object-cover', {
-                'opacity-50': loading,
-              })}
-              src={cover}
-              width={128}
-              height={128}
-              priority
-              alt={getLocal('images.alt.avatar')}
-            />
-            {loading && <Spinner size="normal" position="absolute" />}
-          </div>
-          <Input
-            id="cover"
-            className="absolute inset-0 opacity-0"
-            type="file"
-            name="cover"
-            accept="image/*"
-            onChange={changeHandler}
-            required={prevCover === IMAGE_PLACEHOLDER}
-            disabled={loading}
-          />
-          {error && <span className="text-brand-danger">{error}</span>}
-        </div>
+        <Input.Image
+          id="cover"
+          name="cover"
+          value={cover}
+          prevValue={prevCover}
+          alt={getLocal('images.alt.avatar')}
+          onChange={setCover}
+          onLoading={loadingCoverHandler}
+          onLoaded={loadedCoverHandler}
+        />
       </label>
       <div>
         <h2>{getLocal('ingredients.title')}</h2>
@@ -199,7 +185,10 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
           })}
         </ul>
       </div>
-      <Button.Submit formAction={recipe ? update : create} disabled={loading}>
+      <Button.Submit
+        formAction={recipe ? update : create}
+        disabled={loadingCover}
+      >
         {getLocal('form.create')}
       </Button.Submit>
     </form>

@@ -1,10 +1,10 @@
-import { MyCreateHeader } from '@/app/recipe/_components/MyCreateHeader/MyCreateHeader';
 import { RecipeForm } from '@/app/recipe/_components/RecipeForm/RecipeForm';
+import { RecipeFormHeader } from '@/app/recipe/_components/RecipeFormHeader/RecipeFormHeader';
 
 export default async function RecipeCreate() {
   return (
     <div>
-      <MyCreateHeader />
+      <RecipeFormHeader />
       <RecipeForm />
     </div>
   );

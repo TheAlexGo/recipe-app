@@ -13,7 +13,7 @@ interface IMyCreateHeader {
   recipeEdit?: boolean;
 }
 
-export const MyCreateHeader: FC<IMyCreateHeader> = ({
+export const RecipeFormHeader: FC<IMyCreateHeader> = ({
   recipeEdit,
 }): JSX.Element => {
   const router = useRouter();
