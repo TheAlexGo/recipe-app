@@ -2,6 +2,7 @@
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
 import { createDataFromZodScheme } from '@/utils/form';
@@ -64,7 +65,7 @@ export const uploadAvatar = async (file: File) => {
 
   const { data, error } = await supabase.storage
     .from('user_avatars')
-    .upload(`${user.id}-avatar`, file, {
+    .upload(uuidv4(), file, {
       cacheControl: '3600',
       upsert: false,
     });
