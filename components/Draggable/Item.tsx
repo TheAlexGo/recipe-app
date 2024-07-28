@@ -141,13 +141,13 @@ export const Item: FC<IItem> = ({
   return (
     <li
       {...props}
-      className="relative flex touch-none items-center gap-x-3"
+      className="relative flex items-center gap-x-3"
       style={coordsStyle}
       data-testid="draggable-item"
       ref={itemRef}
     >
       <Button.Icon
-        className="shrink-0 cursor-grab"
+        className="shrink-0 cursor-grab touch-none"
         icon={RxDragHandleHorizontal}
         size="big"
         withPadding={false}
