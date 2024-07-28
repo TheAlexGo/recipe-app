@@ -1,8 +1,10 @@
 'use server';
 
 import { redirect } from 'next/navigation';
+import { z } from 'zod';
 
 import { updateIngredients } from '@/actions/ingredients';
+import { updateSteps, uploadImageStep } from '@/actions/instructions';
 import { IRecipeDB } from '@/actions/models/Recipe';
 import {
   createRecipe,
@@ -10,18 +12,37 @@ import {
   updateRecipe,
   uploadRecipeCover,
 } from '@/actions/recipe';
-import { IIngredientDB } from '@/types/db';
+import { IIngredientDB, IStepDB } from '@/types/db';
+import { createDataFromZodScheme } from '@/utils/form';
+
+const BaseFormData = z.object({
+  title: z.string(),
+  less_title: z.string(),
+  description: z.string(),
+  kcal: z.number(),
+  cooking_time: z.number(),
+  cover: z.instanceof(File),
+  ingredient_ids: z.array(z.number()),
+  ingredient_counts: z.array(z.number()),
+  step_texts: z.array(z.string()),
+  step_old_images: z.array(z.string()),
+  step_images: z.array(z.instanceof(File)),
+});
 
 const prepareData = async (formData: FormData) => {
-  const title = formData.get('title') as string;
-  const less_title = formData.get('less_title') as string;
-  const description = formData.get('description') as string;
-  const kcal = Number(formData.get('kcal'));
-  const cooking_time = Number(formData.get('cooking_time'));
-  const recipe_text = formData.get('recipe_text') as string;
-  const cover = formData.get('cover') as File;
-  const ingredientIds = formData.getAll('productId') as string[];
-  const ingredientCounts = formData.getAll('productCount') as string[];
+  const {
+    title,
+    less_title,
+    description,
+    kcal,
+    cooking_time,
+    cover,
+    ingredient_ids,
+    ingredient_counts,
+    step_texts,
+    step_old_images,
+    step_images,
+  } = createDataFromZodScheme(formData, BaseFormData);
 
   const result = {
     title,
@@ -29,14 +50,23 @@ const prepareData = async (formData: FormData) => {
     description,
     kcal,
     cooking_time,
-    recipe_text,
-    ingredients: ingredientIds.map((id, index) => ({
-      product_id: Number(id),
-      count: Number(ingredientCounts[index]),
+    ingredients: ingredient_ids.map((id, index) => ({
+      product_id: id,
+      count: ingredient_counts[index],
+    })),
+    steps: step_texts.map((text, index) => ({
+      text,
+      order: index,
+      image: step_images[index].size ? step_images[index] : null,
+      oldImage: step_old_images[index],
     })),
     cover: null,
   } as Omit<IRecipeDB, 'id' | 'user_id'> & {
     ingredients: IIngredientDB[];
+    steps: (Omit<IStepDB, 'id' | 'created_at' | 'recipe_id' | 'image_url'> & {
+      image: File | null;
+      oldImage: string;
+    })[];
     cover: File | null;
   };
 
@@ -69,7 +99,7 @@ export const update = async (formData: FormData) => {
   if (idRaw) {
     const id = Number(idRaw);
 
-    const { ingredients, cover, ...data } = await prepareData(formData);
+    const { ingredients, cover, steps, ...data } = await prepareData(formData);
 
     if (cover) {
       Object.assign(data, {
@@ -77,9 +107,16 @@ export const update = async (formData: FormData) => {
       });
     }
 
+    const stepsData = await Promise.all(
+      steps.map(async ({ image, oldImage, ...data }) => ({
+        ...data,
+        image_url: image?.size ? await uploadImageStep(image!) : oldImage,
+      })),
+    );
     await Promise.all([
       updateRecipe(id, data),
       updateIngredients(id, ingredients),
+      updateSteps(id, stepsData),
     ]);
 
     redirect(`/recipe/${idRaw}`);

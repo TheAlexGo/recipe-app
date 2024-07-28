@@ -1,42 +1,50 @@
 import { FC, JSX, useCallback, useState } from 'react';
 
-import { Row } from '@/app/recipe/_components/DynamicInstruction/Row';
 import { Button } from '@/components/Button';
-import { IRowDB } from '@/types/db';
+import { Draggable } from '@/components/Draggable';
+import { IStepDB } from '@/types/db';
 import { getLocal } from '@/utils/local';
 
-interface IDynamicInstruction {}
+import { IRow, Row } from './Row';
 
-export const DynamicInstruction: FC<IDynamicInstruction> = (): JSX.Element => {
-  const [rows, setRows] = useState<IRowDB[]>([
-    {
-      id: `${Date.now()}`,
-    },
-  ]);
+interface IDynamicInstruction {
+  initialSteps?: IStepDB[];
+}
+
+export const DynamicInstruction: FC<IDynamicInstruction> = ({
+  initialSteps,
+}): JSX.Element => {
+  const [rows, setRows] = useState<IRow[]>(
+    initialSteps || [
+      {
+        id: Date.now(),
+      } as IStepDB,
+    ],
+  );
 
   const clickHandler = useCallback(() => {
     setRows((prevRows) => {
       const arr = [...prevRows];
       arr.push({
-        id: `${Date.now()}`,
-      });
+        id: Date.now(),
+      } as IStepDB);
       return arr;
     });
   }, []);
 
   const removeHandler = useCallback(
-    (rowId: string) =>
+    (rowId: number | string) =>
       setRows((prevRows) => prevRows.filter(({ id }) => id !== rowId)),
     [],
   );
 
   return (
     <section>
-      <ul className="flex flex-col gap-y-3">
+      <Draggable className="flex flex-col gap-y-3">
         {rows.map((row) => (
           <Row key={row.id} {...row} onRemove={removeHandler} />
         ))}
-      </ul>
+      </Draggable>
       <Button className="mt-3" onClick={clickHandler}>
         {getLocal('actions.add')}
       </Button>

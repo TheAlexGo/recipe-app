@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { INutrition } from '@/actions/models/Nutritions';
 import { BaseModel, ITableDB } from '@/actions/models/base';
-import { IProductDB } from '@/types/db';
+import { IProductDB, IStepDB } from '@/types/db';
 import { catchError } from '@/utils/decorators';
 
 export interface IRecipeDB extends ITableDB {
@@ -24,6 +24,7 @@ export interface IRecipeProduct extends IProductDB {
 export interface IRecipe extends IRecipeDB {
   nutritions: INutrition[];
   ingredients: IRecipeProduct[];
+  steps: IStepDB[];
 }
 
 export class Recipe extends BaseModel<IRecipeDB> {
@@ -73,14 +74,13 @@ export class Recipe extends BaseModel<IRecipeDB> {
   @catchError
   async selectFullData(recipeId: IRecipeDB['id']): Promise<IRecipe | null> {
     const { data, error } = await this.fromTable()
-      .select('*, nutritions(*)')
+      .select('*, nutritions(*),steps(*)')
       .eq('id', recipeId);
 
     const { data: productData, error: productError } = await this.supabase
       .from('product')
       .select(`*, ingredients!inner(product_id, count)`)
       .eq('ingredients.recipe_id', recipeId);
-
     if (error || productError) {
       throw error || productError;
     }

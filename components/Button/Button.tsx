@@ -1,4 +1,10 @@
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, FC, JSX } from 'react';
+import {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ForwardedRef,
+  forwardRef,
+  JSX,
+} from 'react';
 
 import cn from 'classnames';
 import { LinkProps } from 'next/dist/client/link';
@@ -29,40 +35,49 @@ export interface ILinkProps
 
 export type IButton = IButtonProps | ILinkProps;
 
-export const Button: FC<IButton> = ({
-  className,
-  children,
-  view = 'primary',
-  fill = true,
-  ...props
-}): JSX.Element => {
-  const classes = cn(
-    {
-      'flex items-center justify-center rounded-2xl p-4 font-bold':
-        view !== 'custom',
-      'bg-brand-secondary text-white': view === 'primary',
-      'bg-brand-danger text-white': view === 'danger',
-      'w-full': fill,
-    },
-    className,
-  );
-  if (typeof props.href !== 'undefined') {
-    return (
-      <Link {...props} className={classes}>
-        {children}
-      </Link>
+export const Button = forwardRef<
+  HTMLButtonElement | HTMLAnchorElement,
+  IButton
+>(
+  (
+    { className, children, view = 'primary', fill = true, ...props },
+    ref,
+  ): JSX.Element => {
+    const classes = cn(
+      {
+        'flex items-center justify-center rounded-2xl p-4 font-bold':
+          view !== 'custom',
+        'bg-brand-secondary text-white': view === 'primary',
+        'bg-brand-danger text-white': view === 'danger',
+        'w-full': fill,
+      },
+      className,
     );
-  }
+    if (typeof props.href !== 'undefined') {
+      return (
+        <Link
+          {...props}
+          className={classes}
+          ref={ref as ForwardedRef<HTMLAnchorElement>}
+        >
+          {children}
+        </Link>
+      );
+    }
 
-  return (
-    <button
-      {...props}
-      type={props.type || 'button'}
-      className={cn(classes, {
-        'opacity-70': props.disabled,
-      })}
-    >
-      {children}
-    </button>
-  );
-};
+    return (
+      <button
+        {...props}
+        type={props.type || 'button'}
+        className={cn(classes, {
+          'opacity-70': props.disabled,
+        })}
+        ref={ref as ForwardedRef<HTMLButtonElement>}
+      >
+        {children}
+      </button>
+    );
+  },
+);
+
+Button.displayName = 'Button';

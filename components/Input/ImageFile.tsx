@@ -28,7 +28,7 @@ export const ImageFile: FC<IImageFile> = memo(
     value,
     prevValue,
     onChange,
-    size,
+    size = 'big',
     alt = '',
     onLoading,
     onLoaded,

@@ -39,7 +39,7 @@ export default async function Recipe({ params }: { params: { id: string } }) {
     cooking_time,
     nutritions,
     ingredients,
-    recipe_text,
+    steps,
   } = recipe;
   const cover_url = useLoadImage('recipe_covers', _cover_url);
 
@@ -62,7 +62,6 @@ export default async function Recipe({ params }: { params: { id: string } }) {
                 icon={TbEdit}
                 size="normal"
                 tabIndex={-1}
-                aria-hidden
               />
             )}
             <Button.Favorite
@@ -125,7 +124,7 @@ export default async function Recipe({ params }: { params: { id: string } }) {
               tab: {
                 id: 'instruction',
               },
-              panel: <InstructionPanel recipe={recipe_text} />,
+              panel: <InstructionPanel steps={steps} />,
             },
           ]}
         />

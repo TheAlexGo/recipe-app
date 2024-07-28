@@ -16,7 +16,7 @@ import { useLoadImage } from '@/hooks/useLoadImage';
 interface ICard
   extends Omit<
     IRecipe,
-    'less_title' | 'description' | 'nutritions' | 'ingredients'
+    'less_title' | 'description' | 'nutritions' | 'ingredients' | 'steps'
   > {
   small?: boolean;
   favorite?: boolean;

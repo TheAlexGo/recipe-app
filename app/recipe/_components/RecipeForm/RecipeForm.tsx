@@ -29,10 +29,10 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
   const [loadingCover, setLoadingCover] = useState(false);
   const { onClose } = useAddIngredientModal();
 
-  const removeIngredientHandler = (productId: IProductDB['id']) => {
+  const removeIngredientHandler = (ingredient_id: IProductDB['id']) => {
     return () =>
       setIngredients((prevIngredients) =>
-        prevIngredients.filter(({ id }) => id !== productId),
+        prevIngredients.filter(({ id }) => id !== ingredient_id),
       );
   };
 
@@ -129,17 +129,8 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
           required
         />
       </label>
-      <DynamicInstruction />
-      <label htmlFor="recipe_text">
-        <span>{getLocal('form.recipe_text.label')}</span>
-        <Input.TextArea
-          id="recipe_text"
-          name="recipe_text"
-          rows={5}
-          defaultValue={recipe?.recipe_text}
-          required
-        />
-      </label>
+      <span>{getLocal('form.recipe_text.label')}</span>
+      <DynamicInstruction initialSteps={recipe?.steps} />
       <label htmlFor="cover">
         <span>{getLocal('form.cover.label')}</span>
         <Input.Image
@@ -164,7 +155,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
                   <ProductChip.Input
                     defaultValue={ingredient.count}
                     size="small"
-                    name="productCount"
+                    name="ingredient_counts"
                     fill={false}
                     aria-label={getLocal('input.label.inputCount')}
                   />
@@ -176,7 +167,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
                 <input
                   className="hidden"
                   type="text"
-                  name="productId"
+                  name="ingredient_ids"
                   defaultValue={ingredient.id}
                   readOnly
                 />

@@ -3,33 +3,48 @@ import { FC, JSX, useCallback, useState } from 'react';
 import { CiSquareMinus } from 'react-icons/ci';
 
 import { Button } from '@/components/Button';
+import { Draggable } from '@/components/Draggable';
 import { Input } from '@/components/Input';
-import { IRowDB } from '@/types/db';
-import { IMAGE_PLACEHOLDER } from '@/utils/image';
+import { useLoadImage } from '@/hooks/useLoadImage';
+import { IStepDB } from '@/types/db';
 import { getLocal } from '@/utils/local';
 
-interface IRow extends IRowDB {
-  onRemove?: (rowId: string) => void;
+export interface IRow extends IStepDB {
+  onRemove?: (rowId: IRow['id']) => void;
 }
 
-export const Row: FC<IRow> = ({ id, onRemove }): JSX.Element => {
-  const [image, setImage] = useState(IMAGE_PLACEHOLDER);
+export const Row: FC<IRow> = ({
+  onRemove,
+  id,
+  text,
+  image_url,
+}): JSX.Element => {
+  const imageSrc = useLoadImage('steps_images', image_url);
+  const [image, setImage] = useState(imageSrc);
 
   const clickHandler = useCallback(() => {
     onRemove?.(id);
   }, [id, onRemove]);
 
   return (
-    <li className="flex gap-x-3">
+    <Draggable.Item className="flex items-center gap-x-3">
+      <Input
+        name="step_old_images"
+        className="hidden"
+        defaultValue={image_url}
+        readOnly
+      />
       <Input.Image
-        name="step_image"
+        name="step_images"
         value={image}
         onChange={setImage}
         size="normal"
+        required
       />
       <Input.TextArea
-        name="step_text"
+        name="step_texts"
         placeholder={getLocal('input.placeholder.recipe.step')}
+        defaultValue={text}
       />
       <Button.Icon
         className="shrink-0 text-brand-secondary"
@@ -39,6 +54,6 @@ export const Row: FC<IRow> = ({ id, onRemove }): JSX.Element => {
         aria-label={getLocal('actions.remove')}
         withPadding={false}
       />
-    </li>
+    </Draggable.Item>
   );
 };

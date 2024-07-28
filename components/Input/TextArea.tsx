@@ -51,7 +51,7 @@ export const TextArea: FC<ITextarea> = ({
       >
         <textarea
           {...props}
-          className="absolute inset-0 resize-none overflow-hidden focus-visible:outline-0"
+          className="absolute inset-0 resize-none overflow-hidden bg-transparent focus-visible:outline-0"
           rows={rows}
           onInput={inputHandler}
           value={value}

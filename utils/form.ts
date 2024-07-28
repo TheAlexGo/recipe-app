@@ -19,11 +19,12 @@ export const createDataFromZodScheme = <T extends z.ZodType<any, any>>(
 ): SchemaObject<T> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const schemaKeys = Object.keys((errorScheme as any).shape);
-  const formDataObject: Record<string, FormDataValue> = {};
+  const formDataObject: Record<string, FormDataValue | FormDataValue[]> = {};
   schemaKeys.forEach((key) => {
-    const value = formData.get(key);
+    const value =
+      key[key.length - 1] === 's' ? formData.getAll(key) : formData.get(key);
     if (value !== null) {
-      formDataObject[key] = value as FormDataValue;
+      formDataObject[key] = value as FormDataValue | FormDataValue[];
     }
   });
   return formDataObject as SchemaObject<T>;

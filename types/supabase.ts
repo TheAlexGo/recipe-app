@@ -209,7 +209,6 @@ export type Database = {
           id: number
           kcal: number
           less_title: string
-          recipe_text: string | null
           title: string
           user_id: string
         }
@@ -221,7 +220,6 @@ export type Database = {
           id?: number
           kcal: number
           less_title: string
-          recipe_text?: string | null
           title: string
           user_id: string
         }
@@ -233,13 +231,57 @@ export type Database = {
           id?: number
           kcal?: number
           less_title?: string
-          recipe_text?: string | null
           title?: string
           user_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "recipes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      steps: {
+        Row: {
+          created_at: string
+          id: number
+          image_url: string
+          order: number
+          recipe_id: number
+          text: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          image_url: string
+          order: number
+          recipe_id: number
+          text: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          image_url?: string
+          order?: number
+          recipe_id?: number
+          text?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "steps_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "recipes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "steps_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -262,7 +304,6 @@ export type Database = {
           id: number
           kcal: number
           less_title: string
-          recipe_text: string | null
           title: string
           user_id: string
         }[]
