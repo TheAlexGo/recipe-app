@@ -27,7 +27,7 @@ export const Row: FC<IRow> = ({
   }, [id, onRemove]);
 
   return (
-    <Draggable.Item className="flex items-center gap-x-3">
+    <Draggable.Item id={id} className="flex items-center gap-x-3">
       <Input
         name="step_old_images"
         className="hidden"
@@ -42,6 +42,7 @@ export const Row: FC<IRow> = ({
         required
       />
       <Input.TextArea
+        className="bg-white"
         name="step_texts"
         placeholder={getLocal('input.placeholder.recipe.step')}
         defaultValue={text}

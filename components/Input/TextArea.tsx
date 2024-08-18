@@ -19,6 +19,7 @@ interface ITextarea
 }
 
 export const TextArea: FC<ITextarea> = ({
+  className,
   value: _value,
   defaultValue,
   rows = 1,
@@ -36,7 +37,7 @@ export const TextArea: FC<ITextarea> = ({
   }, [_value, defaultValue]);
 
   return (
-    <div className={getInputClasses({})}>
+    <div className={cn(getInputClasses({}), className)}>
       <div
         className={cn(
           'relative grid after:invisible after:whitespace-pre-wrap after:content-[attr(data-value)]',

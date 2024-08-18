@@ -1,11 +1,15 @@
 import { FC, JSX, useCallback, useState } from 'react';
 
+import { arrayMove } from '@dnd-kit/sortable';
+
 import { Button } from '@/components/Button';
 import { Draggable } from '@/components/Draggable';
 import { IStepDB } from '@/types/db';
 import { getLocal } from '@/utils/local';
 
 import { IRow, Row } from './Row';
+
+import type { DragEndEvent } from '@dnd-kit/core/dist/types';
 
 interface IDynamicInstruction {
   initialSteps?: IStepDB[];
@@ -38,9 +42,26 @@ export const DynamicInstruction: FC<IDynamicInstruction> = ({
     [],
   );
 
+  const dragEndHandler = useCallback((event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over?.id && active.id !== over.id) {
+      setRows((rows) => {
+        const oldIndex = rows.findIndex(({ id }) => active.id === id);
+        const newIndex = rows.findIndex(({ id }) => over.id === id);
+
+        return arrayMove(rows, oldIndex, newIndex);
+      });
+    }
+  }, []);
+
   return (
     <section>
-      <Draggable className="flex flex-col gap-y-3">
+      <Draggable
+        items={rows}
+        className="flex flex-col gap-y-3"
+        onDragEnd={dragEndHandler}
+      >
         {rows.map((row) => (
           <Row key={row.id} {...row} onRemove={removeHandler} />
         ))}

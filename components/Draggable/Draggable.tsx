@@ -1,67 +1,55 @@
-import { FC, HTMLAttributes, JSX, memo, useLayoutEffect, useRef } from 'react';
+import { FC, HTMLAttributes, JSX } from 'react';
 
-import { DRAGGABLE_ITEM_SELECTOR } from '@/components/Draggable/constants';
+import {
+  closestCorners,
+  DndContext,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import { Props } from '@dnd-kit/core/dist/components/DndContext/DndContext';
+import {
+  restrictToParentElement,
+  restrictToVerticalAxis,
+} from '@dnd-kit/modifiers';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 
-import { Provider, useStore } from './store';
-
-interface IDraggable extends HTMLAttributes<HTMLUListElement> {}
-
-const DraggableWrapper: FC<IDraggable> = memo(({ ...props }) => {
-  const containerRef = useRef<HTMLUListElement>(null);
-  const {
-    childrenArray,
-    setItems,
-    activeElement,
-    setContainerTop,
-    setContainerBottom,
-  } = useStore();
-
-  useLayoutEffect(() => {
-    const container = containerRef.current!;
-    const { y, height } = container.getBoundingClientRect();
-    setContainerTop(y);
-    setContainerBottom(y + height);
-    setItems(
-      [...container.querySelectorAll(DRAGGABLE_ITEM_SELECTOR)].map(
-        (node, index) => {
-          const el = node as HTMLElement;
-          const { y, width, height } = el.getBoundingClientRect();
-          return {
-            node: el,
-            order: index,
-            width,
-            height,
-            top: y,
-            middle: (2 * y + height) / 2,
-            bottom: y + height,
-          };
-        },
-      ),
-    );
-  }, [
-    childrenArray,
-    setItems,
-    setContainerTop,
-    setContainerBottom,
-    activeElement,
-  ]);
-
-  return (
-    <ul {...props} ref={containerRef}>
-      {childrenArray}
-    </ul>
-  );
-});
-
-DraggableWrapper.displayName = 'Draggable.DraggableWrapper';
+interface IDraggable
+  extends Omit<HTMLAttributes<HTMLUListElement>, 'onDragEnd'> {
+  items: {
+    id: string | number;
+  }[];
+  onDragEnd?: Props['onDragEnd'];
+}
 
 export const Draggable: FC<IDraggable> = ({
   children,
+  items,
+  onDragEnd,
   ...props
 }): JSX.Element => {
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   return (
-    <Provider contentChildren={children}>
-      <DraggableWrapper {...props} />
-    </Provider>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCorners}
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+      onDragEnd={onDragEnd}
+    >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        <ul {...props}>{children}</ul>
+      </SortableContext>
+    </DndContext>
   );
 };

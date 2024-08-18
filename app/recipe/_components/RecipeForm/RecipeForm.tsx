@@ -180,7 +180,7 @@ export const RecipeForm: FC<IRecipeForm> = ({ recipe }): JSX.Element => {
         formAction={recipe ? update : create}
         disabled={loadingCover}
       >
-        {getLocal('form.create')}
+        {getLocal(recipe ? 'form.save' : 'form.create')}
       </Button.Submit>
     </form>
   );
