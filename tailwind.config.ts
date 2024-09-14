@@ -42,15 +42,13 @@ const config: Config = {
       padding: {
         nav: '8.0625rem',
       },
-      width: {
-        productCardSmall: '8.25rem',
-        productCardBig: '10.5rem',
-      },
       height: {
         nav: '5.3125rem',
         42: '10.5rem',
-        productCardSmall: '5.5rem',
-        productCardBig: '8rem',
+        productCardSmall: '10.75rem',
+        productCardBig: '15.25rem',
+        productCardSmallImage: '5.5rem',
+        productCardBigImage: '8rem',
       },
       maxWidth: {
         50: '12.5rem',

@@ -5,6 +5,8 @@ import { redirect } from 'next/navigation';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 
+import { getUserMock } from '@/actions/mock/user';
+import { isMock } from '@/utils/env';
 import { createDataFromZodScheme } from '@/utils/form';
 import { createClient } from '@/utils/supabase/server';
 
@@ -21,6 +23,9 @@ export interface IUser {
  * Получаем текущего пользователя
  */
 export const getUser = async (): Promise<IUser> => {
+  if (isMock) {
+    return getUserMock();
+  }
   const supabase = createClient();
   const {
     data: { user },

@@ -21,6 +21,7 @@ interface ICard
   small?: boolean;
   favorite?: boolean;
   showFavorite?: boolean;
+  fixedWidth?: boolean;
 }
 
 export const RecipeCard: FC<ICard> = ({
@@ -32,27 +33,25 @@ export const RecipeCard: FC<ICard> = ({
   small,
   favorite,
   showFavorite = true,
+  fixedWidth = false,
 }): JSX.Element => {
   const cover_url = useLoadImage('recipe_covers', _cover_url);
-
-  const imageWidth = small ? 132 : 168;
-  const imageHeight = small ? 88 : 128;
 
   return (
     <Link
       href={`/recipe/${id}`}
-      className={cn(
-        'flex max-w-50 flex-col flex-wrap rounded-2xl shadow-card',
-        {
-          'p-3': small,
-          'p-4': !small,
-        },
-      )}
+      className={cn('flex h-full flex-col flex-wrap rounded-2xl shadow-card', {
+        'w-52': fixedWidth,
+        'p-3': small,
+        'p-4': !small,
+        'h-productCardSmall': small,
+        'h-productCardBig': !small,
+      })}
     >
       <div
         className={cn('relative', {
-          'h-productCardSmall w-productCardSmall': small,
-          'h-productCardBig w-productCardBig': !small,
+          'h-productCardSmallImage': small,
+          'h-productCardBigImage': !small,
         })}
       >
         {showFavorite && (
@@ -64,15 +63,15 @@ export const RecipeCard: FC<ICard> = ({
           />
         )}
         <Image
-          className="h-full w-full rounded-2xl object-cover"
+          className="rounded-2xl object-cover"
           src={cover_url}
-          width={imageWidth}
-          height={imageHeight}
           priority
+          fill
+          sizes="176px"
           alt={`Обложка для ${title}`}
         />
       </div>
-      <h3 className="mt-3 line-clamp-2 font-bold">{title}</h3>
+      <h3 className="mt-3 line-clamp-2 flex-1 font-bold">{title}</h3>
       {!small && (
         <div className="mt-1 flex items-center gap-x-2 text-sm text-neutral-gray-2">
           <Detail icon={TbCampfire}>{kcal} Ккал</Detail>

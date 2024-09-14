@@ -17,6 +17,7 @@ export const Close: FC<IClose> = ({ ...props }): JSX.Element => {
       {...props}
       icon={IoClose}
       aria-label={getLocal('actions.card.close')}
+      shadow
     />
   );
 };

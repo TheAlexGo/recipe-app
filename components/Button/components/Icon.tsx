@@ -11,6 +11,7 @@ export type IIcon = OmitOfUnion<IButton, 'view'> & {
   size: 'big' | 'small' | 'normal';
   withPadding?: boolean;
   active?: boolean;
+  shadow?: boolean;
 };
 
 export const Icon = forwardRef<HTMLButtonElement | HTMLAnchorElement, IIcon>(
@@ -21,6 +22,7 @@ export const Icon = forwardRef<HTMLButtonElement | HTMLAnchorElement, IIcon>(
       className,
       active = false,
       withPadding = true,
+      shadow = false,
       ...props
     },
     ref,
@@ -40,6 +42,7 @@ export const Icon = forwardRef<HTMLButtonElement | HTMLAnchorElement, IIcon>(
             'size-7 rounded': withPadding && isSmall,
             'size-10 rounded-xl': withPadding && isNormal,
             'size-13 rounded-xl': withPadding && isBig,
+            'shadow-card': shadow,
           },
           className,
         )}

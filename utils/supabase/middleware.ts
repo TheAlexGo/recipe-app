@@ -2,12 +2,17 @@ import { createServerClient } from '@supabase/ssr';
 import { CookieOptions } from '@supabase/ssr/src/types';
 import { NextRequest, NextResponse } from 'next/server';
 
+import { isMock } from '@/utils/env';
+
 const notProtectedUrls = ['/login/', '/registration/'];
 
 export const updateSession = async (request: NextRequest) => {
   let supabaseResponse = NextResponse.next({
     request,
   });
+  if (isMock) {
+    return supabaseResponse;
+  }
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
